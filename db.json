@@ -1,0 +1,13 @@
+{
+    "transactions": [
+        {
+            "id": 1,
+            "title": "Transaction 1",
+            "amount": 100,
+            "type": "entrada",
+            "category": "Trabalho",
+            "date": "2023-10-01",
+            "description": "Pagamento de trabalho freelance"
+        }
+    ]
+}

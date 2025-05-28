@@ -18,7 +18,7 @@ npm run dev (front)
 npm run backend 
 
 
-## Objetivo
+## 📌 Objetivo
 
 - Criar um painel de finanças intuitivo onde o usuário possa:
 

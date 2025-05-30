@@ -20,7 +20,7 @@ npm run backend
 
 ## 📌 Objetivo
 
-- Criar um painel de finanças intuitivo onde o usuário possa:
+Criar um painel de finanças intuitivo onde o usuário possa:
 
 - Visualizar entradas e saídas de dinheiro
 

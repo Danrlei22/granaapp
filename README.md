@@ -13,10 +13,11 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 
 ## 📦 Instalação
 
+```bash
 npm install
-npm run dev (front)
+npm run dev
 npm run backend 
-
+```
 
 ## 📌 Objetivo
 

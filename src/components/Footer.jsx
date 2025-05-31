@@ -4,7 +4,7 @@ import { MdOutlineEmail } from "react-icons/md";
 function Footer() {
   return (
     <footer className="bg-primary text-white p-5 text-center text-base bottom-0 fixed w-full">
-      <p>Contantos: </p>
+      <p>Contact: </p>
       <p className="flex justify-center items-center space-x-2">
         <MdOutlineEmail className="text-3xl hover:text-white" />{" "}
         danrlei_vieira@hotmail.com
@@ -29,22 +29,22 @@ function Footer() {
         </a>
       </div>
       <p>
-        &copy; {new Date().getFullYear()} GranaApp. Desenvolvido por Danrlei.
+        &copy; {new Date().getFullYear()} GranaApp. Developed by Danrlei.
       </p>
-      <p>Versão 1.0 - Em desenvolvimento.</p>
+      <p>Version 1.0 - In development.</p>
       <div className="flex justify-center items-center space-x-4 mt-5 text-sm">
         <a href="/termos" className="text-gray-200">
-          Termos de uso
+          Terms of use
         </a>
         {/* Este aplicativo é fornecido "como está", sem garantias. O usuário é responsável pelas informações inseridas e decisões tomadas com base nelas.
          */}
         <a href="/privacidade" className=" text-gray-200">
-          Política de privacidade
+          Privacy Policy
         </a>
         {/* Este aplicativo não coleta nem compartilha dados pessoais dos usuários. Toda a informação inserida é armazenada localmente no dispositivo.
          */}
         <a href="/ajuda" className=" text-gray-200">
-          Ajuda
+          Help
         </a>
         {/* - Para adicionar uma transação, clique no botão "Nova transação".
             - Acompanhe seu saldo atualizado no topo da tela.

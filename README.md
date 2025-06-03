@@ -9,6 +9,7 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 - [Vite](https://vitejs.dev/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [json-server](https://github.com/typicode/json-server)
+- [Tailwindcss](https://tailwindcss.com/)
 
 
 ## 📦 Instalação

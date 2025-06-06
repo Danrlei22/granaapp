@@ -3,6 +3,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 
 import { useSelector } from "react-redux";
+import Navbar from "./components/Navbar";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -11,6 +12,7 @@ function App() {
     <>
       <div className={darkMode ? "bg-black text-white min-h-screen" : "bg-white text-black min-h-screen"}>
         <Header />
+        <Navbar />
         <main className="p-4">Conteúdo principal aqui futuramente...</main>
         <Footer />
       </div>

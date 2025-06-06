@@ -24,11 +24,11 @@ function Header() {
         </a>
       </div>
       <nav className="w-[100%] sm:w-auto flex justify-center">
-        <ul className="flex space-x-10 justify-end pr-4 sm:pr-0">
+        <ul className="flex space-x-10 justify-end sm:pr-0">
           <li>
             <a
               href="/"
-              className="hover:text-black hover:font-bold transition-colors duration-300"
+              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
             >
               Home
             </a>
@@ -36,7 +36,7 @@ function Header() {
           <li>
             <a
               href="/about"
-              className="hover:text-black hover:font-bold transition-colors duration-300"
+              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
             >
               About
             </a>
@@ -44,7 +44,7 @@ function Header() {
           <li>
             <a
               href="/contact"
-              className="hover:text-black hover:font-bold transition-colors duration-300"
+              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
             >
               Contact
             </a>

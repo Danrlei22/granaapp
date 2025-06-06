@@ -10,7 +10,13 @@ function App() {
 
   return (
     <>
-      <div className={darkMode ? "bg-black text-white min-h-screen" : "bg-white text-black min-h-screen"}>
+      <div
+        className={
+          darkMode
+            ? "bg-black text-white min-h-screen min-w-[350px]"
+            : "bg-white text-black min-h-screen min-w-[350px]"
+        }
+      >
         <Header />
         <Navbar />
         <main className="p-4">Conteúdo principal aqui futuramente...</main>

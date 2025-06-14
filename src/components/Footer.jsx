@@ -10,7 +10,7 @@ function Footer() {
         danrlei_vieira@hotmail.com
       </p>
       <p className="flex justify-center items-center space-x-2">
-        <FaWhatsapp className="text-3xl hover:text-[#25D366]" /> (45) 99999-9999
+        <FaWhatsapp className="text-3xl text-[#25D366]" /> (45) 99999-9999
       </p>
       <div className="flex justify-center items-center space-x-4 mb-5 mt-3">
         <a

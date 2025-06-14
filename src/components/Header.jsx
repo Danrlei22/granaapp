@@ -51,7 +51,7 @@ function Header() {
           </li>
         </ul>
       </nav>
-      <div className="flex justify-center sm:justify-end w-full sm:w-auto">
+      <div className="flex justify-center sm:justify-end w-full sm:w-auto mt-2">
         <button
           onClick={handleThemeToggle}
           className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ml-4 ${

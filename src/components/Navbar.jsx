@@ -14,13 +14,13 @@ function Navbar() {
 
   return (
     <nav
-      className={`bg-yellow-500 text-white p-2 shadow-md  w-[100%] md:w-[200px] text-center md:text-start overflow-hidden transition-all duration-500 ${
+      className={`bg-yellow-500 text-black p-2 shadow-md  w-[100%] md:w-[200px] text-center md:text-start overflow-hidden transition-all duration-500 ${
         isMenuOpen ? "h-[300px]" : "h-[40px] md:w-[150px]"
       }`}
     >
       <div className="container mx-auto flex-row justify-between items-center ">
         <div className="flex items-center mb-4 justify-center md:justify-start pl-1">
-          <button onClick={handleToggleMenu} className="flex items-center md:border-b-4 md:border-green-700 md:w-auto">
+          <button onClick={handleToggleMenu} className="flex items-center">
             <FiMenu className="text-[22px]" />
             <h2 className="text-xl font-bold pl-2 leading-none">MENU</h2>
           </button>
@@ -30,26 +30,26 @@ function Navbar() {
             <li className="w-full md:justify-start">
               <a
                 href="/a"
-                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2"
+                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowUpCircle className="text-[22px] text-green-700" />
-                <span className="pl-2">ENTRADA</span>
+                <span className="pl-2 font-bold">ENTRADA</span>
               </a>
             </li>
             <li className="w-full md:justify-start">
               <a
                 href="/b"
-                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2"
+                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowDownCircle className="text-[22px] text-red-500" />
-                <span className="pl-2">SAIDA</span>
+                <span className="pl-2 font-bold">SAIDA</span>
               </a>
             </li>
 
             <li className="w-full md:justify-start">
               <a
                 href="/c"
-                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2"
+                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <div className="relative w-[22px] h-[22px]">
                   <FiRepeat
@@ -63,16 +63,16 @@ function Navbar() {
                     style={{ color: "red", clipPath: "inset(50% 0 0 0)" }}
                   />
                 </div>
-                <span className="pl-2">TRANSAÇÕES</span>
+                <span className="pl-2 font-bold">TRANSAÇÕES</span>
               </a>
             </li>
             <li className="w-full md:justify-start">
               <a
                 href="/d"
-                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2"
+                className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <GoGraph className="text-[22px] text-blue-500" />
-                <span className="pl-2">GRÁFICOS</span>
+                <span className="pl-2 font-bold">GRÁFICOS</span>
               </a>
             </li>
           </ul>

@@ -1,6 +1,6 @@
 function About() {
   return (
-    <div className="about">
+    <div>
       <h1 className="text-center font-bold text-4xl my-4">About</h1>
       <p className="text-center text-2xl px-8 leading-relaxed md:px-16 mb-8">
         <strong>GranaApp</strong> is a web application developed to help users

@@ -10,7 +10,7 @@ function Layout() {
   const location = useLocation();
 
   // Define routes where the side menu should not be displayed
-  const noSideMenuRoutes = ["/about"];
+  const noSideMenuRoutes = ["/about" ,"/contact"];
   const hideSideMenu =  noSideMenuRoutes.includes(location.pathname);
 
   return (

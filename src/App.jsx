@@ -4,7 +4,7 @@ import Header from "./components/Header";
 
 import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import Main from "./components/Main";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -19,11 +19,7 @@ function App() {
         }
       >
         <Header />
-        <div className="flex md:flex-row flex-col">
-          <Navbar />
-          <Home />
-        </div>
-
+        <Main />
         <Footer />
       </div>
     </>

@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+{/* Homepage Styles */}
+.box-info {
+    @apply flex flex-col justify-between items-center
+}
+
+.border-box {
+    @apply border-4 border-primary p-2 rounded m-4
+}
+
+.h2-bold {
+    @apply font-bold text-2xl
+}
+
+.grafic {
+    @apply w-[400px] h-[300px]
+}
+
+.thead-table {
+    @apply border border-black px-4 py-2
+}
+
+.td-table{
+    @apply border border-black px-2 py-1
+}
+
+.temp {
+    @apply transition-all duration-300 ease-in-out
+}

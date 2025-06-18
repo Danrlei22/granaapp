@@ -14,7 +14,7 @@ function Navbar() {
 
   return (
     <nav
-      className={`bg-yellow-500 text-black p-2 shadow-md  w-[100%] md:w-[200px] text-center md:text-start overflow-hidden transition-all duration-500 ${
+      className={`bg-yellow-500 text-black p-2 shadow-md  w-[100%] md:w-[250px] md:min-w-[200px] text-center md:text-start overflow-hidden temp ${
         isMenuOpen ? "h-[300px]" : "h-[40px] md:w-[150px]"
       }`}
     >
@@ -33,7 +33,7 @@ function Navbar() {
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowUpCircle className="text-[22px] text-green-700" />
-                <span className="pl-2 font-bold">ENTRADA</span>
+                <span className="pl-2 font-bold">ENTRY</span>
               </a>
             </li>
             <li className="w-full md:justify-start">
@@ -42,7 +42,7 @@ function Navbar() {
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowDownCircle className="text-[22px] text-red-500" />
-                <span className="pl-2 font-bold">SAIDA</span>
+                <span className="pl-2 font-bold">EXIT</span>
               </a>
             </li>
 
@@ -63,7 +63,7 @@ function Navbar() {
                     style={{ color: "red", clipPath: "inset(50% 0 0 0)" }}
                   />
                 </div>
-                <span className="pl-2 font-bold">TRANSAÇÕES</span>
+                <span className="pl-2 font-bold">TRANSACTIONS</span>
               </a>
             </li>
             <li className="w-full md:justify-start">
@@ -72,7 +72,7 @@ function Navbar() {
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <GoGraph className="text-[22px] text-blue-500" />
-                <span className="pl-2 font-bold">GRÁFICOS</span>
+                <span className="pl-2 font-bold">GRAPHICS</span>
               </a>
             </li>
           </ul>

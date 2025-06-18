@@ -3,7 +3,7 @@ import { MdOutlineEmail } from "react-icons/md";
 
 function Footer() {
   return (
-    <footer className="bg-primary text-white p-5 text-center text-base bottom-0 fixed w-full min-w-[350px]">
+    <footer className="bg-primary text-white p-5 text-center text-base bottom-0 w-full min-w-[350px]">
       <p>Contact: </p>
       <p className="flex justify-center items-center space-x-2">
         <MdOutlineEmail className="text-3xl hover:text-white" />{" "}

@@ -4,7 +4,7 @@ import { FiArrowUpCircle, FiArrowDownCircle, FiRepeat } from "react-icons/fi";
 import { toggleMenu } from "../redux/slices/menuSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-function Navbar() {
+function SideMenu() {
   const dispatch = useDispatch();
   const isMenuOpen = useSelector((state) => state.menu.isOpen);
 
@@ -82,4 +82,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default SideMenu;

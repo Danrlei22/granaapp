@@ -60,7 +60,7 @@ function Home() {
           <h2 className="h2-bold box-info">Latest transfers</h2>
 
           <div className="flex flex-col justify-between items-center">
-            <table className="table-auto text-center text-black border-collapse border border-tertiary w-[340px] md:w-[500px] temp m-4">
+            <table className="table-auto text-center text-black border-collapse border border-tertiary w-[320px] md:w-[500px] temp">
               <thead className="bg-tertiary">
                 <tr className="text-white">
                   <th className="thead-table">Amount</th>

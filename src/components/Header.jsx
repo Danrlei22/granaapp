@@ -2,6 +2,7 @@ import logo from "../assets/logo.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slices/themeSlice";
+import { Link } from "react-router-dom";
 
 function Header() {
   const dispatch = useDispatch();
@@ -14,40 +15,40 @@ function Header() {
   return (
     <header className=" flex-col sm:flex-row bg-primary text-white p-4 flex justify-around items-center h-auto">
       <div className="flex items-center space-x pl-0 sm:pl-10">
-        <a href="/" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <img
             src={logo}
             alt="GranaApp Logoooo"
             className="h-[50px] w-[50px]"
           />
           <h1 className="text-3xl font-bold">GranaApp</h1>
-        </a>
+        </Link>
       </div>
       <nav className="w-[100%] sm:w-auto flex justify-center">
         <ul className="flex space-x-10 justify-end sm:pr-0">
           <li>
-            <a
-              href="/"
-              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
+            <Link
+              to="/"
+              className="hover:bg-tertiary hover:rounded-lg hover:font-bold p-3"
             >
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/about"
-              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
+            <Link
+              to="/about"
+              className="hover:bg-tertiary hover:rounded-lg hover:font-bold p-3"
             >
               About
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/contact"
-              className="hover:bg-green-600 hover:rounded-lg hover:font-bold p-3"
+            <Link
+              to="/contact"
+              className="hover:bg-tertiary hover:rounded-lg hover:font-bold p-3"
             >
               Contact
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

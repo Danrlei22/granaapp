@@ -1,28 +1,21 @@
 import "./App.css";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-
-import { useSelector } from "react-redux";
-import Navbar from "./components/Navbar";
-import Main from "./components/Main";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 function App() {
-  const darkMode = useSelector((state) => state.theme.darkMode);
-
   return (
-    <>
-      <div
-        className={
-          darkMode
-            ? "bg-black text-white min-h-screen min-w-[350px]"
-            : "bg-white text-black min-h-screen min-w-[350px]"
-        }
-      >
-        <Header />
-        <Main />
-        <Footer />
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 

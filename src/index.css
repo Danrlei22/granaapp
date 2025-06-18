@@ -8,11 +8,11 @@
 }
 
 .border-box {
-    @apply border-4 border-primary p-2 rounded m-4
+    @apply border-4 border-tertiary p-2 rounded m-4
 }
 
 .h2-bold {
-    @apply font-bold text-2xl
+    @apply font-bold text-3xl
 }
 
 .grafic {

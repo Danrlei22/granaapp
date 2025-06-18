@@ -29,7 +29,7 @@ function Navbar() {
           <ul className="flex flex-col space-y-2">
             <li className="w-full md:justify-start">
               <a
-                href="/a"
+                href="/entry"
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowUpCircle className="text-[22px] text-green-700" />
@@ -38,7 +38,7 @@ function Navbar() {
             </li>
             <li className="w-full md:justify-start">
               <a
-                href="/b"
+                href="/exit"
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <FiArrowDownCircle className="text-[22px] text-red-500" />
@@ -48,7 +48,7 @@ function Navbar() {
 
             <li className="w-full md:justify-start">
               <a
-                href="/c"
+                href="/transactions"
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <div className="relative w-[22px] h-[22px]">
@@ -68,7 +68,7 @@ function Navbar() {
             </li>
             <li className="w-full md:justify-start">
               <a
-                href="/d"
+                href="/graphics"
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <GoGraph className="text-[22px] text-blue-500" />

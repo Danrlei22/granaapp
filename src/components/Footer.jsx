@@ -38,9 +38,9 @@ function Footer() {
           Terms of use
         </Link>
         
-        <a href="/privacidade" className=" text-gray-200 hover:underline">
+        <Link to="/privacy" className=" text-gray-200 hover:underline">
           Privacy Policy
-        </a>
+        </Link>
         {/* Este aplicativo não coleta nem compartilha dados pessoais dos usuários. Toda a informação inserida é armazenada localmente no dispositivo.
          */}
         <a href="/ajuda" className=" text-gray-200 hover:underline">

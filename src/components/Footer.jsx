@@ -1,5 +1,6 @@
 import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -33,17 +34,16 @@ function Footer() {
       </p>
       <p>Version 1.0 - In development.</p>
       <div className="flex justify-center items-center space-x-4 mt-5 text-sm">
-        <a href="/termos" className="text-gray-200">
+        <Link to="/terms" className="text-gray-200 hover:underline">
           Terms of use
-        </a>
-        {/* Este aplicativo é fornecido "como está", sem garantias. O usuário é responsável pelas informações inseridas e decisões tomadas com base nelas.
-         */}
-        <a href="/privacidade" className=" text-gray-200">
+        </Link>
+        
+        <a href="/privacidade" className=" text-gray-200 hover:underline">
           Privacy Policy
         </a>
         {/* Este aplicativo não coleta nem compartilha dados pessoais dos usuários. Toda a informação inserida é armazenada localmente no dispositivo.
          */}
-        <a href="/ajuda" className=" text-gray-200">
+        <a href="/ajuda" className=" text-gray-200 hover:underline">
           Help
         </a>
         {/* - Para adicionar uma transação, clique no botão "Nova transação".

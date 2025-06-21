@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <div className="flex flex-row flex-wrap justify-evenly items-center h-auto p-2">
-      <div className="flex flex-col justify-between items-center mb-4 border-box w-[300px] h-[250px]">
+      <div className="flex flex-col justify-between items-center mb-4 border-box w-[300px] h-[250px] shadow-2xl">
         <h2 className="h2-bold">Month</h2>
 
         <div className="box-info">
@@ -33,7 +33,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center border-box w-[400px] h-[250px]">
+      <div className="flex justify-center items-center border-box w-[400px] h-[250px] shadow-2xl">
         <div className="box-info">
           <h2 className="font-bold text-tertiary text-4xl text-center">Phrase of the day</h2>
           <p className="p-4 text-center italic text-xl font-bold">
@@ -42,7 +42,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="border-box">
+      <div className="border-box shadow-2xl">
         <div>
           <h2 className="h2-bold box-info">Chart of the month</h2>
           <div className="border-solid border-2 border-tertiary ">
@@ -55,7 +55,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between items-center mb-4 border-box">
+      <div className="flex flex-col justify-between items-center mb-4 border-box shadow-2xl">
         <div>
           <h2 className="h2-bold box-info">Latest transfers</h2>
 

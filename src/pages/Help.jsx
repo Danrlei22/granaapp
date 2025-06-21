@@ -9,7 +9,6 @@ function Help() {
           1 - To add a transaction, click on the "Transaction" menu.
         </p>
         <p className="mb-4">
-          {" "}
           2 - Follow your updated balance at the top of the screen.
         </p>
         <p className="mb-4">

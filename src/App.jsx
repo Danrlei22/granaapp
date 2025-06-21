@@ -1,4 +1,3 @@
-import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
@@ -7,6 +6,7 @@ import Contact from "./pages/Contact";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Help from "./pages/Help";
+import Entry from "./pages/Entry";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/entry" element={<Entry />} />
         </Route>
       </Routes>
     </Router>

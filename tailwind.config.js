@@ -10,6 +10,9 @@ export default {
         'primary': '#c79d33', //gold
         'secondary': '#d7b661', //light gold
         'tertiary': '#333FC7' // purple
+      },
+      screens: {
+        xs: '480px'
       }
     },
   },

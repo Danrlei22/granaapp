@@ -2,7 +2,8 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 
 function Entry() {
   return (
-    <div className="flex flex-col items-center w-full w-min-[350px]">
+    <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
+      {/* Search Bar */}
       <div className="flex flex-row p-4 bg-secondary gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl">
         <input
           type="text"
@@ -14,11 +15,12 @@ function Entry() {
         </button>
       </div>
 
-      <div className="flex flex-row flex-wrap justify-center items-start h-auto sm:p-2 p-0 text-xs sm:text-base">
-        <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-0 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+     {/* Entry tables */}
+      <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1">
+        <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
           <h1 className="font-bold text-2xl box-info sm:mb-4 mb-2">Entry</h1>
-          <div>
-            <table className="border border-tertiary w-full text-center">
+          <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px]">
+            <table className="border border-tertiary text-center min-w-[400px]">
               <thead className="bg-tertiary text-white">
                 <tr>
                   <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -126,10 +128,23 @@ function Entry() {
             </button>
           </div>
         </div>
+        {/* tooltip nos botoes de data */}
       </div>
-
-      <div className="flex flex-row w-full h-auto p-2">
-        <button></button>
+    
+        {/* Buttons */}
+      <div className="flex flex-row w-full p-2 gap-2 justify-center items-end mt-auto my-4">
+        <button className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary">
+          New entry
+        </button>
+        <button className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary">
+          Edit
+        </button>
+        <button className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary">
+          Delete
+        </button>
+        <button className="bg-blue-600 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary">
+          Export PDF
+        </button>
       </div>
     </div>
   );

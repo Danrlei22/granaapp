@@ -48,7 +48,7 @@ function SideMenu() {
 
             <li className="w-full md:justify-start">
               <a
-                href="/transactions"
+                href="/resume"
                 className="flex items-center justify-center md:justify-start hover:bg-yellow-600 transition-colors duration-200 px-2 rounded-xl"
               >
                 <div className="relative w-[22px] h-[22px]">
@@ -63,7 +63,7 @@ function SideMenu() {
                     style={{ color: "red", clipPath: "inset(50% 0 0 0)" }}
                   />
                 </div>
-                <span className="pl-2 font-bold">TRANSACTIONS</span>
+                <span className="pl-2 font-bold">RESUME</span>
               </a>
             </li>
             <li className="w-full md:justify-start">

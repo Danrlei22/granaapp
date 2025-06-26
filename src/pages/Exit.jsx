@@ -1,5 +1,5 @@
-import { FaEdit, FaFilePdf, FaTrash } from "react-icons/fa";
-import { FaMagnifyingGlass, FaPlus } from "react-icons/fa6";
+import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 function Exit() {
   return (
@@ -135,7 +135,7 @@ function Exit() {
       {/* Buttons */}
       <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
         <button className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1">
-          <FaPlus />
+          <FaPlusSquare />
           New exit
         </button>
         <button className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1">

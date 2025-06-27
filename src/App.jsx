@@ -8,7 +8,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Help from "./pages/Help";
 import Entry from "./pages/Entry";
 import Exit from "./pages/Exit";
-import Resume from "./pages/Resume";
+import Summary from "./pages/Summary";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
           <Route path="/help" element={<Help />} />
           <Route path="/entry" element={<Entry />} />
           <Route path="/exit" element={<Exit />} />
-          <Route path="/resume" element={<Resume />} />
+          <Route path="/summary" element={<Summary />} />
         </Route>
       </Routes>
     </Router>

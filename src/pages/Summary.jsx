@@ -52,7 +52,7 @@ function Summary() {
 
         {/* filtro */}
         <div className="flex flex-col items-center justify-center w-auto min-w-[280px] border-box shadow-2xl shadow-tertiary h-auto max-h-[140px]">
-          <h2 className="font-bold">Period filter:</h2>
+          <h2 className="font-bold text-xl">Period filter:</h2>
           <div className="flex flex-row w-auto h-[50px] border-2 border-tertiary gap-2 p-2 m-1">
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
               Quarter

@@ -2,100 +2,100 @@
   "summary": [
     {
       "id": 1,
-      "type": "entrada",
+      "type": "entry",
       "amount": 1200,
       "category": "Salário",
       "description": "Pagamento mensal",
-      "date": "2023-06-01"
+      "date": "01/06/2023"
     },
     {
       "id": 2,
-      "type": "entrada",
+      "type": "entry",
       "amount": 300,
       "category": "Freelance",
       "description": "Site para cliente",
-      "date": "2023-06-10"
+      "date": "10/06/2023"
     },
     {
       "id": 3,
-      "type": "entrada",
+      "type": "entry",
       "amount": 150,
       "category": "Presente",
       "description": "Aniversário",
-      "date": "2023-07-05"
+      "date": "05/07/2023"
     },
     {
       "id": 4,
-      "type": "entrada",
+      "type": "entry",
       "amount": 500,
       "category": "Venda",
       "description": "Venda de produto usado",
-      "date": "2023-07-20"
+      "date": "20/07/2023"
     },
     {
       "id": 5,
-      "type": "entrada",
+      "type": "entry",
       "amount": 250,
       "category": "Reembolso",
       "description": "Reembolso de curso",
-      "date": "2023-08-12"
+      "date": "12/08/2023"
     },
     {
       "id": 6,
-      "type": "entrada",
+      "type": "entry",
       "amount": 100,
       "category": "Outros",
       "description": "Ajuda familiar",
-      "date": "2023-09-02"
+      "date": "02/09/2023"
     },
 
     {
       "id": 7,
-      "type": "saida",
+      "type": "exit",
       "amount": 400,
       "category": "Aluguel",
       "description": "Apartamento",
-      "date": "2023-06-05"
+      "date": "05/06/2023"
     },
     {
       "id": 8,
-      "type": "saida",
+      "type": "exit",
       "amount": 200,
       "category": "Mercado",
       "description": "Compras do mês",
-      "date": "2023-06-12"
+      "date": "12/06/2023"
     },
     {
       "id": 9,
-      "type": "saida",
+      "type": "exit",
       "amount": 80,
       "category": "Transporte",
       "description": "Gasolina",
-      "date": "2023-07-01"
+      "date": "01/07/2023"
     },
     {
       "id": 10,
-      "type": "saida",
+      "type": "exit",
       "amount": 60,
       "category": "Lazer",
       "description": "Cinema e lanche",
-      "date": "2023-07-15"
+      "date": "15/07/2023"
     },
     {
       "id": 11,
-      "type": "saida",
+      "type": "exit",
       "amount": 150,
       "category": "Saúde",
       "description": "Consulta médica",
-      "date": "2023-08-08"
+      "date": "08/08/2023"
     },
     {
       "id": 12,
-      "type": "saida",
+      "type": "exit",
       "amount": 90,
       "category": "Educação",
       "description": "Assinatura de curso",
-      "date": "2023-09-04"
+      "date": "04/09/2023"
     }
   ]
 }

@@ -1,7 +1,49 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import React from "react";
 
 function Entry() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/summary")
+      .then((res) => {
+        const entriesData = res.data.filter((item) => item.type === "entry");
+        setEntries(entriesData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar dados: ", err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-lg text-gray-700">Loading...</p>
+      </div>
+    );
+  }
+
+  const groupByMonth = (data) => {
+    return data.reduce((acc, item) => {
+      const [year, month] = item.date.split("/").reverse();
+      const key = `${month}/${year}`;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(item);
+      return acc;
+    }, {});
+  };
+
+  const groupedEntries = groupByMonth(entries);
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -42,68 +84,49 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                <tr>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    1
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    R$ 3.000,00
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Salary
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Monthly salary for September
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    2023-09-30
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={5} className="bg-green-800 text-white">
-                    Total month: R$ 3.000,00
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    2
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    R$ 2.000,00
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Investment
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Return on investment in stocks
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    2023-10-01
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    3
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    R$ 1.500,00
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Freelance
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Payment for freelance work
-                  </td>
-                  <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    2023-10-05
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={5} className="bg-green-800 text-white">
-                    Total month: R$ 3.500,00
-                  </td>
-                </tr>
-                {/*Toda vez q fechar o mes mostrar o total do mes */}
+                {Object.entries(groupedEntries).map(([month, items]) => {
+                  const total = items.reduce(
+                    (sum, item) => sum + item.amount,
+                    0
+                  );
+                  return (
+                    <React.Fragment key={month}>
+                      {items.map((item) => (
+                        <tr key={item.id}>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.id}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            R${" "}
+                            {item.amount.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.category}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.description}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.date}
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td
+                          colSpan="5"
+                          className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
+                        >
+                          Total {month}: R${" "}
+                          {total.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>

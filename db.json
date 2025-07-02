@@ -135,6 +135,38 @@
       "category": "Salary",
       "description": "",
       "date": "2025-07-01"
+    },
+    {
+      "id": "f995",
+      "type": "entry",
+      "amount": 99.99,
+      "category": "Salary",
+      "description": "teste",
+      "date": "2025-06-30"
+    },
+    {
+      "id": "c078",
+      "type": "entry",
+      "amount": 55.55,
+      "category": "Investment",
+      "description": "Pix",
+      "date": "2025-06-29"
+    },
+    {
+      "id": "aef7",
+      "type": "entry",
+      "amount": 0.1,
+      "category": "Other",
+      "description": "teste do amount >0",
+      "date": "2025-06-29"
+    },
+    {
+      "id": "9fd0",
+      "type": "entry",
+      "amount": 11111.11,
+      "category": "Other",
+      "description": "testee",
+      "date": "2025-07-10"
     }
   ]
 }

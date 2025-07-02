@@ -48,7 +48,6 @@
       "description": "Ajuda familiar",
       "date": "02/09/2023"
     },
-
     {
       "id": 7,
       "type": "exit",
@@ -96,6 +95,46 @@
       "category": "Educação",
       "description": "Assinatura de curso",
       "date": "04/09/2023"
+    },
+    {
+      "id": 7,
+      "amount": 1500,
+      "category": "Salary",
+      "description": "Salário do mês",
+      "date": "2025-07-01",
+      "type": "entry"
+    },
+    {
+      "id": 8,
+      "type": "entry",
+      "amount": 0,
+      "category": "",
+      "description": "",
+      "date": ""
+    },
+    {
+      "id": 9,
+      "type": "entry",
+      "amount": 0,
+      "category": "Salary",
+      "description": "",
+      "date": "2025-06-30"
+    },
+    {
+      "id": "6780",
+      "type": "entry",
+      "amount": 100,
+      "category": "Other",
+      "description": "Projeto de finanças",
+      "date": "2025-07-01"
+    },
+    {
+      "id": "fc54",
+      "type": "entry",
+      "amount": 3000,
+      "category": "Salary",
+      "description": "",
+      "date": "2025-07-01"
     }
   ]
 }

@@ -97,7 +97,7 @@ function Exit() {
                             {item.id}
                           </td>
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R${" "}
+                            R$ -
                             {item.amount.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
                             })}
@@ -118,7 +118,7 @@ function Exit() {
                           colSpan="5"
                           className="font-bold bg-red-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                         >
-                          Total {month}: R${" "}
+                          Total {month}: R$ -
                           {total.toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                           })}

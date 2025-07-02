@@ -8,18 +8,26 @@ function Entry() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [amount, setAmount] = useState("0,00");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const categories = ["Salary", "Freelance", "Investment", "Present", "Other"];
+
+  const fetchEntries = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/summary");
+      const entriesData = res.data.filter((item) => item.type === "entry");
+      setEntries(entriesData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/summary")
-      .then((res) => {
-        const entriesData = res.data.filter((item) => item.type === "entry");
-        setEntries(entriesData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar dados: ", err);
-        setLoading(false);
-      });
+    fetchEntries();
   }, []);
 
   if (loading) {
@@ -43,6 +51,54 @@ function Entry() {
   };
 
   const groupedEntries = groupByMonth(entries);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !amount ||
+      parseFloat(amount.replace(",", ".")) <= 0 ||
+      !category ||
+      !date
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const newEntry = {
+      type: "entry",
+      amount: parseFloat(amount.replace(",", ".")),
+      category,
+      description,
+      date,
+    };
+
+    try {
+      await axios.post("http://localhost:5000/summary", newEntry);
+      alert("Entry added successfully!");
+
+      fetchEntries();
+
+      setAmount("0,00");
+      setCategory("");
+      setDescription("");
+      setDate("");
+    } catch (error) {
+      console.error("Error adding entry:", error);
+      alert("Failed to add entry. Please try again.");
+    }
+  };
+
+  const handleAmountChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+
+    value = value.padStart(3, "0");
+
+    const reais = value.slice(0, -2);
+    const centavos = value.slice(-2);
+
+    setAmount(`${parseInt(reais)}${","}${centavos}`);
+  };
 
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
@@ -153,6 +209,69 @@ function Entry() {
           </div>
         </div>
         {/* tooltip nos botoes de data */}
+      </div>
+
+      {/* Form */}
+      <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col w-full max-w-md p-4 gap-2"
+        >
+          <h1 className="font-bold text-2xl box-info mb-4">New Entry</h1>
+          <label className="font-bold">Amount:</label>
+          <input
+            type="text"
+            name="amount"
+            placeholder="0,00"
+            min={0}
+            value={amount}
+            onChange={handleAmountChange}
+            className="border border-tertiary p-2 rounded w-full"
+            required
+          />
+          <label className="font-bold">Category:</label>
+          <select
+            name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border border-tertiary p-2 rounded w-full"
+            required
+          >
+            <option value="">Select category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+          <label className="font-bold">Description:</label>
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            max={50}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="border border-tertiary p-2 rounded w-full"
+          />
+
+          <label className="font-bold">Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="border border-tertiary p-2 rounded w-full"
+            required
+          />
+
+          <button
+            type="submit"
+            className="font-bold bg-blue-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-blue-800 mt-4"
+          >
+            Submit
+          </button>
+        </form>
       </div>
 
       {/* Buttons */}

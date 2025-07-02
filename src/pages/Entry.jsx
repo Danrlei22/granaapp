@@ -41,8 +41,16 @@ function Entry() {
 
   const groupByMonth = (data) => {
     return data.reduce((acc, item) => {
-      const [year, month] = item.date.split("/").reverse();
-      const key = `${month}/${year}`;
+      const dateObj = new Date(item.date);
+
+      if(isNaN(dateObj)) return acc;
+      
+
+      const monthName = dateObj.toLocaleDateString("pt-BR", {month: "long"});
+      const year = dateObj.getFullYear();
+    
+      const key = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)}/${year}`;
+
       if (!acc[key]) {
         acc[key] = [];
       }
@@ -174,7 +182,7 @@ function Entry() {
                             {item.description}
                           </td>
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.date}
+                            {new Date(item.date).toLocaleDateString("pt-BR")}
                           </td>
                         </tr>
                       ))}

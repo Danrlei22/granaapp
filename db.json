@@ -167,6 +167,46 @@
       "category": "Other",
       "description": "testee",
       "date": "2025-07-10"
+    },
+    {
+      "id": "fdb0",
+      "type": "entry",
+      "amount": 88.88,
+      "category": "Salary",
+      "description": "teste mes",
+      "date": "2025-07-10"
+    },
+    {
+      "id": "8074",
+      "type": "entry",
+      "amount": 8.88,
+      "category": "Salary",
+      "description": "teste mes",
+      "date": "2025-07-10"
+    },
+    {
+      "id": "205b",
+      "type": "entry",
+      "amount": 8.88,
+      "category": "Other",
+      "description": "teste mes",
+      "date": "2025-07-10"
+    },
+    {
+      "id": "1ba3",
+      "type": "entry",
+      "amount": 5.55,
+      "category": "Salary",
+      "description": "5555",
+      "date": "2025-07-11"
+    },
+    {
+      "id": "023c",
+      "type": "entry",
+      "amount": 222.22,
+      "category": "Freelance",
+      "description": "Testando mes ",
+      "date": "2025-08-08"
     }
   ]
 }

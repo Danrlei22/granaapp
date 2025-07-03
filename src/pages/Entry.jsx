@@ -7,7 +7,6 @@ import React from "react";
 function Entry() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [amount, setAmount] = useState("0,00");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -43,13 +42,14 @@ function Entry() {
     return data.reduce((acc, item) => {
       const dateObj = new Date(item.date);
 
-      if(isNaN(dateObj)) return acc;
-      
+      if (isNaN(dateObj)) return acc;
 
-      const monthName = dateObj.toLocaleDateString("pt-BR", {month: "long"});
+      const monthName = dateObj.toLocaleDateString("pt-BR", { month: "long" });
       const year = dateObj.getFullYear();
-    
-      const key = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)}/${year}`;
+
+      const key = `${monthName.charAt(0).toUpperCase()}${monthName.slice(
+        1
+      )}/${year}`;
 
       if (!acc[key]) {
         acc[key] = [];
@@ -117,6 +117,34 @@ function Entry() {
     }
   };
 
+  const monthMap = {
+    janeiro: 0,
+    fevereiro: 1,
+    março: 2,
+    abril: 3,
+    maio: 4,
+    junho: 5,
+    julho: 6,
+    agosto: 7,
+    setembro: 8,
+    outubro: 9,
+    novembro: 10,
+    dezembro: 11,
+  };
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  const currentMonthEntries = Object.entries(groupedEntries).filter(
+    ([month]) => {
+      const [monthName, year] = month.toLowerCase().split("/");
+      return (
+        monthMap[monthName.toLowerCase()] === currentMonth &&
+        Number(year) === currentYear
+      );
+    }
+  );
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -157,49 +185,60 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {Object.entries(groupedEntries).map(([month, items]) => {
-                  const total = items.reduce(
-                    (sum, item) => sum + item.amount,
-                    0
-                  );
-                  return (
-                    <React.Fragment key={month}>
-                      {items.map((item) => (
-                        <tr key={item.id}>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.id}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R${" "}
-                            {item.amount.toLocaleString("pt-BR", {
+                {currentMonthEntries.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="text-center p-2 text-black italic"
+                    >
+                      No entries found for this month.
+                    </td>
+                  </tr>
+                ) : (
+                  currentMonthEntries.map(([month, items]) => {
+                    const total = items.reduce(
+                      (sum, item) => sum + item.amount,
+                      0
+                    );
+                    return (
+                      <React.Fragment key={month}>
+                        {items.map((item) => (
+                          <tr key={item.id}>
+                            <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {item.id}
+                            </td>
+                            <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              R${" "}
+                              {item.amount.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                            <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {item.category}
+                            </td>
+                            <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {item.description}
+                            </td>
+                            <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {new Date(item.date).toLocaleDateString("pt-BR")}
+                            </td>
+                          </tr>
+                        ))}
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
+                          >
+                            Total {month}: R${" "}
+                            {total.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
                             })}
                           </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.category}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.description}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {new Date(item.date).toLocaleDateString("pt-BR")}
-                          </td>
                         </tr>
-                      ))}
-                      <tr>
-                        <td
-                          colSpan="5"
-                          className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
-                        >
-                          Total {month}: R${" "}
-                          {total.toLocaleString("pt-BR", {
-                            minimumFractionDigits: 2,
-                          })}
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
+                      </React.Fragment>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>

@@ -220,7 +220,10 @@ function Entry() {
                               {item.description}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                              {new Date(item.date).toLocaleDateString("pt-BR")}
+                              {(() => {
+                                const [year, month, day] = item.date.split("-");
+                                return `${day}/${month}/${year}`;
+                              })()}
                             </td>
                           </tr>
                         ))}

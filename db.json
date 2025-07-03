@@ -215,6 +215,62 @@
       "category": "Investment",
       "description": "22",
       "date": "2025-07-02"
+    },
+    {
+      "id": "b4c4",
+      "type": "entry",
+      "amount": 11.11,
+      "category": "Salary",
+      "description": "1111",
+      "date": "2025-07-01"
+    },
+    {
+      "id": "7eb8",
+      "type": "entry",
+      "amount": 1212.12,
+      "category": "Salary",
+      "description": "2121221",
+      "date": "2025-07-02"
+    },
+    {
+      "id": "aeea",
+      "type": "entry",
+      "amount": 110,
+      "category": "Salary",
+      "description": "1111",
+      "date": "2025-07-23"
+    },
+    {
+      "id": "8aab",
+      "type": "entry",
+      "amount": 121.21,
+      "category": "Salary",
+      "description": "121212",
+      "date": "2025-07-02"
+    },
+    {
+      "id": "5435",
+      "type": "entry",
+      "amount": 909.99,
+      "category": "Salary",
+      "description": "9999999",
+      "date": "2025-07-09"
+    },
+    {
+      "id": "359a",
+      "type": "entry",
+      "amount": 9.99,
+      "category": "Salary",
+      "description": "999999",
+      "date": "2025-07-09"
+    },
+    {
+      "id": "67ef",
+      "type": "entry",
+      "amount": 111.11,
+      "category": "Salary",
+      "description": "111111",
+      "date": "2025-07-10"
     }
   ]
 }

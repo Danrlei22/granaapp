@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import React from "react";
 
 function Entry() {
@@ -13,6 +13,7 @@ function Entry() {
   const [date, setDate] = useState("");
   const categories = ["Salary", "Freelance", "Investment", "Present", "Other"];
   const [showForm, setShowForm] = useState(false);
+  const [highlightedId, setHighlightedId] = useState(null);
 
   const fetchEntries = async () => {
     try {
@@ -83,10 +84,17 @@ function Entry() {
     };
 
     try {
-      await axios.post("http://localhost:5000/summary", newEntry);
+      const res = await axios.post("http://localhost:5000/summary", newEntry);
+      const createdEntry = res.data;
       alert("Entry added successfully!");
 
-      fetchEntries();
+      await fetchEntries();
+
+      setHighlightedId(createdEntry.id);
+
+      setTimeout(() => {
+        setHighlightedId(null);
+      }, 3000);
 
       setAmount("0,00");
       setCategory("");
@@ -203,7 +211,14 @@ function Entry() {
                     return (
                       <React.Fragment key={month}>
                         {items.map((item) => (
-                          <tr key={item.id}>
+                          <tr
+                            key={item.id}
+                            className={`transition duration-300 ${
+                              highlightedId === item.id
+                                ? "animate-bg-blink"
+                                : ""
+                            }`}
+                          >
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                               {item.id}
                             </td>
@@ -277,6 +292,13 @@ function Entry() {
             onSubmit={handleSubmit}
             className="flex flex-col w-full max-w-md p-4 gap-2"
           >
+            <button
+              type="button"
+              className="text-red-600 hover:text-red-800 flex justify-end text-xl"
+              onClick={handleCancel}
+            >
+              <FaXmark />
+            </button>
             <h1 className="font-bold text-2xl box-info mb-4">New Entry</h1>
             <label className="font-bold">Amount:</label>
             <input

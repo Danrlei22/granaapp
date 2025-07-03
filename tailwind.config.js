@@ -13,7 +13,16 @@ export default {
       },
       screens: {
         xs: '480px'
-      }
+      },
+      animation: {
+        'bg-blink': 'bgBlink 1s steps(2,start) infinite',
+      },
+      keyframes: {
+        bgBlink: {
+          '0%': { backgroundColor: 'transparent' },
+          '100%': { backgroundColor: '#facc15' },
+        },
+      },
     },
   },
   plugins: [],

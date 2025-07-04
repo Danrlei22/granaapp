@@ -444,8 +444,24 @@ function Entry() {
           }}
           className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
         >
-          <FaTrash /> {isDeleteMode ? "Confirm Deletion" : "Delete"}
+          <FaTrash />{" "}
+          {isDeleteMode
+            ? selectedIds.length > 0
+              ? "Confirm Deletion"
+              : "Selecionar itens"
+            : "Delete"}
         </button>
+        {isDeleteMode && (
+          <button
+            onClick={() => {
+              setIsDeleteMode(false);
+              setSelectedIds([]);
+            }}
+            className="bg-red-400 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaXmark /> Cancel delete
+          </button>
+        )}
         <button className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
           <FaFilePdf /> Export PDF
         </button>

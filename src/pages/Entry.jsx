@@ -14,6 +14,8 @@ function Entry() {
   const categories = ["Salary", "Freelance", "Investment", "Present", "Other"];
   const [showForm, setShowForm] = useState(false);
   const [highlightedId, setHighlightedId] = useState(null);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchEntries = async () => {
     try {
@@ -153,6 +155,38 @@ function Entry() {
     }
   );
 
+  const toggleSelection = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((itemId) => itemId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleDeleteSelected = async () => {
+    try {
+      const confirmed = confirm(
+        "Are you sure you want to delete the selected items?"
+      );
+      if (!confirmed) return;
+
+      await Promise.all(
+        selectedIds.map((id) =>
+          axios.delete(`http://localhost:5000/summary/${id}`)
+        )
+      );
+
+      setSelectedIds([]);
+      setIsDeleteMode(false);
+      await fetchEntries();
+    } catch (error) {
+      console.error("Error deleting multiple items: ", error);
+      alert("Error deleting entries. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -217,9 +251,18 @@ function Entry() {
                               highlightedId === item.id
                                 ? "animate-bg-blink"
                                 : ""
+                            } ${
+                              selectedIds.includes(item.id) ? "bg-red-200" : ""
                             }`}
                           >
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {isDeleteMode && (
+                                <input
+                                  type="checkbox"
+                                  checked={selectedIds.includes(item.id)}
+                                  onChange={() => toggleSelection(item.id)}
+                                />
+                              )}
                               {item.id}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -389,8 +432,19 @@ function Entry() {
         <button className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1">
           <FaEdit /> Edit
         </button>
-        <button className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1">
-          <FaTrash /> Delete
+        <button
+          onClick={() => {
+            if (!isDeleteMode) {
+              setIsDeleteMode(true);
+            } else if (selectedIds.length > 0) {
+              handleDeleteSelected();
+            } else {
+              alert("Select at least one item to delete.");
+            }
+          }}
+          className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
+        >
+          <FaTrash /> {isDeleteMode ? "Confirm Deletion" : "Delete"}
         </button>
         <button className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
           <FaFilePdf /> Export PDF

@@ -145,92 +145,12 @@
       "date": "2025-08-08"
     },
     {
-      "id": "7157",
-      "type": "entry",
-      "amount": 1,
-      "category": "Investment",
-      "description": "",
-      "date": "2025-07-03"
-    },
-    {
-      "id": "03dc",
-      "type": "entry",
-      "amount": 10,
-      "category": "Salary",
-      "description": "1",
-      "date": "2025-07-03"
-    },
-    {
-      "id": "c042",
-      "type": "entry",
-      "amount": 1,
-      "category": "Salary",
-      "description": "2",
-      "date": "2025-07-04"
-    },
-    {
-      "id": "5999",
-      "type": "entry",
-      "amount": 20,
-      "category": "Investment",
-      "description": "3",
-      "date": "2025-07-03"
-    },
-    {
-      "id": "817d",
-      "type": "entry",
-      "amount": 10,
-      "category": "Freelance",
-      "description": "4",
-      "date": "2025-07-05"
-    },
-    {
-      "id": "330d",
-      "type": "entry",
-      "amount": 90,
-      "category": "Salary",
-      "description": "5",
-      "date": "2025-07-03"
-    },
-    {
-      "id": "7a3a",
-      "type": "entry",
-      "amount": 99,
-      "category": "Salary",
-      "description": "99",
-      "date": "2025-07-03"
-    },
-    {
-      "id": "daf7",
-      "type": "entry",
-      "amount": 11110,
-      "category": "Salary",
-      "description": "100",
-      "date": "2025-07-30"
-    },
-    {
-      "id": "0035",
-      "type": "entry",
-      "amount": 22,
-      "category": "Investment",
-      "description": "22",
-      "date": "2025-07-02"
-    },
-    {
       "id": "b4c4",
       "type": "entry",
       "amount": 11.11,
       "category": "Salary",
       "description": "1111",
       "date": "2025-07-01"
-    },
-    {
-      "id": "7eb8",
-      "type": "entry",
-      "amount": 1212.12,
-      "category": "Salary",
-      "description": "2121221",
-      "date": "2025-07-02"
     },
     {
       "id": "aeea",

@@ -17,6 +17,7 @@ function Entry() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedEditId, setSelectedEditId] = useState(null)
 
   const fetchEntries = async () => {
     try {
@@ -264,6 +265,15 @@ function Entry() {
                                   onChange={() => toggleSelection(item.id)}
                                 />
                               )}
+                              {isEditMode &&  (
+                                <input 
+                                  type="radio"
+                                  name="edit-select"
+                                  checked={selectedEditId === item.id}
+                                  value={item.id}
+                                  onChange={() => setSelectedEditId(item.id)}
+                                />
+                              )}
                               {item.id}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -434,7 +444,7 @@ function Entry() {
           onClick={() => {
             if (!isEditMode) {
               setIsEditMode(true);
-              console.log(isEditMode)
+              setIsDeleteMode(false);
             }
           }}
           className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
@@ -445,6 +455,7 @@ function Entry() {
           onClick={() => {
             if (!isDeleteMode) {
               setIsDeleteMode(true);
+              setIsEditMode(false)
             } else if (selectedIds.length > 0) {
               handleDeleteSelected();
             } else {

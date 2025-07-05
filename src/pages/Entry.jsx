@@ -16,6 +16,7 @@ function Entry() {
   const [highlightedId, setHighlightedId] = useState(null);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchEntries = async () => {
     try {
@@ -422,14 +423,22 @@ function Entry() {
       )}
 
       {/* Buttons */}
-      <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
+      <div className="flex flex-row flex-wrap w-full p-2 gap-2 justify-center items-end py-12">
         <button
           onClick={() => setShowForm(true)}
           className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1"
         >
           <FaPlusSquare /> New entry
         </button>
-        <button className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1">
+        <button
+          onClick={() => {
+            if (!isEditMode) {
+              setIsEditMode(true);
+              console.log(isEditMode)
+            }
+          }}
+          className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
+        >
           <FaEdit /> Edit
         </button>
         <button

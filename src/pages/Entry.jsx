@@ -17,7 +17,9 @@ function Entry() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedEditId, setSelectedEditId] = useState(null)
+  const [selectedEditId, setSelectedEditId] = useState(null);
+  const [editingData, setEditingData] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const fetchEntries = async () => {
     try {
@@ -34,6 +36,15 @@ function Entry() {
   useEffect(() => {
     fetchEntries();
   }, []);
+
+  useEffect(() => {
+    if (editingData) {
+      setAmount(editingData.amount.toString().replace(".", ","));
+      setCategory(editingData.category);
+      setDescription(editingData.description);
+      setDate(editingData.date);
+    }
+  }, [editingData]);
 
   if (loading) {
     return (
@@ -78,35 +89,54 @@ function Entry() {
       alert("Please fill in all required fields.");
       return;
     }
-
-    const newEntry = {
-      type: "entry",
-      amount: parseFloat(amount.replace(",", ".")),
-      category,
-      description,
-      date,
-    };
-
     try {
-      const res = await axios.post("http://localhost:5000/summary", newEntry);
-      const createdEntry = res.data;
-      alert("Entry added successfully!");
+      if (editingData) {
+        const confirmed = confirm(
+          "Are you sure you want to update this entry?"
+        );
+        if (!confirmed) return;
+
+        await axios.put(`http://localhost:5000/summary/${editingData.id}`, {
+          ...editingData,
+          amount: parseFloat(amount.replace(",", ".")),
+          category,
+          description,
+          date,
+        });
+
+        alert("Entry updated successfully!");
+      } else {
+        await axios.post("http://localhost:5000/summary", {
+          type: "entry",
+          amount: parseFloat(amount.replace(",", ".")),
+          category,
+          description,
+          date,
+        });
+
+        alert("Entry added successfully!");
+      }
 
       await fetchEntries();
 
-      setHighlightedId(createdEntry.id);
+      setHighlightedId(editingData ? editingData.id : null);
 
       setTimeout(() => {
         setHighlightedId(null);
       }, 3000);
 
+      setEditingData(null);
+      setIsEditModalOpen(false);
+      setShowForm(false);
+      setIsEditMode(false);
+      setSelectedEditId(null);
       setAmount("0,00");
       setCategory("");
       setDescription("");
       setDate("");
     } catch (error) {
       console.error("Error adding entry:", error);
-      alert("Failed to add entry. Please try again.");
+      alert("Failed to process entry. Please try again.");
     }
   };
 
@@ -122,11 +152,15 @@ function Entry() {
   };
 
   const handleCancel = () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel?");
-
-    if (confirmCancel) {
-      setShowForm(false);
-    }
+    setEditingData(null);
+    setIsEditModalOpen(false);
+    setShowForm(false);
+    setIsEditMode(false);
+    setSelectedEditId(null);
+    setAmount("0,00");
+    setCategory("");
+    setDescription("");
+    setDate("");
   };
 
   const monthMap = {
@@ -265,13 +299,17 @@ function Entry() {
                                   onChange={() => toggleSelection(item.id)}
                                 />
                               )}
-                              {isEditMode &&  (
-                                <input 
+                              {isEditMode && (
+                                <input
                                   type="radio"
                                   name="edit-select"
                                   checked={selectedEditId === item.id}
                                   value={item.id}
-                                  onChange={() => setSelectedEditId(item.id)}
+                                  onChange={() => {
+                                    setSelectedEditId(item.id);
+                                    setEditingData(item);
+                                    setIsEditModalOpen(true);
+                                  }}
                                 />
                               )}
                               {item.id}
@@ -340,7 +378,7 @@ function Entry() {
       </div>
 
       {/* Form */}
-      {showForm && (
+      {(showForm || isEditModalOpen) && (
         <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
           <form
             onSubmit={handleSubmit}
@@ -353,7 +391,9 @@ function Entry() {
             >
               <FaXmark />
             </button>
-            <h1 className="font-bold text-2xl box-info mb-4">New Entry</h1>
+            <h1 className="font-bold text-2xl box-info mb-4">
+              {editingData ? "Edit Entry" : "New Entry"}
+            </h1>
             <label className="font-bold">Amount:</label>
             <input
               type="text"
@@ -451,11 +491,24 @@ function Entry() {
         >
           <FaEdit /> Edit
         </button>
+        {isEditMode && (
+          <button
+            onClick={() => {
+              setIsEditMode(false);
+              setSelectedEditId(null);
+              setEditingData(null);
+              setIsEditModalOpen(false);
+            }}
+            className="bg-yellow-400 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaXmark /> Cancel edit
+          </button>
+        )}
         <button
           onClick={() => {
             if (!isDeleteMode) {
               setIsDeleteMode(true);
-              setIsEditMode(false)
+              setIsEditMode(false);
             } else if (selectedIds.length > 0) {
               handleDeleteSelected();
             } else {

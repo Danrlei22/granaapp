@@ -155,18 +155,10 @@
     {
       "id": "8aab",
       "type": "entry",
-      "amount": 121.21,
-      "category": "Salary",
-      "description": "121212",
+      "amount": 22.22,
+      "category": "Freelance",
+      "description": "222",
       "date": "2025-07-02"
-    },
-    {
-      "id": "5435",
-      "type": "entry",
-      "amount": 909.99,
-      "category": "Salary",
-      "description": "9999999",
-      "date": "2025-07-09"
     },
     {
       "id": "359a",
@@ -179,7 +171,7 @@
     {
       "id": "67ef",
       "type": "entry",
-      "amount": 111.11,
+      "amount": 111.1,
       "category": "Salary",
       "description": "111111",
       "date": "2025-07-10"

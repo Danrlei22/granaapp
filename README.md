@@ -11,6 +11,8 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 - [Tailwindcss](https://tailwindcss.com/) - Framework de CSS utilitário para estilização rápida.
 - [json-server](https://github.com/typicode/json-server) - Backend fake para simulação de API REST.
 - [Axios](https://axios-http.com/) - Cliente HTTP para consumir a API.
+- [jsPDF](https://github.com/parallax/jsPDF) - Biblioteca para geração de arquivos PDF via JavaScript.
+- [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) - Plugin do jsPDF para criação de tabelas no PDF.
 
 
 ## 📦 Instalação

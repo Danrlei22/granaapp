@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import React from "react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import logoName from "../assets/logoName.PNG";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -221,6 +224,45 @@ function Entry() {
       console.error("Error deleting multiple items: ", error);
       alert("Error deleting entries. Please try again.");
     }
+  };
+
+  const exportToPDF = async () => {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const response = await fetch(logoName);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const base64data = reader.result;
+
+      doc.addImage(base64data, "PNG", 14, 5, 40, 12);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.text("Input Report", pageWidth / 2, 14, { align: "center" });
+
+      const tableColumn = ["ID", "Amount", "Category", "Description", "Date"];
+
+      const tableRows = entries.map((entry) => [
+        entry.id,
+        `R$ ${entry.amount.toFixed(2).replace(".", ",")}`,
+        entry.category,
+        entry.description,
+        new Date(entry.date).toLocaleDateString("pt-BR"),
+      ]);
+
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 22,
+      });
+
+      doc.save(`report-input-${new Date().toISOString().slice(0, 10)}.pdf`);
+    };
+
+    reader.readAsDataURL(blob);
   };
 
   return (
@@ -535,7 +577,10 @@ function Entry() {
             <FaXmark /> Cancel delete
           </button>
         )}
-        <button className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+        <button
+          onClick={exportToPDF}
+          className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+        >
           <FaFilePdf /> Export PDF
         </button>
       </div>

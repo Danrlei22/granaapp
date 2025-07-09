@@ -409,7 +409,7 @@ function Entry() {
               Quarter
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
-              Semester
+              Last 6 months
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
               Year

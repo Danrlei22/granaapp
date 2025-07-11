@@ -24,8 +24,9 @@ function Entry() {
   const [selectedEditId, setSelectedEditId] = useState(null);
   const [editingData, setEditingData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showDateFilter, setShowDateFilter] = useState(false);
+  const [filteredEntries, setFilteredEntries] = useState([]);
 
   const fetchEntries = async () => {
     try {
@@ -271,7 +272,12 @@ function Entry() {
   const handleDateChange = (date) => {
     setSelectedDate(date);
 
-    console.log("Data seleciona", date)
+    const filtered = entries.filter((item) => {
+      const itemDate = new Date(item.date).toISOString().split("T")[0];
+      return itemDate === date;
+    });
+
+    setFilteredEntries(filtered);
   };
 
   return (
@@ -314,13 +320,75 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {currentMonthEntries.length === 0 ? (
+                {selectedDate ? (
+                  filteredEntries.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="text-center p-2 text-black italic"
+                      >
+                        No entries found for selected day.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredEntries.map((item) => (
+                      <tr
+                        key={item.id}
+                        className={`transition duration-300 ${
+                          highlightedId === item.id ? "animate-bg-blink" : ""
+                        } ${selectedIds.includes(item.id) ? "bg-red-200" : ""}`}
+                      >
+                        <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          {isDeleteMode && (
+                            <input
+                              type="checkbox"
+                              checked={selectedIds.includes(item.id)}
+                              onChange={() => toggleSelection(item.id)}
+                            />
+                          )}
+                          {isEditMode && (
+                            <input
+                              type="radio"
+                              name="edit-select"
+                              checked={selectedEditId === item.id}
+                              value={item.id}
+                              onChange={() => {
+                                setSelectedEditId(item.id);
+                                setEditingData(item);
+                                setIsEditModalOpen(true);
+                              }}
+                            />
+                          )}
+                          {item.id}
+                        </td>
+                        <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          R${" "}
+                          {item.amount.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          {item.category}
+                        </td>
+                        <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          {item.description}
+                        </td>
+                        <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          {(() => {
+                            const [year, month, day] = item.date.split("-");
+                            return `${day}/${month}/${year}`;
+                          })()}
+                        </td>
+                      </tr>
+                    ))
+                  )
+                ) : currentMonthEntries.length === 0 ? (
                   <tr>
                     <td
                       colSpan="5"
                       className="text-center p-2 text-black italic"
                     >
-                      No entries found for this month.
+                      No entries found for selected month.
                     </td>
                   </tr>
                 ) : (

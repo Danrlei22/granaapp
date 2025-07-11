@@ -7,12 +7,17 @@ function DataFilter({ onDateChange }) {
     const newDate = e.target.value;
 
     setSelectedDate(newDate);
-    onDateChange(newDate)
+    onDateChange(newDate);
   };
 
   return (
     <>
-      <input type="date" className="bg-blue-500 p-0.5 m-1 border-2 border-tertiary" value={selectedDate} onChange={handleChange} />
+      <input
+        type="date"
+        className="bg-blue-300 p-0.5 m-1 border-2 border-tertiary rounded"
+        value={selectedDate}
+        onChange={handleChange}
+      />
     </>
   );
 }

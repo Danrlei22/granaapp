@@ -474,7 +474,22 @@ function Entry() {
               Year
             </button>
           </div>
-          {showDateFilter && <DataFilter onDateChange={handleDateChange} />}
+          <div className="flex flex-col items-start justify-center w-full">
+            {showDateFilter && <DataFilter onDateChange={handleDateChange} />}
+            {selectedDate && (
+              <div className="w-full text-center mt-4">
+                <span
+                  onClick={() => {
+                    setSelectedDate("");
+                    setFilteredEntries([]);
+                  }}
+                  className="text-blue-600 underline cursor-pointer"
+                >
+                  Clean filter
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         {/* tooltip nos botoes de data */}
       </div>

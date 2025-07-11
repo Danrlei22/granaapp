@@ -63,16 +63,14 @@ function Entry() {
 
   const groupByMonth = (data) => {
     return data.reduce((acc, item) => {
-      const dateObj = new Date(item.date);
+      const dateObj = new Date(item.date + "T12:00:00");
 
       if (isNaN(dateObj)) return acc;
 
-      const monthName = dateObj.toLocaleDateString("pt-BR", { month: "long" });
+      const month = dateObj.getMonth();
       const year = dateObj.getFullYear();
 
-      const key = `${monthName.charAt(0).toUpperCase()}${monthName.slice(
-        1
-      )}/${year}`;
+      const key = `${month}/${year}`;
 
       if (!acc[key]) {
         acc[key] = [];
@@ -170,33 +168,13 @@ function Entry() {
     setDate("");
   };
 
-  const monthMap = {
-    janeiro: 0,
-    fevereiro: 1,
-    março: 2,
-    abril: 3,
-    maio: 4,
-    junho: 5,
-    julho: 6,
-    agosto: 7,
-    setembro: 8,
-    outubro: 9,
-    novembro: 10,
-    dezembro: 11,
-  };
-
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const currentMonthEntries = Object.entries(groupedEntries).filter(
-    ([month]) => {
-      const [monthName, year] = month.toLowerCase().split("/");
-      return (
-        monthMap[monthName.toLowerCase()] === currentMonth &&
-        Number(year) === currentYear
-      );
-    }
-  );
+  const currentMonthEntries = Object.entries(groupedEntries).filter(([key]) => {
+    const [month, year] = key.split("/").map(Number);
+    return month === currentMonth && year === currentYear;
+  });
 
   const toggleSelection = (id) => {
     setSelectedIds((prev) => {
@@ -458,7 +436,7 @@ function Entry() {
                             colSpan="5"
                             className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                           >
-                            Total {month}: R${" "}
+                            Total month {month}: R${" "}
                             {total.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
                             })}

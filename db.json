@@ -1,7 +1,7 @@
 {
   "summary": [
     {
-      "id": 7,
+      "id": "7",
       "type": "exit",
       "amount": 400,
       "category": "Aluguel",
@@ -9,7 +9,7 @@
       "date": "05/06/2023"
     },
     {
-      "id": 8,
+      "id": "8",
       "type": "exit",
       "amount": 200,
       "category": "Mercado",
@@ -17,7 +17,7 @@
       "date": "12/06/2023"
     },
     {
-      "id": 9,
+      "id": "9",
       "type": "exit",
       "amount": 80,
       "category": "Transporte",
@@ -25,7 +25,7 @@
       "date": "01/07/2023"
     },
     {
-      "id": 10,
+      "id": "10",
       "type": "exit",
       "amount": 60,
       "category": "Lazer",
@@ -33,7 +33,7 @@
       "date": "15/07/2023"
     },
     {
-      "id": 11,
+      "id": "11",
       "type": "exit",
       "amount": 150,
       "category": "Saúde",
@@ -41,7 +41,7 @@
       "date": "08/08/2023"
     },
     {
-      "id": 12,
+      "id": "12",
       "type": "exit",
       "amount": 90,
       "category": "Educação",
@@ -87,6 +87,22 @@
       "category": "Salary",
       "description": "5",
       "date": "2025-06-30"
+    },
+    {
+      "id": "2c08",
+      "type": "entry",
+      "amount": 150,
+      "category": "Freelance",
+      "description": "1",
+      "date": "2025-07-01"
+    },
+    {
+      "id": "383e",
+      "type": "entry",
+      "amount": 30,
+      "category": "Investment",
+      "description": "5",
+      "date": "2025-07-11"
     }
   ]
 }

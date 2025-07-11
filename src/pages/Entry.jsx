@@ -6,6 +6,7 @@ import React from "react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logoName from "../assets/logoName.PNG";
+import DataFilter from "../components/filters/DateFilter";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -23,6 +24,8 @@ function Entry() {
   const [selectedEditId, setSelectedEditId] = useState(null);
   const [editingData, setEditingData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [showDateFilter, setShowDateFilter] = useState(false);
 
   const fetchEntries = async () => {
     try {
@@ -265,6 +268,12 @@ function Entry() {
     reader.readAsDataURL(blob);
   };
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+
+    console.log("Data seleciona", date)
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -399,9 +408,13 @@ function Entry() {
         <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+            <button
+              onClick={() => setShowDateFilter(!showDateFilter)}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Day
             </button>
+
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
               Month
             </button>
@@ -415,6 +428,7 @@ function Entry() {
               Year
             </button>
           </div>
+          {showDateFilter && <DataFilter onDateChange={handleDateChange} />}
         </div>
         {/* tooltip nos botoes de data */}
       </div>

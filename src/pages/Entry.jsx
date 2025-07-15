@@ -30,7 +30,7 @@ function Entry() {
 
   const fetchEntries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/summary");
+      const res = await axios.get("https://granaapp.onrender.com/summary");
       const entriesData = res.data.filter((item) => item.type === "entry");
       setEntries(entriesData);
       setLoading(false);
@@ -101,7 +101,7 @@ function Entry() {
         );
         if (!confirmed) return;
 
-        await axios.put(`http://localhost:5000/summary/${editingData.id}`, {
+        await axios.put(`https://granaapp.onrender.com/summary/${editingData.id}`, {
           ...editingData,
           amount: parseFloat(amount.replace(",", ".")),
           category,
@@ -111,7 +111,7 @@ function Entry() {
 
         alert("Entry updated successfully!");
       } else {
-        await axios.post("http://localhost:5000/summary", {
+        await axios.post("https://granaapp.onrender.com/summary", {
           type: "entry",
           amount: parseFloat(amount.replace(",", ".")),
           category,
@@ -195,7 +195,7 @@ function Entry() {
 
       await Promise.all(
         selectedIds.map((id) =>
-          axios.delete(`http://localhost:5000/summary/${id}`)
+          axios.delete(`https://granaapp.onrender.com/summary/${id}`)
         )
       );
 

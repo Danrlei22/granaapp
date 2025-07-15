@@ -482,6 +482,7 @@ function Entry() {
                   onClick={() => {
                     setSelectedDate("");
                     setFilteredEntries([]);
+                    setShowDateFilter(false)
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

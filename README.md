@@ -2,6 +2,10 @@
 
 Painel de controle financeiro pessoal desenvolvido com React e Vite.
 
+## 🔗 Links do Projeto
+
+🌐 [Frontend (Netlify)](https://granaapp.netlify.app/)
+🛠️ [Backend (Render)](https://granaapp.onrender.com/)
 
 ## 🚀 Tecnologias
 
@@ -13,6 +17,8 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 - [Axios](https://axios-http.com/) - Cliente HTTP para consumir a API.
 - [jsPDF](https://github.com/parallax/jsPDF) - Biblioteca para geração de arquivos PDF via JavaScript.
 - [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) - Plugin do jsPDF para criação de tabelas no PDF.
+- [Render](https://render.com/) - Plataforma de hospedagem utilizada para disponibilizar o backend online.
+- [Netlify](https://www.netlify.com) – Plataforma de hospedagem e CI/CD para front-ends modernos.
 
 
 ## 📦 Instalação

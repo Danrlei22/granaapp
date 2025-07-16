@@ -29,6 +29,7 @@ function Entry() {
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [activeFilterType, setActiveFilterType] = useState(null);
+  const [selectedQuarter, setSelectedQuarter] = useState(null);
 
   const fetchEntries = async () => {
     try {
@@ -57,8 +58,8 @@ function Entry() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-lg text-gray-700">Loading...</p>
+      <div className="flex items-center justify-center w-full h-full">
+        <p className="text-lg text-gray-700 ">Loading...</p>
       </div>
     );
   }
@@ -277,11 +278,32 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
+  const handleQuarterChange = (month) => {
+    setSelectedQuarter(month);
+
+    const lastThreeMonths = [
+        currentMonth,
+        (currentMonth - 1 + 12) % 12,
+        (currentMonth - 2 + 12) % 12,
+      ];
+
+    const filtered = entries.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+      return (
+        lastThreeMonths.includes(date.getMonth()) &&
+        date.getFullYear() === currentYear
+      );
+    });
+
+    setFilteredEntries(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
       <div className="flex flex-row p-4 bg-green-600 gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl">
         <input
+          name="searchEntry"
           type="text"
           placeholder="Search..."
           className="p-2 border rounded w-full"
@@ -317,7 +339,7 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {selectedDate || selectedMonth ? (
+                {selectedDate || selectedMonth || selectedQuarter ? (
                   filteredEntries.length === 0 ? (
                     <tr>
                       <td
@@ -492,7 +514,11 @@ function Entry() {
             >
               Month
             </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+
+            <button
+              onClick={handleQuarterChange}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Quarter
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
@@ -511,7 +537,7 @@ function Entry() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
-            {(selectedDate || selectedMonth) && (
+            {(selectedDate || selectedMonth || selectedQuarter) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
@@ -519,6 +545,7 @@ function Entry() {
                     setFilteredEntries([]);
                     setSelectedMonth("");
                     setActiveFilterType(null);
+                    setSelectedQuarter("")
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

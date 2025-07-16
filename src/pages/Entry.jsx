@@ -26,10 +26,9 @@ function Entry() {
   const [editingData, setEditingData] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [showDateFilter, setShowDateFilter] = useState(false);
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [showMonthFilter, setShowMonthFilter] = useState(false);
+  const [activeFilterType, setActiveFilterType] = useState(null);
 
   const fetchEntries = async () => {
     try {
@@ -318,7 +317,7 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {(selectedDate || selectedMonth) ? (
+                {selectedDate || selectedMonth ? (
                   filteredEntries.length === 0 ? (
                     <tr>
                       <td
@@ -475,14 +474,20 @@ function Entry() {
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
             <button
-              onClick={() => setShowDateFilter(!showDateFilter)}
+              onClick={() =>
+                setActiveFilterType((prev) => (prev === "day" ? null : "day"))
+              }
               className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
             >
               Day
             </button>
 
             <button
-              onClick={() => setShowMonthFilter(!showMonthFilter)}
+              onClick={() =>
+                setActiveFilterType((prev) =>
+                  prev === "month" ? null : "month"
+                )
+              }
               className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
             >
               Month
@@ -498,9 +503,11 @@ function Entry() {
             </button>
           </div>
           <div className="flex flex-col items-start justify-center w-full">
-            {showDateFilter && <DataFilter onDateChange={handleDateChange} />}
+            {activeFilterType === "day" && (
+              <DataFilter onDateChange={handleDateChange} />
+            )}
 
-            {showMonthFilter && (
+            {activeFilterType === "month" && (
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
@@ -510,9 +517,8 @@ function Entry() {
                   onClick={() => {
                     setSelectedDate("");
                     setFilteredEntries([]);
-                    setShowDateFilter(false);
-                    setShowMonthFilter(false);
-                    setSelectedMonth("")
+                    setSelectedMonth("");
+                    setActiveFilterType(null);
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

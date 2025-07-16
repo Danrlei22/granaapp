@@ -7,6 +7,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logoName from "../assets/logoName.PNG";
 import DataFilter from "../components/filters/DateFilter";
+import MonthFilter from "../components/filters/MonthFilter";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -27,6 +28,8 @@ function Entry() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDateFilter, setShowDateFilter] = useState(false);
   const [filteredEntries, setFilteredEntries] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [showMonthFilter, setShowMonthFilter] = useState(false);
 
   const fetchEntries = async () => {
     try {
@@ -101,13 +104,16 @@ function Entry() {
         );
         if (!confirmed) return;
 
-        await axios.put(`https://granaapp.onrender.com/summary/${editingData.id}`, {
-          ...editingData,
-          amount: parseFloat(amount.replace(",", ".")),
-          category,
-          description,
-          date,
-        });
+        await axios.put(
+          `https://granaapp.onrender.com/summary/${editingData.id}`,
+          {
+            ...editingData,
+            amount: parseFloat(amount.replace(",", ".")),
+            category,
+            description,
+            date,
+          }
+        );
 
         alert("Entry updated successfully!");
       } else {
@@ -258,6 +264,20 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+
+    const filtered = entries.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+      return (
+        date.getMonth() === parseInt(month) &&
+        date.getFullYear() === currentYear
+      );
+    });
+
+    setFilteredEntries(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -298,7 +318,7 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {selectedDate ? (
+                {(selectedDate || selectedMonth) ? (
                   filteredEntries.length === 0 ? (
                     <tr>
                       <td
@@ -461,7 +481,10 @@ function Entry() {
               Day
             </button>
 
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+            <button
+              onClick={() => setShowMonthFilter(!showMonthFilter)}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Month
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
@@ -476,13 +499,20 @@ function Entry() {
           </div>
           <div className="flex flex-col items-start justify-center w-full">
             {showDateFilter && <DataFilter onDateChange={handleDateChange} />}
-            {selectedDate && (
+
+            {showMonthFilter && (
+              <MonthFilter onMonthChange={handleMonthChange} />
+            )}
+
+            {(selectedDate || selectedMonth) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
                     setSelectedDate("");
                     setFilteredEntries([]);
-                    setShowDateFilter(false)
+                    setShowDateFilter(false);
+                    setShowMonthFilter(false);
+                    setSelectedMonth("")
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

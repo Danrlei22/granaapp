@@ -31,6 +31,7 @@ function Entry() {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [activeFilterType, setActiveFilterType] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
+  const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(null);
 
   const fetchEntries = async () => {
     try {
@@ -295,6 +296,44 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
+  const handleLastSixMonthsChange = () => {
+    setSelectedLastSixMonths(true);
+
+    const today = new Date();
+
+    const currentMonthStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      1
+    );
+
+    const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date(
+        currentMonthStart.getFullYear(),
+        currentMonthStart.getMonth() - i,
+        1
+      );
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      };
+    });
+
+    const filtered = entries.filter((entry) => {
+      if (!entry?.date) return false;
+
+      const entryDate = new Date(entry.date);
+      const entryMonth = entryDate.getMonth() + 1;
+      const entryYear = entryDate.getFullYear();
+
+      return lastSixMonths.some(
+        (m) => m.month === entryMonth && m.year === entryYear
+      );
+    });
+
+    setFilteredEntries(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -336,7 +375,10 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {selectedDate || selectedMonth || selectedQuarter ? (
+                {selectedDate ||
+                selectedMonth ||
+                selectedQuarter ||
+                selectedLastSixMonths ? (
                   filteredEntries.length === 0 ? (
                     <tr>
                       <td
@@ -518,7 +560,10 @@ function Entry() {
             >
               Quarter
             </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+            <button
+              onClick={handleLastSixMonthsChange}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Last 6 months
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
@@ -534,7 +579,10 @@ function Entry() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
-            {(selectedDate || selectedMonth || selectedQuarter) && (
+            {(selectedDate ||
+              selectedMonth ||
+              selectedQuarter ||
+              selectedLastSixMonths) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
@@ -543,6 +591,7 @@ function Entry() {
                     setSelectedMonth("");
                     setActiveFilterType(null);
                     setSelectedQuarter("");
+                    setSelectedLastSixMonths("");
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

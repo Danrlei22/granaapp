@@ -8,6 +8,7 @@ import "jspdf-autotable";
 import logoName from "../assets/logoName.PNG";
 import DataFilter from "../components/filters/DateFilter";
 import MonthFilter from "../components/filters/MonthFilter";
+import Loading from "../components/Loading";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -57,11 +58,7 @@ function Entry() {
   }, [editingData]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <p className="text-lg text-gray-700 ">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   const groupByMonth = (data) => {
@@ -282,10 +279,10 @@ function Entry() {
     setSelectedQuarter(month);
 
     const lastThreeMonths = [
-        currentMonth,
-        (currentMonth - 1 + 12) % 12,
-        (currentMonth - 2 + 12) % 12,
-      ];
+      currentMonth,
+      (currentMonth - 1 + 12) % 12,
+      (currentMonth - 2 + 12) % 12,
+    ];
 
     const filtered = entries.filter((item) => {
       const date = new Date(item.date + "T12:00:00");
@@ -545,7 +542,7 @@ function Entry() {
                     setFilteredEntries([]);
                     setSelectedMonth("");
                     setActiveFilterType(null);
-                    setSelectedQuarter("")
+                    setSelectedQuarter("");
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

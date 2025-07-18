@@ -9,6 +9,7 @@ import logoName from "../assets/logoName.PNG";
 import DataFilter from "../components/filters/DateFilter";
 import MonthFilter from "../components/filters/MonthFilter";
 import Loading from "../components/Loading";
+import YearFilter from "../components/filters/YearFilter";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -32,6 +33,7 @@ function Entry() {
   const [activeFilterType, setActiveFilterType] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const fetchEntries = async () => {
     try {
@@ -276,8 +278,8 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
-  const handleQuarterChange = (month) => {
-    setSelectedQuarter(month);
+  const handleQuarterChange = () => {
+    setSelectedQuarter(true);
 
     const lastThreeMonths = [
       currentMonth,
@@ -334,6 +336,18 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+
+    const filtered = entries.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+
+      return date.getFullYear().toString() === year;
+    });
+
+    setFilteredEntries(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -378,7 +392,8 @@ function Entry() {
                 {selectedDate ||
                 selectedMonth ||
                 selectedQuarter ||
-                selectedLastSixMonths ? (
+                selectedLastSixMonths ||
+                selectedYear ? (
                   filteredEntries.length === 0 ? (
                     <tr>
                       <td
@@ -566,7 +581,12 @@ function Entry() {
             >
               Last 6 months
             </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+            <button
+              onClick={() =>
+                setActiveFilterType((prev) => (prev === "year" ? null : "year"))
+              }
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Year
             </button>
           </div>
@@ -579,10 +599,15 @@ function Entry() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
+            {activeFilterType === "year" && (
+              <YearFilter onYearChange={handleYearChange} entries={entries}/>
+            )}
+
             {(selectedDate ||
               selectedMonth ||
               selectedQuarter ||
-              selectedLastSixMonths) && (
+              selectedLastSixMonths ||
+              selectedYear) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
@@ -592,6 +617,7 @@ function Entry() {
                     setActiveFilterType(null);
                     setSelectedQuarter("");
                     setSelectedLastSixMonths("");
+                    setSelectedYear("")
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

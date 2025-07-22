@@ -593,12 +593,15 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <button
-              onClick={handleQuarterChange}
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Quarter
-            </button>
+            <Tooltip text="Filter entries last 3 months" position="bottom">
+              <button
+                onClick={handleQuarterChange}
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Quarter
+              </button>
+            </Tooltip>
+
             <button
               onClick={handleLastSixMonthsChange}
               className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"

@@ -11,6 +11,7 @@ import MonthFilter from "../components/filters/MonthFilter";
 import Loading from "../components/Loading";
 import YearFilter from "../components/filters/YearFilter";
 import SearchBar from "../components/SearchBar";
+import Tooltip from "../components/ui/Tooltip";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -351,8 +352,7 @@ function Entry() {
   };
 
   const handleSearch = (term) => {
-
-    if(term.trim() === ""){
+    if (term.trim() === "") {
       setFilteredEntries([]);
       setIsSearchActive(false);
       return;
@@ -569,14 +569,16 @@ function Entry() {
         <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <button
-              onClick={() =>
-                setActiveFilterType((prev) => (prev === "day" ? null : "day"))
-              }
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Day
-            </button>
+            <Tooltip text="Filter entries by day" position="bottom">
+              <button
+                onClick={() =>
+                  setActiveFilterType((prev) => (prev === "day" ? null : "day"))
+                }
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Day
+              </button>
+            </Tooltip>
 
             <button
               onClick={() =>
@@ -647,7 +649,6 @@ function Entry() {
             )}
           </div>
         </div>
-        {/* tooltip nos botoes de data */}
       </div>
 
       {/* Form */}

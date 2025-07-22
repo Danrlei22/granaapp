@@ -611,14 +611,18 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <button
-              onClick={() =>
-                setActiveFilterType((prev) => (prev === "year" ? null : "year"))
-              }
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Year
-            </button>
+            <Tooltip text="Filter entries by year" position="bottom">
+              <button
+                onClick={() =>
+                  setActiveFilterType((prev) =>
+                    prev === "year" ? null : "year"
+                  )
+                }
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Year
+              </button>
+            </Tooltip>
           </div>
           <div className="flex flex-col items-start justify-center w-full">
             {activeFilterType === "day" && (

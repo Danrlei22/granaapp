@@ -580,16 +580,18 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <button
-              onClick={() =>
-                setActiveFilterType((prev) =>
-                  prev === "month" ? null : "month"
-                )
-              }
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Month
-            </button>
+            <Tooltip text="Filter entries by month" position="bottom">
+              <button
+                onClick={() =>
+                  setActiveFilterType((prev) =>
+                    prev === "month" ? null : "month"
+                  )
+                }
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Month
+              </button>
+            </Tooltip>
 
             <button
               onClick={handleQuarterChange}

@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slices/themeSlice";
 import { Link } from "react-router-dom";
+import Tooltip from "./ui/Tooltip";
 
 function Header() {
   const dispatch = useDispatch();
@@ -53,18 +54,20 @@ function Header() {
         </ul>
       </nav>
       <div className="flex justify-center sm:justify-end w-full sm:w-auto mt-2">
-        <button
-          onClick={handleThemeToggle}
-          className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ml-4 ${
-            isDarkMode ? "bg-black" : "bg-white"
-          }`}
-        >
-          <span
-            className={`inline-block w-5 h-5 transform  rounded-full transition-transform duration-300 ${
-              isDarkMode ? "translate-x-6 bg-white" : "translate-x-1 bg-black"
+        <Tooltip text="Toggle Clear/Dark Mode " position="bottom">
+          <button
+            onClick={handleThemeToggle}
+            className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ml-4 ${
+              isDarkMode ? "bg-black" : "bg-white"
             }`}
-          />
-        </button>
+          >
+            <span
+              className={`inline-block w-5 h-5 transform  rounded-full transition-transform duration-300 ${
+                isDarkMode ? "translate-x-6 bg-white" : "translate-x-1 bg-black"
+              }`}
+            />
+          </button>
+        </Tooltip>
       </div>
     </header>
   );

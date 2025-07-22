@@ -10,6 +10,7 @@ import DataFilter from "../components/filters/DateFilter";
 import MonthFilter from "../components/filters/MonthFilter";
 import Loading from "../components/Loading";
 import YearFilter from "../components/filters/YearFilter";
+import SearchBar from "../components/SearchBar";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -34,6 +35,7 @@ function Entry() {
   const [selectedQuarter, setSelectedQuarter] = useState(null);
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   const fetchEntries = async () => {
     try {
@@ -348,20 +350,37 @@ function Entry() {
     setFilteredEntries(filtered);
   };
 
+  const handleSearch = (term) => {
+
+    if(term.trim() === ""){
+      setFilteredEntries([]);
+      setIsSearchActive(false);
+      return;
+    }
+
+    const lowerTerm = term.toLowerCase();
+
+    const filtered = entries.filter((entry) => {
+      return (
+        entry.description.toLowerCase().includes(lowerTerm) ||
+        entry.category.toLowerCase().includes(lowerTerm)
+      );
+    });
+
+    setFilteredEntries(filtered);
+    setIsSearchActive(true);
+
+    setSelectedDate(null);
+    setSelectedMonth(null);
+    setSelectedQuarter(null);
+    setSelectedLastSixMonths(null);
+    setSelectedYear(null);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
-      <div className="flex flex-row p-4 bg-green-600 gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl">
-        <input
-          name="searchEntry"
-          type="text"
-          placeholder="Search..."
-          className="p-2 border rounded w-full"
-        />
-        <button className="bg-blue-600 text-white p-2 rounded w-auto flex items-center gap-2 active:bg-blue-800 ">
-          <FaMagnifyingGlass /> Search
-        </button>
-      </div>
+      <SearchBar onSearch={handleSearch} />
 
       {/* Entry tables */}
       <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1">
@@ -389,7 +408,8 @@ function Entry() {
                 </tr>
               </thead>
               <tbody className="bg-green-300 text-black">
-                {selectedDate ||
+                {isSearchActive ||
+                selectedDate ||
                 selectedMonth ||
                 selectedQuarter ||
                 selectedLastSixMonths ||
@@ -600,7 +620,7 @@ function Entry() {
             )}
 
             {activeFilterType === "year" && (
-              <YearFilter onYearChange={handleYearChange} entries={entries}/>
+              <YearFilter onYearChange={handleYearChange} entries={entries} />
             )}
 
             {(selectedDate ||
@@ -617,7 +637,7 @@ function Entry() {
                     setActiveFilterType(null);
                     setSelectedQuarter("");
                     setSelectedLastSixMonths("");
-                    setSelectedYear("")
+                    setSelectedYear("");
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

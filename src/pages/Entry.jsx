@@ -602,12 +602,15 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <button
-              onClick={handleLastSixMonthsChange}
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Last 6 months
-            </button>
+            <Tooltip text="Filter entries las 6 months" position="bottom">
+              <button
+                onClick={handleLastSixMonthsChange}
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Last 6 months
+              </button>
+            </Tooltip>
+
             <button
               onClick={() =>
                 setActiveFilterType((prev) => (prev === "year" ? null : "year"))

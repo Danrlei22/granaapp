@@ -420,7 +420,7 @@ function Entry() {
                         colSpan="5"
                         className="text-center p-2 text-black italic"
                       >
-                        No entries found for selected day.
+                        No entries found for selected date.
                       </td>
                     </tr>
                   ) : (
@@ -481,7 +481,7 @@ function Entry() {
                       colSpan="5"
                       className="text-center p-2 text-black italic"
                     >
-                      No entries found for selected month.
+                      No entries found for selected date.
                     </td>
                   </tr>
                 ) : (

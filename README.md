@@ -19,6 +19,7 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 - [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) - Plugin do jsPDF para criação de tabelas no PDF.
 - [Render](https://render.com/) - Plataforma de hospedagem utilizada para disponibilizar o backend online.
 - [Netlify](https://www.netlify.com) – Plataforma de hospedagem e CI/CD para front-ends modernos.
+- [React Tooltip](https://www.npmjs.com/package/react-tooltip) - Biblioteca para criação de tooltips com React.
 
 
 ## 📦 Instalação

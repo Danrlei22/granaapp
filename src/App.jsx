@@ -10,6 +10,8 @@ import Entry from "./pages/Entry";
 import Exit from "./pages/Exit";
 import Summary from "./pages/Summary";
 import Graphics from "./pages/Graphics";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
           <Route path="/graphics" element={<Graphics />} />
         </Route>
       </Routes>
+      <ToastContainer position="bottom-center" autoClose={3000}/>
     </Router>
   );
 }

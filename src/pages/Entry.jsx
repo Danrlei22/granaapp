@@ -12,6 +12,7 @@ import Loading from "../components/Loading";
 import YearFilter from "../components/filters/YearFilter";
 import SearchBar from "../components/SearchBar";
 import Tooltip from "../components/ui/Tooltip";
+import { toast } from "react-toastify";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -97,7 +98,7 @@ function Entry() {
       !category ||
       !date
     ) {
-      alert("Please fill in all required fields.");
+      toast.info("Please fill in all required fields.");
       return;
     }
     try {
@@ -118,7 +119,7 @@ function Entry() {
           }
         );
 
-        alert("Entry updated successfully!");
+        toast.success("Entry updated successfully!");
       } else {
         await axios.post("https://granaapp.onrender.com/summary", {
           type: "entry",
@@ -128,7 +129,7 @@ function Entry() {
           date,
         });
 
-        alert("Entry added successfully!");
+        toast.success("Entry added successfully!");
       }
 
       await fetchEntries();
@@ -150,7 +151,7 @@ function Entry() {
       setDate("");
     } catch (error) {
       console.error("Error adding entry:", error);
-      alert("Failed to process entry. Please try again.");
+      toast.error("Failed to process entry. Please try again.");
     }
   };
 
@@ -213,7 +214,7 @@ function Entry() {
       await fetchEntries();
     } catch (error) {
       console.error("Error deleting multiple items: ", error);
-      alert("Error deleting entries. Please try again.");
+      toast.error("Error deleting entries. Please try again.");
     }
   };
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
-import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa6";
 import React from "react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -13,6 +13,8 @@ import YearFilter from "../components/filters/YearFilter";
 import SearchBar from "../components/SearchBar";
 import Tooltip from "../components/ui/Tooltip";
 import { toast } from "react-toastify";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -103,7 +105,56 @@ function Entry() {
     }
     try {
       if (editingData) {
-        const confirmed = confirm(
+        confirmAlert({
+          title: "Confirm Update",
+          message: "Are you sure you want to update this entry?",
+          buttons: [
+            {
+              label: "Yes",
+              onClick: async () => {
+                try {
+                  await axios.put(
+                    `https://granaapp.onrender.com/summary/${editingData.id}`,
+                    {
+                      ...editingData,
+                      amount: parseFloat(amount.replace(",", ".")),
+                      category,
+                      description,
+                      date,
+                    }
+                  );
+
+                  toast.info("Entry updated successfully!");
+                  fetchEntries();
+                } catch (error) {
+                  toast.error("Failed to update entry. Please try again.");
+                  console.error("Error updating entry:", error);
+                  return;
+                }
+              },
+            },
+            {
+              label: "No",
+              onClick: () => {
+                setEditingData(null);
+                setIsEditModalOpen(false);
+                setShowForm(false);
+                setIsEditMode(false);
+                setSelectedEditId(null);
+                setAmount("0,00");
+                setCategory("");
+                setDescription("");
+                setDate("");
+              },
+            },
+          ],
+          className:
+            "rounded-xl p-6 bg-white text-black shadow-xl max-w-md w-full text-center",
+          overlayClassName:
+            "bg-black bg-opacity-60 fixed inset-0 flex items-center justify-center",
+        });
+
+        /*const confirmed = confirm(
           "Are you sure you want to update this entry?"
         );
         if (!confirmed) return;
@@ -119,7 +170,7 @@ function Entry() {
           }
         );
 
-        toast.success("Entry updated successfully!");
+        toast.info("Entry updated successfully!");*/
       } else {
         await axios.post("https://granaapp.onrender.com/summary", {
           type: "entry",
@@ -202,6 +253,8 @@ function Entry() {
         "Are you sure you want to delete the selected items?"
       );
       if (!confirmed) return;
+
+      toast.warning("Entry deleted!");
 
       await Promise.all(
         selectedIds.map((id) =>

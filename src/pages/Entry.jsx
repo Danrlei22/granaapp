@@ -92,6 +92,18 @@ function Entry() {
 
   const groupedEntries = groupByMonth(entries);
 
+  const resetForm = () => {
+    setEditingData(null);
+    setIsEditModalOpen(false);
+    setShowForm(false);
+    setIsEditMode(false);
+    setSelectedEditId(null);
+    setAmount("0,00");
+    setCategory("");
+    setDescription("");
+    setDate("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -137,15 +149,8 @@ function Entry() {
             {
               label: "No",
               onClick: () => {
-                setEditingData(null);
-                setIsEditModalOpen(false);
-                setShowForm(false);
-                setIsEditMode(false);
-                setSelectedEditId(null);
-                setAmount("0,00");
-                setCategory("");
-                setDescription("");
-                setDate("");
+                resetForm();
+                toast.info("Update cancelled.");
               },
             },
           ],
@@ -164,21 +169,13 @@ function Entry() {
 
       await fetchEntries();
 
+      resetForm();
+
       setHighlightedId(editingData ? editingData.id : null);
 
       setTimeout(() => {
         setHighlightedId(null);
       }, 3000);
-
-      setEditingData(null);
-      setIsEditModalOpen(false);
-      setShowForm(false);
-      setIsEditMode(false);
-      setSelectedEditId(null);
-      setAmount("0,00");
-      setCategory("");
-      setDescription("");
-      setDate("");
     } catch (error) {
       console.error("Error adding entry:", error);
       toast.error("Failed to process entry. Please try again.");

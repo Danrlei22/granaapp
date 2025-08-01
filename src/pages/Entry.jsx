@@ -15,6 +15,7 @@ import Tooltip from "../components/ui/Tooltip";
 import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import "../utils/confirmAlert.css";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -107,7 +108,7 @@ function Entry() {
       if (editingData) {
         confirmAlert({
           title: "Confirm Update",
-          message: "Are you sure you want to update this entry?",
+          message: "Are you sure you want to update?",
           buttons: [
             {
               label: "Yes",
@@ -124,11 +125,11 @@ function Entry() {
                     }
                   );
 
-                  toast.info("Entry updated successfully!");
+                  toast.info("Updated successfully!");
                   fetchEntries();
                 } catch (error) {
-                  toast.error("Failed to update entry. Please try again.");
-                  console.error("Error updating entry:", error);
+                  toast.error("Failed to update. Please try again.");
+                  console.error("Error updating:", error);
                   return;
                 }
               },
@@ -148,29 +149,7 @@ function Entry() {
               },
             },
           ],
-          className:
-            "rounded-xl p-6 bg-white text-black shadow-xl max-w-md w-full text-center",
-          overlayClassName:
-            "bg-black bg-opacity-60 fixed inset-0 flex items-center justify-center",
         });
-
-        /*const confirmed = confirm(
-          "Are you sure you want to update this entry?"
-        );
-        if (!confirmed) return;
-
-        await axios.put(
-          `https://granaapp.onrender.com/summary/${editingData.id}`,
-          {
-            ...editingData,
-            amount: parseFloat(amount.replace(",", ".")),
-            category,
-            description,
-            date,
-          }
-        );
-
-        toast.info("Entry updated successfully!");*/
       } else {
         await axios.post("https://granaapp.onrender.com/summary", {
           type: "entry",

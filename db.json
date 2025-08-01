@@ -47,6 +47,14 @@
       "category": "Freelance",
       "description": "5",
       "date": "2025-07-01"
+    },
+    {
+      "id": "1be0",
+      "type": "entry",
+      "amount": 500,
+      "category": "Freelance",
+      "description": "Teste db.json",
+      "date": "2025-08-01"
     }
   ]
 }

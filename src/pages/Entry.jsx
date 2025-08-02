@@ -193,18 +193,6 @@ function Entry() {
     setAmount(`${parseInt(reais)}${","}${centavos}`);
   };
 
-  const handleCancel = () => {
-    setEditingData(null);
-    setIsEditModalOpen(false);
-    setShowForm(false);
-    setIsEditMode(false);
-    setSelectedEditId(null);
-    setAmount("0,00");
-    setCategory("");
-    setDescription("");
-    setDate("");
-  };
-
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
@@ -703,7 +691,7 @@ function Entry() {
             <button
               type="button"
               className="text-red-600 hover:text-red-800 flex justify-end text-xl"
-              onClick={handleCancel}
+              onClick={resetForm}
             >
               <FaXmark />
             </button>
@@ -780,7 +768,7 @@ function Entry() {
             <button
               type="button"
               className="font-bold bg-red-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-red-800 mt-2"
-              onClick={handleCancel}
+              onClick={resetForm}
             >
               Cancel
             </button>

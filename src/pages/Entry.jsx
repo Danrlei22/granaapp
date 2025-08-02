@@ -212,8 +212,51 @@ function Entry() {
   };
 
   const handleDeleteSelected = async () => {
-    try {
-      const confirmed = confirm(
+    confirmAlert({
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete the selected item(s)?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            if (selectedIds.length === 0) {
+              toast.info("Select at least one item to delete.");
+              return;
+            }
+            try {
+              await Promise.all(
+                selectedIds.map((id) =>
+                  axios.delete(`https://granaapp.onrender.com/summary/${id}`)
+                )
+              );
+
+              toast.warning("Entry deleted!");
+              setSelectedIds([]);
+              setIsDeleteMode(false);
+              await fetchEntries();
+            } catch (error) {
+              console.error("Error deleting item(s): ", error);
+              toast.error("Error deleting entries. Please try again.");
+              return;
+            } finally {
+              setSelectedIds([]);
+              setIsDeleteMode(false);
+              await fetchEntries();
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            setSelectedIds([]);
+            setIsDeleteMode(false);
+            toast.info("Deletion cancelled.");
+          },
+        },
+      ],
+    });
+
+    /*const confirmed = confirm(
         "Are you sure you want to delete the selected items?"
       );
       if (!confirmed) return;
@@ -232,7 +275,7 @@ function Entry() {
     } catch (error) {
       console.error("Error deleting multiple items: ", error);
       toast.error("Error deleting entries. Please try again.");
-    }
+    }*/
   };
 
   const exportToPDF = async () => {

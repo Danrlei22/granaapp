@@ -1,0 +1,8 @@
+.custom-toast-container {
+  margin-bottom: 2em;
+}
+
+.Toastify__toast {
+  background-color: #ebecee;
+  color: #000;
+}

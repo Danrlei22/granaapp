@@ -13,6 +13,7 @@ import Graphics from "./pages/Graphics";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import "./utils/toastContainer.css";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
           <Route path="/graphics" element={<Graphics />} />
         </Route>
       </Routes>
-      <ToastContainer position="bottom-center" autoClose={5000}/>
+      <ToastContainer position="bottom-center" autoClose={5000} className="custom-toast-container"/>
     </Router>
   );
 }

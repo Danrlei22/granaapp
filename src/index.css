@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-{/* Homepage Styles */}
 .box-info {
     @apply flex flex-col justify-between items-center
 }
@@ -30,5 +29,3 @@
 .temp {
     @apply transition-all duration-300 ease-in-out
 }
-
-{/* Resume Styles */}

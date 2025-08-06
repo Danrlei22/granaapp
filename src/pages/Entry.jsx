@@ -255,27 +255,6 @@ function Entry() {
         },
       ],
     });
-
-    /*const confirmed = confirm(
-        "Are you sure you want to delete the selected items?"
-      );
-      if (!confirmed) return;
-
-      toast.warning("Entry deleted!");
-
-      await Promise.all(
-        selectedIds.map((id) =>
-          axios.delete(`https://granaapp.onrender.com/summary/${id}`)
-        )
-      );
-
-      setSelectedIds([]);
-      setIsDeleteMode(false);
-      await fetchEntries();
-    } catch (error) {
-      console.error("Error deleting multiple items: ", error);
-      toast.error("Error deleting entries. Please try again.");
-    }*/
   };
 
   const exportToPDF = async () => {

@@ -20,6 +20,7 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 - [Render](https://render.com/) - Plataforma de hospedagem utilizada para disponibilizar o backend online.
 - [Netlify](https://www.netlify.com) – Plataforma de hospedagem e CI/CD para front-ends modernos.
 - [React Tooltip](https://www.npmjs.com/package/react-tooltip) - Biblioteca para criação de tooltips com React.
+- [React Toastify](https://fkhadra.github.io/react-toastify/) - Biblioteca para exibir notificações toast de forma simples e personalizável.
 
 
 ## 📦 Instalação

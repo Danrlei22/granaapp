@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "../utils/confirmAlert.css";
+import calculateTotal from "../utils/calculateTotal";
 
 function Entry() {
   const [entries, setEntries] = useState([]);
@@ -526,10 +527,10 @@ function Entry() {
                   </tr>
                 ) : (
                   currentMonthEntries.map(([month, items]) => {
-                    const total = items.reduce(
+                    /*const total = items.reduce(
                       (sum, item) => sum + item.amount,
                       0
-                    );
+                    );*/
                     return (
                       <React.Fragment key={month}>
                         {items.map((item) => (
@@ -591,10 +592,16 @@ function Entry() {
                             colSpan="5"
                             className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                           >
-                            Total month {month}: R${" "}
-                            {total.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                            })}
+                            <span>Month: {month} </span>
+                            <br />
+                            <span>
+                              Total: R${" "}
+                              {calculateTotal(
+                                groupedEntries[month]
+                              ).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </span>
                           </td>
                         </tr>
                       </React.Fragment>

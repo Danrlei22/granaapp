@@ -429,7 +429,7 @@ function Entry() {
 
     const filtered = entries.filter((entry) => {
       return (
-        entry.description.toLowerCase().includes(lowerTerm) ||
+        entry.amount.toString().includes(lowerTerm) ||
         entry.category.toLowerCase().includes(lowerTerm)
       );
     });

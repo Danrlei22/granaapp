@@ -25,7 +25,7 @@ function SearchBar({ onSearch }) {
         type="text"
         value={term}
         onChange={handleInputChange}
-        placeholder="Search by category or description"
+        placeholder="Search by amount or category"
         className="p-2 border rounded w-full"
       />
       {term && (

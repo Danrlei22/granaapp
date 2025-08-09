@@ -275,14 +275,40 @@ function Entry() {
       doc.setFontSize(18);
       doc.text("Input Report", pageWidth / 2, 14, { align: "center" });
 
-      const tableColumn = ["ID", "Amount", "Category", "Description", "Date"];
+      const tableColumn = ["ID", "Category", "Description", "Date", "Amount"];
+
+      const totalAmount = calculateTotal(entries);
 
       const tableRows = entries.map((entry) => [
         entry.id,
-        `R$ ${entry.amount.toFixed(2).replace(".", ",")}`,
         entry.category,
         entry.description,
         new Date(entry.date).toLocaleDateString("pt-BR"),
+        `R$ ${entry.amount.toFixed(2).replace(".", ",")}`,
+      ]);
+
+      tableRows.push([
+        {
+          content: "Total:",
+          colSpan: 4,
+          styles: {
+            halign: "right",
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontSize: 12,
+            fontStyle: "bold",
+          },
+        },
+        {
+          content: `R$ ${totalAmount.toFixed(2).replace(".", ",")}`,
+          styles: {
+            halign: "left",
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontSize: 12,
+            fontStyle: "bold",
+          },
+        },
       ]);
 
       doc.autoTable({

@@ -160,7 +160,6 @@ function Entry() {
         });
       } else {
         await axios.post("http://localhost:5000/entries", {
-          type: "entry",
           amount: parseFloat(amount.replace(",", ".")),
           category,
           description,
@@ -529,8 +528,7 @@ function Entry() {
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                             R${" "}
                             {item.amount.toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
+                              minimumFractionDigits: 2,
                             })}
                           </td>
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -557,8 +555,7 @@ function Entry() {
                             {calculateTotal(filteredEntries).toLocaleString(
                               "pt-BR",
                               {
-                                style: "currency",
-                                currency: "BRL",
+                                minimumFractionDigits: 2,
                               }
                             )}
                           </span>
@@ -616,8 +613,7 @@ function Entry() {
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                               R${" "}
                               {item.amount.toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
+                                minimumFractionDigits: 2,
                               })}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -646,8 +642,7 @@ function Entry() {
                               {calculateTotal(
                                 groupedEntries[month]
                               ).toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
+                                minimumFractionDigits: 2,
                               })}
                             </span>
                           </td>

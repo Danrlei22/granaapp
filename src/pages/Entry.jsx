@@ -83,7 +83,7 @@ function Entry() {
       const month = dateObj.getMonth();
       const year = dateObj.getFullYear();
 
-      const key = `${month}/${year}`;
+      const key = `${month + 1}/${year}`;
 
       if (!acc[key]) {
         acc[key] = [];
@@ -195,7 +195,7 @@ function Entry() {
     setAmount(`${parseInt(reais)}${","}${centavos}`);
   };
 
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
   const currentMonthEntries = Object.entries(groupedEntries).filter(([key]) => {

@@ -38,5 +38,22 @@ app.post("/entries", async (req, res) => {
   }
 });
 
+app.put("/entries/:id", async (req, res) => {
+  const { id } = req.params;
+  const { amount, category, description, date } = req.body;
+
+  try {
+    const result = await pool.query(
+      "UPDATE entries SET amount = $1, category = $2, description = $3, date = $4 WHERE id = $5 RETURNING *",
+      [amount, category, description, date, id]
+    );
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro ao atualizar entry" });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server rodando na porta ${PORT}`));

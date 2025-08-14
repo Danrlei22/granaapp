@@ -45,9 +45,11 @@ function Entry() {
 
   const fetchEntries = async () => {
     try {
-      const res = await axios.get("https://granaapp.onrender.com/summary");
-      const entriesData = res.data.filter((item) => item.type === "entry");
-      setEntries(entriesData);
+      const res = await axios.get(
+        "http://localhost:5000/entries"
+      ); 
+
+      setEntries(res.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching entries:", error);
@@ -128,7 +130,7 @@ function Entry() {
               onClick: async () => {
                 try {
                   await axios.put(
-                    `https://granaapp.onrender.com/summary/${editingData.id}`,
+                    `http://localhost:5000/entries/${editingData.id}`,
                     {
                       ...editingData,
                       amount: parseFloat(amount.replace(",", ".")),
@@ -157,7 +159,7 @@ function Entry() {
           ],
         });
       } else {
-        await axios.post("https://granaapp.onrender.com/summary", {
+        await axios.post("http://localhost:5000/entries", {
           type: "entry",
           amount: parseFloat(amount.replace(",", ".")),
           category,
@@ -227,7 +229,7 @@ function Entry() {
             try {
               await Promise.all(
                 selectedIds.map((id) =>
-                  axios.delete(`https://granaapp.onrender.com/summary/${id}`)
+                  axios.delete(`http://localhost:5000/entries/${id}`)
                 )
               );
 
@@ -527,7 +529,8 @@ function Entry() {
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                             R${" "}
                             {item.amount.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
+                              style: "currency",
+                              currency: "BRL",
                             })}
                           </td>
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -554,7 +557,8 @@ function Entry() {
                             {calculateTotal(filteredEntries).toLocaleString(
                               "pt-BR",
                               {
-                                minimumFractionDigits: 2,
+                                style: "currency",
+                                currency: "BRL",
                               }
                             )}
                           </span>
@@ -612,7 +616,8 @@ function Entry() {
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                               R${" "}
                               {item.amount.toLocaleString("pt-BR", {
-                                minimumFractionDigits: 2,
+                                style: "currency",
+                                currency: "BRL",
                               })}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -641,7 +646,8 @@ function Entry() {
                               {calculateTotal(
                                 groupedEntries[month]
                               ).toLocaleString("pt-BR", {
-                                minimumFractionDigits: 2,
+                                style: "currency",
+                                currency: "BRL",
                               })}
                             </span>
                           </td>

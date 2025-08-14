@@ -28,7 +28,7 @@ Painel de controle financeiro pessoal desenvolvido com React e Vite.
 ```bash
 npm install
 npm run dev
-npm run backend 
+node index.js (dentro da pasta server)
 ```
 
 ## 📌 Objetivo

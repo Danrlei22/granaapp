@@ -13,6 +13,7 @@ app.get("/entries", async (req, res) => {
     const formattedEntries = result.rows.map((entry) => ({
       ...entry,
       date: entry.date.toISOString().split("T")[0], // YYYY/MM/DD
+      amount: Number(entry.amount),
     }));
 
     res.json(formattedEntries);

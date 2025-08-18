@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.get("/entries", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM entries");
+    const result = await pool.query("SELECT * FROM entries ORDER BY date DESC");
 
     const formattedEntries = result.rows.map((entry) => ({
       ...entry,

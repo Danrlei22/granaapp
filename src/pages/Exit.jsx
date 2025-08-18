@@ -8,18 +8,20 @@ function Exit() {
   const [exits, setExits] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchExits = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/exits");
+
+      setExits(res.data);
+      setLoading(false);
+    }catch (err) {
+      console.error("Error fetching exits: ", err);
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/summary")
-      .then((res) => {
-        const exitsData = res.data.filter((item) => item.type === "exit");
-        setExits(exitsData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar dados: ", err);
-        setLoading(false);
-      });
+    fetchExits();
   }, []);
 
   if (loading) {

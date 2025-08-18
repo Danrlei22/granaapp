@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import Loading from "../components/Loading";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -22,11 +23,7 @@ function Exit() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-lg text-gray-700">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   const groupByMonth = (data) => {

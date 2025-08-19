@@ -1,12 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import Loading from "../components/Loading";
 
 function Exit() {
   const [exits, setExits] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [amount, setAmount] = useState("0,00");
+  const categories = [
+    "Food",
+    "Entretainment",
+    "Home",
+    "Health",
+    "Light",
+    "Water",
+    "Car",
+    "Other",
+  ];
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [category, setCategory] = useState("");
 
   const fetchExits = async () => {
     try {
@@ -56,6 +71,14 @@ function Exit() {
     const [month, year] = key.split("/").map(Number);
     return month === currentMonth && year === currentYear;
   });
+
+  const resetForm = () => {
+    setShowForm(false);
+    setAmount("0,00");
+    setCategory("");
+    setDescription("");
+    setDate("");
+  };
 
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
@@ -169,12 +192,100 @@ function Exit() {
             </button>
           </div>
         </div>
-        {/* tooltip nos botoes de data */}
       </div>
+
+      {/* Form add/edit */}
+      {showForm && (
+        <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+          <form className="flex flex-col w-full max-w-md p-4 gap-2">
+            <button
+              type="button"
+              className="text-red-600 hover:text-red-800 flex justify-end text-xl"
+              onClick={resetForm}
+            >
+              <FaXmark />
+            </button>
+            <h2 className="font-bold text-2xl box-info mb-4">New Exit</h2>
+            <label className="font-bold">Amount:</label>
+            <input
+              type="text"
+              name="amount"
+              placeholder="0,00"
+              min={0}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="border border-tertiary p-2 rounded w-full text-black"
+              required
+            />
+            <label className="font-bold">Category:</label>
+            <select
+              name="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="border border-tertiary p-2 rounded w-full text-black"
+              required
+            >
+              <option value="">Select category</option>
+              {categories.map((cat, index) => (
+                <option key={index} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            <label className="font-bold">Description:</label>
+            <input
+              type="text"
+              name="description"
+              placeholder="Description"
+              max={50}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border border-tertiary p-2 rounded w-full text-black"
+            />
+            <label className="font-bold">Date:</label>
+            <input
+              type="date"
+              name="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="border border-tertiary p-2 rounded w-full text-black"
+              required
+            />
+            <button
+              type="submit"
+              className="font-bold bg-blue-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-blue-800 mt-4"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              className="font-bold bg-yellow-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-yellow-800 mt-2"
+              onClick={() => {
+                setAmount("0,00");
+                setCategory("");
+                setDescription("");
+                setDate("");
+              }}
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              className="font-bold bg-red-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-red-800 mt-2"
+              onClick={resetForm}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
-        <button className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1">
+        <button
+          onClick={() => setShowForm(true)}
+          className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1"
+        >
           <FaPlusSquare />
           New exit
         </button>

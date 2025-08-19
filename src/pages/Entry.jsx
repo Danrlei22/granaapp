@@ -767,9 +767,9 @@ function Entry() {
             >
               <FaXmark />
             </button>
-            <h1 className="font-bold text-2xl box-info mb-4">
+            <h2 className="font-bold text-2xl box-info mb-4">
               {editingData ? "Edit Entry" : "New Entry"}
-            </h1>
+            </h2>
             <label className="font-bold">Amount:</label>
             <input
               type="text"

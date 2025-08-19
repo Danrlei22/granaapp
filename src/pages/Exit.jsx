@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import Loading from "../components/Loading";
+import { toast } from "react-toastify";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -89,6 +90,37 @@ function Exit() {
     const centavos = value.slice(-2);
 
     setAmount(`${parseInt(reais)}${","}${centavos}`);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !amount ||
+      parseFloat(amount.replace(",", ".")) <= 0 ||
+      !category ||
+      !date
+    ) {
+      toast.info("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:5000/exits", {
+        amount: parseFloat(amount.replace(",", ".")),
+        category,
+        description,
+        date,
+      });
+
+      toast.success("Exit added successfully!");
+
+      await fetchExits();
+      resetForm();
+    } catch (err) {
+      console.error("Error adding exit: ", err);
+      toast.error("Error adding exit. Please try again.");
+    }
   };
 
   return (
@@ -208,7 +240,10 @@ function Exit() {
       {/* Form add/edit */}
       {showForm && (
         <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
-          <form className="flex flex-col w-full max-w-md p-4 gap-2">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col w-full max-w-md p-4 gap-2"
+          >
             <button
               type="button"
               className="text-red-600 hover:text-red-800 flex justify-end text-xl"

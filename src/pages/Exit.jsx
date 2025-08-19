@@ -80,6 +80,17 @@ function Exit() {
     setDate("");
   };
 
+  const handleAmountChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+
+    value = value.padStart(3, "0");
+
+    const reais = value.slice(0, -2);
+    const centavos = value.slice(-2);
+
+    setAmount(`${parseInt(reais)}${","}${centavos}`);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -213,7 +224,7 @@ function Exit() {
               placeholder="0,00"
               min={0}
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={handleAmountChange}
               className="border border-tertiary p-2 rounded w-full text-black"
               required
             />

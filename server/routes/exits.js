@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const result = await pool.query("SELECT *  FROM extis ORDER BY date DESC");
+    const result = await pool.query("SELECT *  FROM exits ORDER BY date DESC");
 
     const formattedExits = result.rows.map((exit) => ({
       ...exit,

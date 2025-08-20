@@ -36,4 +36,25 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { amount, category, description, date } = req.body;
+
+  try {
+    const result = await pool.query(
+      "UPDATE exits SET amount = $1, category = $2, description = $3, date = $4 WHERE id = $5 RETURNING *",
+      [amount, category, description, date, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Exit não encontrada." });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro ao atualizar exit." });
+  }
+});
+
 export default router;

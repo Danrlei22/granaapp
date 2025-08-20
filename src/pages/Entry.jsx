@@ -142,9 +142,9 @@ function Entry() {
 
                   toast.info("Updated successfully!");
                   fetchEntries();
-                } catch (error) {
+                } catch (err) {
                   toast.error("Failed to update. Please try again.");
-                  console.error("Error updating:", error);
+                  console.error("Error updating:", err);
                   return;
                 }
               },

@@ -5,6 +5,7 @@ import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import calculateTotal from "../utils/calculateTotal";
+import { confirmAlert } from "react-confirm-alert";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -24,6 +25,10 @@ function Exit() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingData, setEditingData] = useState(null);
+  const [selectedEditId, setSelectedEditId] = useState(null);
 
   const fetchExits = async () => {
     try {
@@ -40,6 +45,15 @@ function Exit() {
   useEffect(() => {
     fetchExits();
   }, []);
+
+  useEffect(() => {
+    if (editingData) {
+      setAmount(editingData.amount.toString().replace(".", ","));
+      setCategory(editingData.category);
+      setDescription(editingData.description);
+      setDate(editingData.date);
+    }
+  }, [editingData]);
 
   if (loading) {
     return <Loading />;
@@ -80,6 +94,10 @@ function Exit() {
     setCategory("");
     setDescription("");
     setDate("");
+    setEditingData(null);
+    setIsEditModalOpen(false);
+    setIsEditMode(false);
+    setSelectedEditId(null);
   };
 
   const handleAmountChange = (e) => {
@@ -107,14 +125,53 @@ function Exit() {
     }
 
     try {
-      await axios.post("http://localhost:5000/exits", {
-        amount: parseFloat(amount.replace(",", ".")),
-        category,
-        description,
-        date,
-      });
+      if (editingData) {
+        confirmAlert({
+          title: "Confirm Update",
+          message: "Are you sure you want to update?",
+          buttons: [
+            {
+              label: "Yes",
+              onClick: async () => {
+                try {
+                  await axios.put(
+                    `http://localhost:5000/exits/${editingData.id}`,
+                    {
+                      ...editingData,
+                      amount: parseFloat(amount.replace(",", ".")),
+                      category,
+                      description,
+                      date,
+                    }
+                  ),
+                    toast.info("Update successfully!");
+                  fetchExits();
+                } catch (err) {
+                  toast.error("Failed to update. Please try again.");
+                  console.error("Error updating", err);
+                  return;
+                }
+              },
+            },
+            {
+              label: "No",
+              onClick: () => {
+                resetForm();
+                toast.info("Update cancelled.");
+              },
+            },
+          ],
+        });
+      } else {
+        await axios.post("http://localhost:5000/exits", {
+          amount: parseFloat(amount.replace(",", ".")),
+          category,
+          description,
+          date,
+        });
 
-      toast.success("Exit added successfully!");
+        toast.success("Exit added successfully!");
+      }
 
       await fetchExits();
       resetForm();
@@ -180,6 +237,19 @@ function Exit() {
                         {items.map((item) => (
                           <tr key={item.id}>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {isEditMode && (
+                                <input
+                                  type="radio"
+                                  name="edit-select"
+                                  checked={selectedEditId === item.id}
+                                  value={item.id}
+                                  onChange={() => {
+                                    setSelectedEditId(item.id);
+                                    setEditingData(item);
+                                    setIsEditModalOpen(true);
+                                  }}
+                                />
+                              )}
                               {item.id}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
@@ -251,7 +321,7 @@ function Exit() {
       </div>
 
       {/* Form add/edit */}
-      {showForm && (
+      {(showForm || isEditModalOpen) && (
         <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
           <form
             onSubmit={handleSubmit}
@@ -264,7 +334,9 @@ function Exit() {
             >
               <FaXmark />
             </button>
-            <h2 className="font-bold text-2xl box-info mb-4">New Exit</h2>
+            <h2 className="font-bold text-2xl box-info mb-4">
+              {editingData ? "Edit Exit" : "New Exit"}
+            </h2>
             <label className="font-bold">Amount:</label>
             <input
               type="text"
@@ -348,10 +420,31 @@ function Exit() {
           <FaPlusSquare />
           New exit
         </button>
-        <button className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1">
+        <button
+          onClick={() => {
+            if (!isEditMode) {
+              setIsEditMode(true);
+            }
+          }}
+          className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
+        >
           <FaEdit />
           Edit
         </button>
+        {isEditMode && (
+          <button
+            onClick={() => {
+              setIsEditMode(false);
+              setSelectedEditId(null);
+              setEditingData(null);
+              setIsEditModalOpen(false);
+            }}
+            className="bg-yellow-400 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaXmark />
+            Cancel edit
+          </button>
+        )}
         <button className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1">
           <FaTrash />
           Delete

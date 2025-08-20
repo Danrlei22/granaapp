@@ -635,7 +635,7 @@ function Entry() {
                             colSpan="5"
                             className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                           >
-                            <span>Month: {month} </span>
+                            <span>Month: {month}</span>
                             <br />
                             <span>
                               Total: R${" "}

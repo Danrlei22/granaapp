@@ -4,6 +4,7 @@ import { FaEdit, FaFilePdf, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
+import calculateTotal from "../utils/calculateTotal";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -206,7 +207,16 @@ function Exit() {
                             colSpan="5"
                             className="font-bold bg-red-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                           >
-                            Total {month}
+                            <span>Month: {month}</span>
+                            <br />
+                            <span>
+                              Total: R$ -{" "}
+                              {calculateTotal(
+                                groupedExits[month]
+                              ).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </span>
                           </td>
                         </tr>
                       </React.Fragment>

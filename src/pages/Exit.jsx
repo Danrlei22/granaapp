@@ -194,7 +194,10 @@ function Exit() {
                               {item.description}
                             </td>
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                              {item.date}
+                              {(() => {
+                                const [year, month, day] = item.date.split("-");
+                                return `${day}/${month}/${year}`;
+                              })()}
                             </td>
                           </tr>
                         ))}

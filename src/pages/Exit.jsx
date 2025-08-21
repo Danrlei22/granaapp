@@ -29,6 +29,8 @@ function Exit() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingData, setEditingData] = useState(null);
   const [selectedEditId, setSelectedEditId] = useState(null);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchExits = async () => {
     try {
@@ -180,6 +182,8 @@ function Exit() {
       toast.error("Error adding exit. Please try again.");
     }
   };
+
+  const handleDeleteSelected = async () => {};
 
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
@@ -445,10 +449,38 @@ function Exit() {
             Cancel edit
           </button>
         )}
-        <button className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1">
-          <FaTrash />
-          Delete
+        <button
+          onClick={() => {
+            if (!isDeleteMode) {
+              setIsDeleteMode(true);
+              setIsEditMode(false);
+            } else if (selectedIds.length > 0) {
+              handleDeleteSelected();
+            } else {
+              alert("Select at least one item to delete.");
+            }
+          }}
+          className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
+        >
+          <FaTrash />{" "}
+          {isDeleteMode
+            ? selectedIds.length > 0
+              ? "Confirm Deletion"
+              : "Selecionar itens"
+            : "Delete"}
         </button>
+        {isDeleteMode && (
+          <button
+            onClick={() => {
+              setIsDeleteMode(false);
+              setSelectedIds([]);
+            }}
+            className="bg-red-400 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaXmark />
+            Cancel delete
+          </button>
+        )}
         <button className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
           <FaFilePdf />
           Export PDF

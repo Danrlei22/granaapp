@@ -183,7 +183,51 @@ function Exit() {
     }
   };
 
-  const handleDeleteSelected = async () => {};
+  const handleDeleteSelected = async () => {
+    confirmAlert({
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete the selected item(s)?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            if (selectedIds.length === 0) {
+              toast.info("Select at least one item to delete.");
+              return;
+            }
+            try {
+              await Promise.all(
+                selectedIds.map((id) =>
+                  axios.delete(`http://localhost:5000/exits/${id}`)
+                )
+              );
+
+              toast.warning("Exit(s) deleted!");
+              setSelectedIds([]);
+              setIsDeleteMode(false);
+              await fetchExits();
+            } catch (err) {
+              console.error("Error deletinf exits: ", err);
+              toast.error("Error deleting exits. Please try again.");
+              return;
+            } finally {
+              setSelectedIds([]);
+              setIsDeleteMode(false);
+              await fetchExits();
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            setSelectedIds([]);
+            setIsDeleteMode(false);
+            toast.info("Deletion cancelled.");
+          },
+        },
+      ],
+    });
+  };
 
   const toggleSelection = (id) => {
     setSelectedIds((prev) => {

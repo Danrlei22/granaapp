@@ -185,6 +185,16 @@ function Exit() {
 
   const handleDeleteSelected = async () => {};
 
+  const toggleSelection = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((itemId) => itemId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -252,6 +262,13 @@ function Exit() {
                                     setEditingData(item);
                                     setIsEditModalOpen(true);
                                   }}
+                                />
+                              )}
+                              {isDeleteMode && (
+                                <input
+                                  type="checkbox"
+                                  checked={selectedIds.includes(item.id)}
+                                  onChange={() => toggleSelection(item.id)}
                                 />
                               )}
                               {item.id}

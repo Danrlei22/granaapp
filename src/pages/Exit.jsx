@@ -31,6 +31,7 @@ function Exit() {
   const [selectedEditId, setSelectedEditId] = useState(null);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [highlightedId, setHighlightedId] = useState(null);
 
   const fetchExits = async () => {
     try {
@@ -147,7 +148,12 @@ function Exit() {
                     }
                   ),
                     toast.info("Update successfully!");
-                  fetchExits();
+                  await fetchExits();
+
+                  setHighlightedId(editingData.id);
+                  setTimeout(() => setHighlightedId(null), 3000);
+
+                  resetForm();
                 } catch (err) {
                   toast.error("Failed to update. Please try again.");
                   console.error("Error updating", err);
@@ -165,7 +171,7 @@ function Exit() {
           ],
         });
       } else {
-        await axios.post("http://localhost:5000/exits", {
+        const res = await axios.post("http://localhost:5000/exits", {
           amount: parseFloat(amount.replace(",", ".")),
           category,
           description,
@@ -173,9 +179,14 @@ function Exit() {
         });
 
         toast.success("Exit added successfully!");
+        await fetchExits();
+
+        if (res.data?.id) {
+          setHighlightedId(res.data.id);
+          setTimeout(() => setHighlightedId(null), 3000);
+        }
       }
 
-      await fetchExits();
       resetForm();
     } catch (err) {
       console.error("Error adding exit: ", err);
@@ -293,7 +304,16 @@ function Exit() {
                     return (
                       <React.Fragment key={month}>
                         {items.map((item) => (
-                          <tr key={item.id}>
+                          <tr
+                            key={item.id}
+                            className={`transition duration-300 ${
+                              highlightedId === item.id
+                                ? "animate-bg-blink"
+                                : ""
+                            } ${
+                              selectedIds.includes(item.id) ? "bg-red-200" : ""
+                            }`}
+                          >
                             <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                               {isEditMode && (
                                 <input

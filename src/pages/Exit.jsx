@@ -8,6 +8,7 @@ import calculateTotal from "../utils/calculateTotal";
 import { confirmAlert } from "react-confirm-alert";
 import jsPDF from "jspdf";
 import logoName from "../assets/logoName.PNG";
+import Tooltip from "../components/ui/Tooltip";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -453,9 +454,11 @@ function Exit() {
         <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
-              Day
-            </button>
+            <Tooltip text="Filter by day" position="bottom">
+              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+                Day
+              </button>
+            </Tooltip>
             <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
               Month
             </button>

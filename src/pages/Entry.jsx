@@ -171,7 +171,7 @@ function Entry() {
 
         toast.success("Entry added successfully!");
         await fetchEntries();
-        
+
         if (res.data?.id) {
           setHighlightedId(res.data.id);
           setTimeout(() => setHighlightedId(null), 3000);
@@ -660,7 +660,7 @@ function Entry() {
         <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <Tooltip text="Filter entries by day" position="bottom">
+            <Tooltip text="Filter by day" position="bottom">
               <button
                 onClick={() =>
                   setActiveFilterType((prev) => (prev === "day" ? null : "day"))

@@ -474,9 +474,11 @@ function Exit() {
                 Semester
               </button>
             </Tooltip>
-            <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
-              Year
-            </button>
+            <Tooltip text="Filter by year" position="bottom">
+              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+                Year
+              </button>
+            </Tooltip>
           </div>
         </div>
       </div>

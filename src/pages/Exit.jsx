@@ -6,6 +6,8 @@ import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import calculateTotal from "../utils/calculateTotal";
 import { confirmAlert } from "react-confirm-alert";
+import jsPDF from "jspdf";
+import logoName from "../assets/logoName.PNG";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -248,6 +250,71 @@ function Exit() {
         return [...prev, id];
       }
     });
+  };
+
+  const exportToPDF = async () => {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const response = await fetch(logoName);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const base64data = reader.result;
+
+      doc.addImage(base64data, "PNG", 14, 5, 40, 12);
+
+      doc.setFont("healvetica", "bold");
+      doc.setFontSize(18);
+      doc.text("Exits Report", pageWidth / 2, 14, { align: "center" });
+
+      const tableColumn = ["ID", "Category", "Description", "Date", "Amount"];
+
+      const totalAmount = calculateTotal(exits);
+
+      const tableRows = exits.map((exits) => [
+        exits.id,
+        exits.category,
+        exits.description,
+        new Date(exits.date).toLocaleDateString("pt-BR"),
+        `R$  ${exits.amount.toFixed(2).replace(".", ",")}`,
+      ]);
+
+      tableRows.push([
+        {
+          content: "Total:",
+          colSpan: 4,
+          styles: {
+            halign: "right",
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontSize: 12,
+            fontStyle: "bold",
+          },
+        },
+        {
+          content: `R$ ${totalAmount.toFixed(2).replace(".", ",")}`,
+          styles: {
+            halign: "left",
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontSize: 12,
+            fontStyle: "bold",
+          },
+        },
+      ]);
+
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 22,
+      });
+
+      doc.save(`report-exits-${new Date().toISOString().slice(0, 10)}.pdf`);
+    };
+
+    reader.readAsDataURL(blob);
   };
 
   return (
@@ -562,7 +629,10 @@ function Exit() {
             Cancel delete
           </button>
         )}
-        <button className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+        <button
+          onClick={exportToPDF}
+          className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+        >
           <FaFilePdf />
           Export PDF
         </button>

@@ -45,9 +45,7 @@ function Entry() {
 
   const fetchEntries = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/entries"
-      ); 
+      const res = await axios.get("http://localhost:5000/entries");
 
       setEntries(res.data);
       setLoading(false);
@@ -141,7 +139,12 @@ function Entry() {
                   );
 
                   toast.info("Updated successfully!");
-                  fetchEntries();
+                  await fetchEntries();
+
+                  setHighlightedId(editingData.id);
+                  setTimeout(() => setHighlightedId(null), 3000);
+
+                  resetForm();
                 } catch (err) {
                   toast.error("Failed to update. Please try again.");
                   console.error("Error updating:", err);
@@ -159,7 +162,7 @@ function Entry() {
           ],
         });
       } else {
-        await axios.post("http://localhost:5000/entries", {
+        const res = await axios.post("http://localhost:5000/entries", {
           amount: parseFloat(amount.replace(",", ".")),
           category,
           description,
@@ -167,17 +170,15 @@ function Entry() {
         });
 
         toast.success("Entry added successfully!");
+        await fetchEntries();
+        
+        if (res.data?.id) {
+          setHighlightedId(res.data.id);
+          setTimeout(() => setHighlightedId(null), 3000);
+        }
       }
 
-      await fetchEntries();
-
       resetForm();
-
-      setHighlightedId(editingData ? editingData.id : null);
-
-      setTimeout(() => {
-        setHighlightedId(null);
-      }, 3000);
     } catch (error) {
       console.error("Error adding entry:", error);
       toast.error("Failed to process entry. Please try again.");

@@ -671,7 +671,7 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <Tooltip text="Filter entries by month" position="bottom">
+            <Tooltip text="Filter by month" position="bottom">
               <button
                 onClick={() =>
                   setActiveFilterType((prev) =>
@@ -684,7 +684,7 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <Tooltip text="Filter entries last 3 months" position="bottom">
+            <Tooltip text="Filter last 3 months" position="bottom">
               <button
                 onClick={handleQuarterChange}
                 className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
@@ -693,7 +693,7 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <Tooltip text="Filter entries las 6 months" position="bottom">
+            <Tooltip text="Filter las 6 months" position="bottom">
               <button
                 onClick={handleLastSixMonthsChange}
                 className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
@@ -702,7 +702,7 @@ function Entry() {
               </button>
             </Tooltip>
 
-            <Tooltip text="Filter entries by year" position="bottom">
+            <Tooltip text="Filter by year" position="bottom">
               <button
                 onClick={() =>
                   setActiveFilterType((prev) =>

@@ -459,9 +459,11 @@ function Exit() {
                 Day
               </button>
             </Tooltip>
-            <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
-              Month
-            </button>
+            <Tooltip text="Filter by month" position="bottom">
+              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+                Month
+              </button>
+            </Tooltip>
             <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
               Quarter
             </button>

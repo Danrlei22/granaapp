@@ -469,9 +469,11 @@ function Exit() {
                 Quarter
               </button>
             </Tooltip>
-            <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
-              Semester
-            </button>
+            <Tooltip text="Filter last 6 months" position="bottom">
+              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+                Semester
+              </button>
+            </Tooltip>
             <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
               Year
             </button>

@@ -42,6 +42,7 @@ function Exit() {
   const [filteredExits, setFilteredExits] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(false);
+  const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
 
   const fetchExits = async () => {
     try {
@@ -370,6 +371,44 @@ function Exit() {
     setFilteredExits(filtered);
   };
 
+  const handleLastSixMonthsChange = () => {
+    setSelectedLastSixMonths(true);
+
+    const today = new Date();
+
+    const currentMonthStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      1
+    );
+
+    const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date(
+        currentMonthStart.getFullYear(),
+        currentMonthStart.getMonth() - i,
+        1
+      );
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      };
+    });
+
+    const filtered = exits.filter((exits) => {
+      if (!exits?.date) return false;
+
+      const exitDate = new Date(exits.date);
+      const exitMonth = exitDate.getMonth() + 1;
+      const exitYear = exitDate.getFullYear();
+
+      return lastSixMonths.some(
+        (m) => m.month === exitMonth && m.year === exitYear
+      );
+    });
+
+    setFilteredExits(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -410,7 +449,10 @@ function Exit() {
                 </tr>
               </thead>
               <tbody className="bg-red-300 text-black">
-                {selectedDate || selectedMonth || selectedQuarter ? (
+                {selectedDate ||
+                selectedMonth ||
+                selectedQuarter ||
+                selectedLastSixMonths ? (
                   filteredExits.length === 0 ? (
                     <tr>
                       <td
@@ -607,8 +649,11 @@ function Exit() {
               </button>
             </Tooltip>
             <Tooltip text="Filter last 6 months" position="bottom">
-              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
-                Semester
+              <button
+                onClick={handleLastSixMonthsChange}
+                className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800"
+              >
+                Last 6 months
               </button>
             </Tooltip>
             <Tooltip text="Filter by year" position="bottom">
@@ -626,24 +671,26 @@ function Exit() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
-            {selectedDate ||
+            {(selectedDate ||
               selectedMonth ||
-              (selectedQuarter && (
-                <div className="w-full text-center mt-4">
-                  <span
-                    onClick={() => {
-                      setSelectedDate("");
-                      setFilteredExits([]);
-                      setActiveFilterType(null);
-                      setSelectedMonth(null);
-                      setSelectedQuarter(false);
-                    }}
-                    className="text-blue-600 underline cursor-pointer"
-                  >
-                    Clean filter
-                  </span>
-                </div>
-              ))}
+              selectedQuarter ||
+              selectedLastSixMonths) && (
+              <div className="w-full text-center mt-4">
+                <span
+                  onClick={() => {
+                    setSelectedDate("");
+                    setFilteredExits([]);
+                    setActiveFilterType(null);
+                    setSelectedMonth(null);
+                    setSelectedQuarter(false);
+                    setSelectedLastSixMonths(false);
+                  }}
+                  className="text-blue-600 underline cursor-pointer"
+                >
+                  Clean filter
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

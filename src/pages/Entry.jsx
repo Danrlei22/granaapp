@@ -725,7 +725,7 @@ function Entry() {
             )}
 
             {activeFilterType === "year" && (
-              <YearFilter onYearChange={handleYearChange} entries={entries} />
+              <YearFilter onYearChange={handleYearChange} data={entries} />
             )}
 
             {(selectedDate ||

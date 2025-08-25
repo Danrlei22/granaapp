@@ -11,6 +11,7 @@ import logoName from "../assets/logoName.PNG";
 import Tooltip from "../components/ui/Tooltip";
 import DataFilter from "../components/filters/DateFilter";
 import MonthFilter from "../components/filters/MonthFilter";
+import YearFilter from "../components/filters/YearFilter";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -43,6 +44,7 @@ function Exit() {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(false);
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const fetchExits = async () => {
     try {
@@ -409,6 +411,18 @@ function Exit() {
     setFilteredExits(filtered);
   };
 
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+
+    const filtered = exits.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+
+      return date.getFullYear().toString() === year;
+    });
+
+    setFilteredExits(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -452,7 +466,8 @@ function Exit() {
                 {selectedDate ||
                 selectedMonth ||
                 selectedQuarter ||
-                selectedLastSixMonths ? (
+                selectedLastSixMonths ||
+                selectedYear ? (
                   filteredExits.length === 0 ? (
                     <tr>
                       <td
@@ -657,7 +672,14 @@ function Exit() {
               </button>
             </Tooltip>
             <Tooltip text="Filter by year" position="bottom">
-              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+              <button
+                onClick={() => {
+                  setActiveFilterType((prev) =>
+                    prev === "year" ? null : "year"
+                  );
+                }}
+                className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800"
+              >
                 Year
               </button>
             </Tooltip>
@@ -671,10 +693,15 @@ function Exit() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
+            {activeFilterType === "year" && (
+              <YearFilter onYearChange={handleYearChange} data={exits} />
+            )}
+
             {(selectedDate ||
               selectedMonth ||
               selectedQuarter ||
-              selectedLastSixMonths) && (
+              selectedLastSixMonths ||
+              selectedYear) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
@@ -684,6 +711,7 @@ function Exit() {
                     setSelectedMonth(null);
                     setSelectedQuarter(false);
                     setSelectedLastSixMonths(false);
+                    setSelectedYear(null);
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

@@ -1,15 +1,15 @@
 import { useMemo, useState } from "react";
 
-function YearFilter({ onYearChange, entries }) {
+function YearFilter({ onYearChange, data }) {
   const [selectYear, setSelectYear] = useState("");
 
   const availableYears = useMemo(() => {
-    const years = entries.map((item) => {
+    const years = data.map((item) => {
       const date = new Date(item.date + "T12:00:00");
       return date.getFullYear();
     });
     return [...new Set(years)].sort((a, b) => b - a);
-  }, [entries]);
+  }, [data]);
 
   const handleChange = (e) => {
     const newYear = e.target.value;

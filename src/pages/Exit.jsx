@@ -41,6 +41,7 @@ function Exit() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [filteredExits, setFilteredExits] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedQuarter, setSelectedQuarter] = useState(false);
 
   const fetchExits = async () => {
     try {
@@ -349,6 +350,26 @@ function Exit() {
     setFilteredExits(filtered);
   };
 
+  const handleQuarterChange = () => {
+    setSelectedQuarter(true);
+
+    const lastThreeMonths = [
+      currentMonth,
+      (currentMonth - 1 + 12) % 12,
+      (currentMonth - 2 + 12) % 12,
+    ];
+
+    const filtered = exits.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+      return (
+        lastThreeMonths.includes(date.getMonth()) &&
+        date.getFullYear() === currentYear
+      );
+    });
+
+    setFilteredExits(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -389,7 +410,7 @@ function Exit() {
                 </tr>
               </thead>
               <tbody className="bg-red-300 text-black">
-                {selectedDate || selectedMonth ? (
+                {selectedDate || selectedMonth || selectedQuarter ? (
                   filteredExits.length === 0 ? (
                     <tr>
                       <td
@@ -578,7 +599,10 @@ function Exit() {
               </button>
             </Tooltip>
             <Tooltip text="Filter last 3 months" position="bottom">
-              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+              <button
+                onClick={handleQuarterChange}
+                className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800"
+              >
                 Quarter
               </button>
             </Tooltip>
@@ -602,20 +626,24 @@ function Exit() {
               <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
-            {selectedDate && (
-              <div className="w-full text-center mt-4">
-                <span
-                  onClick={() => {
-                    setSelectedDate("");
-                    setFilteredExits([]);
-                    setActiveFilterType(null);
-                  }}
-                  className="text-blue-600 underline cursor-pointer"
-                >
-                  Clean filter
-                </span>
-              </div>
-            )}
+            {selectedDate ||
+              selectedMonth ||
+              (selectedQuarter && (
+                <div className="w-full text-center mt-4">
+                  <span
+                    onClick={() => {
+                      setSelectedDate("");
+                      setFilteredExits([]);
+                      setActiveFilterType(null);
+                      setSelectedMonth(null);
+                      setSelectedQuarter(false);
+                    }}
+                    className="text-blue-600 underline cursor-pointer"
+                  >
+                    Clean filter
+                  </span>
+                </div>
+              ))}
           </div>
         </div>
       </div>

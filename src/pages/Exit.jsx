@@ -10,6 +10,7 @@ import jsPDF from "jspdf";
 import logoName from "../assets/logoName.PNG";
 import Tooltip from "../components/ui/Tooltip";
 import DataFilter from "../components/filters/DateFilter";
+import MonthFilter from "../components/filters/MonthFilter";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -550,7 +551,14 @@ function Exit() {
               </button>
             </Tooltip>
             <Tooltip text="Filter by month" position="bottom">
-              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+              <button
+                onClick={() => {
+                  setActiveFilterType((prev) =>
+                    prev === "month" ? null : "month"
+                  );
+                }}
+                className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800"
+              >
                 Month
               </button>
             </Tooltip>
@@ -570,9 +578,24 @@ function Exit() {
               </button>
             </Tooltip>
           </div>
-          <div>
+          <div className="flex flex-col items-start justify-center w-full">
             {activeFilterType === "day" && (
               <DataFilter onDateChange={handleDateChange} />
+            )}
+
+            {selectedDate && (
+              <div className="w-full text-center mt-4">
+                <span
+                  onClick={() => {
+                    setSelectedDate("");
+                    setFilteredExits([]);
+                    setActiveFilterType(null);
+                  }}
+                  className="text-blue-600 underline cursor-pointer"
+                >
+                  Clean filter
+                </span>
+              </div>
             )}
           </div>
         </div>

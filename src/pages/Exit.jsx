@@ -40,6 +40,7 @@ function Exit() {
   const [activeFilterType, setActiveFilterType] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [filteredExits, setFilteredExits] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
   const fetchExits = async () => {
     try {
@@ -334,6 +335,20 @@ function Exit() {
     setFilteredExits(filtered);
   };
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+
+    const filtered = exits.filter((item) => {
+      const date = new Date(item.date + "T12:00:00");
+      return (
+        date.getMonth() === parseInt(month) &&
+        date.getFullYear() === currentYear
+      );
+    });
+
+    setFilteredExits(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -374,7 +389,7 @@ function Exit() {
                 </tr>
               </thead>
               <tbody className="bg-red-300 text-black">
-                {selectedDate ? (
+                {selectedDate || selectedMonth ? (
                   filteredExits.length === 0 ? (
                     <tr>
                       <td
@@ -581,6 +596,10 @@ function Exit() {
           <div className="flex flex-col items-start justify-center w-full">
             {activeFilterType === "day" && (
               <DataFilter onDateChange={handleDateChange} />
+            )}
+
+            {activeFilterType === "month" && (
+              <MonthFilter onMonthChange={handleMonthChange} />
             )}
 
             {selectedDate && (

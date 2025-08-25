@@ -9,6 +9,7 @@ import { confirmAlert } from "react-confirm-alert";
 import jsPDF from "jspdf";
 import logoName from "../assets/logoName.PNG";
 import Tooltip from "../components/ui/Tooltip";
+import DataFilter from "../components/filters/DateFilter";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -35,6 +36,9 @@ function Exit() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [highlightedId, setHighlightedId] = useState(null);
+  const [activeFilterType, setActiveFilterType] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [filteredExits, setFilteredExits] = useState([]);
 
   const fetchExits = async () => {
     try {
@@ -318,6 +322,17 @@ function Exit() {
     reader.readAsDataURL(blob);
   };
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+
+    const filtered = exits.filter((item) => {
+      const itemDate = new Date(item.date).toISOString().split("T")[0];
+      return itemDate === date;
+    });
+
+    setFilteredExits(filtered);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
@@ -358,7 +373,77 @@ function Exit() {
                 </tr>
               </thead>
               <tbody className="bg-red-300 text-black">
-                {currentMonthExits.length === 0 ? (
+                {selectedDate ? (
+                  filteredExits.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="text-center p-2 text-black italic"
+                      >
+                        No exits found for selected date.
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {filteredExits.map((item) => (
+                        <tr
+                          key={item.id}
+                          className={`transition duration-300 ${
+                            highlightedId === item.id ? "animate-bg-blink" : ""
+                          } ${
+                            selectedIds.includes(item.id) ? "bg-red-200" : ""
+                          }                        
+                        `}
+                        >
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {isEditMode && (
+                              <input
+                                type="checkbox"
+                                checked={selectedIds.includes(item.id)}
+                                onChange={() => {
+                                  toggleSelection(item.id);
+                                }}
+                              />
+                            )}
+                            {item.id}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            R$ - {""}
+                            {item.amount.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.category}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {item.description}
+                          </td>
+                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {(() => {
+                              const [year, month, day] = item.date.split("-");
+                              return `${day}/${month}/${year}`;
+                            })()}
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td
+                          colSpan="5"
+                          className="font-bold bg-red-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
+                        >
+                          <span>
+                            Total: R$ -{" "}
+                            {calculateTotal(filteredExits).toLocaleString(
+                              "pt-BR",
+                              { minimumFractionDigits: 2 }
+                            )}
+                          </span>
+                        </td>
+                      </tr>
+                    </>
+                  )
+                ) : currentMonthExits.length === 0 ? (
                   <tr>
                     <td
                       colSpan="5"
@@ -455,7 +540,12 @@ function Exit() {
           <h2 className="font-bold pl-2">Period filter:</h2>
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
             <Tooltip text="Filter by day" position="bottom">
-              <button className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800">
+              <button
+                onClick={() =>
+                  setActiveFilterType((prev) => (prev === "day" ? null : "day"))
+                }
+                className="bg-red-600 text-white p-2 rounded w-auto flex items-center active:bg-red-800"
+              >
                 Day
               </button>
             </Tooltip>
@@ -479,6 +569,11 @@ function Exit() {
                 Year
               </button>
             </Tooltip>
+          </div>
+          <div>
+            {activeFilterType === "day" && (
+              <DataFilter onDateChange={handleDateChange} />
+            )}
           </div>
         </div>
       </div>

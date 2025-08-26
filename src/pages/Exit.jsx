@@ -12,6 +12,7 @@ import Tooltip from "../components/ui/Tooltip";
 import DataFilter from "../components/filters/DateFilter";
 import MonthFilter from "../components/filters/MonthFilter";
 import YearFilter from "../components/filters/YearFilter";
+import SearchBar from "../components/SearchBar";
 
 function Exit() {
   const [exits, setExits] = useState([]);
@@ -45,6 +46,7 @@ function Exit() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   const fetchExits = async () => {
     try {
@@ -423,19 +425,36 @@ function Exit() {
     setFilteredExits(filtered);
   };
 
+  const handleSearch = (term) => {
+    if (term.trim() === "") {
+      setFilteredExits([]);
+      setIsSearchActive(false);
+      return;
+    }
+
+    const lowerTerm = term.toLowerCase();
+
+    const filtered = exits.filter((exits) => {
+      return (
+        exits.amount.toString().includes(lowerTerm) ||
+        exits.category.toLowerCase().includes(lowerTerm)
+      );
+    });
+
+    setFilteredExits(filtered);
+    setIsSearchActive(true);
+
+    setSelectedDate(null);
+    setSelectedMonth(null);
+    setSelectedQuarter(null);
+    setSelectedLastSixMonths(null);
+    setSelectedYear(null);
+  };
+
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
       {/* Search Bar */}
-      <div className="flex flex-row p-4 bg-red-600 gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="p-2 border rounded w-full"
-        />
-        <button className="bg-blue-600 text-white p-2 rounded w-auto flex items-center gap-2 active:bg-blue-800 ">
-          <FaMagnifyingGlass /> Search
-        </button>
-      </div>
+      <SearchBar onSearch={handleSearch} />
 
       {/* Exit tables */}
       <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1">
@@ -467,7 +486,8 @@ function Exit() {
                 selectedMonth ||
                 selectedQuarter ||
                 selectedLastSixMonths ||
-                selectedYear ? (
+                selectedYear ||
+                isSearchActive ? (
                   filteredExits.length === 0 ? (
                     <tr>
                       <td

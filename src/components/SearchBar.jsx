@@ -19,7 +19,7 @@ function SearchBar({ onSearch }) {
   };
 
   return (
-    <div className="flex flex-row p-4 bg-green-600 gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl text-black">
+    <div className="flex flex-row p-4 bg-primary gap-2 w-auto m-4 rounded-lg shadow-lg max-w-2xl text-black">
       <input
         name="search"
         type="text"

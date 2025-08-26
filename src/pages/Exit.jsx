@@ -490,12 +490,25 @@ function Exit() {
                         `}
                         >
                           <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {isEditMode && (
+                            {isDeleteMode && (
                               <input
                                 type="checkbox"
                                 checked={selectedIds.includes(item.id)}
                                 onChange={() => {
                                   toggleSelection(item.id);
+                                }}
+                              />
+                            )}
+                            {isEditMode && (
+                              <input
+                                type="radio"
+                                name="edit-select"
+                                checked={selectedEditId === item.id}
+                                value={item.id}
+                                onChange={() => {
+                                  setSelectedEditId(item.id);
+                                  setEditingData(item);
+                                  setIsEditModalOpen(true);
                                 }}
                               />
                             )}

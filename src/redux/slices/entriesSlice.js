@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchEntries = createAsyncThunk("entries/fetchEntries", async () => {
-  const res = await fetch("http://localhost:5000/entries");
+export const fetchEntries = createAsyncThunk(
+  "entries/fetchEntries",
+  async () => {
+    const res = await fetch("http://localhost:5000/entries");
 
-  return res.json();
-});
+    return res.json();
+  }
+);
 
 const entriesSlice = createSlice({
   name: "entries",

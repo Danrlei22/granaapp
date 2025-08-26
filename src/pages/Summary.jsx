@@ -2,19 +2,30 @@ import { useEffect } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
+import { fetchExits } from "../redux/slices/exitsSlice";
 
 function Summary() {
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
+  const exits = useSelector((state) => state.exits.data);
 
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     dispatch(fetchEntries());
+    dispatch(fetchExits());
   }, [dispatch]);
 
   const currentMonthEntries = entries.filter((item) => {
+    const date = new Date(item.date + "T12:00:00");
+
+    return (
+      date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
+    );
+  });
+
+  const currentMonthExits = exits.filter((item) => {
     const date = new Date(item.date + "T12:00:00");
 
     return (
@@ -27,7 +38,12 @@ function Summary() {
     0
   );
 
-  const total = totalEntries;
+  const totalExits = currentMonthExits.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const total = totalEntries - totalExits;
 
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
@@ -60,15 +76,17 @@ function Summary() {
                 <tbody>
                   <tr>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      {new Date().toLocaleDateString("pt-BR", {
-                        month: "long",
-                      })}
+                      {new Date()
+                        .toLocaleDateString("pt-BR", {
+                          month: "long",
+                        })
+                        .toUpperCase()}
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                       R$ {totalEntries.toFixed(2)}
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ 0
+                      R$ -{totalExits.toFixed(2)}
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
                       R$ {total.toFixed(2)}

@@ -1,6 +1,34 @@
+import { useEffect } from "react";
 import { FaFilePdf } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEntries } from "../redux/slices/entriesSlice";
 
 function Summary() {
+  const dispatch = useDispatch();
+  const entries = useSelector((state) => state.entries.data);
+
+  const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
+
+  const currentMonthEntries = entries.filter((item) => {
+    const date = new Date(item.date + "T12:00:00");
+
+    return (
+      date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
+    );
+  });
+
+  const totalEntries = currentMonthEntries.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const total = totalEntries;
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -32,16 +60,18 @@ function Summary() {
                 <tbody>
                   <tr>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      Maio
+                      {new Date().toLocaleDateString("pt-BR", {
+                        month: "long",
+                      })}
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ 1000,00
+                      R$ {totalEntries.toFixed(2)}
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ 500,00
+                      R$ 0
                     </td>
                     <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ 500,00
+                      R$ {total.toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
@@ -68,7 +98,7 @@ function Summary() {
         {/* tooltip nos botoes de data */}
 
         {/* Destaques do periodo */}
-        <div className="flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base">
+        <div className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base">
           <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
             Highlights of the year
           </h2>

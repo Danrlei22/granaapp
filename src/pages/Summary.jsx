@@ -75,21 +75,21 @@ function Summary() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                       {new Date()
-                        .toLocaleDateString("pt-BR", {
+                        .toLocaleDateString("en-US", {
                           month: "long",
                         })
                         .toUpperCase()}
                     </td>
-                    <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                       R$ {totalEntries.toFixed(2)}
                     </td>
-                    <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                       R$ -{totalExits.toFixed(2)}
                     </td>
-                    <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ {total.toFixed(2)}
+                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      <strong>R$ {total.toFixed(2)}</strong>
                     </td>
                   </tr>
                 </tbody>

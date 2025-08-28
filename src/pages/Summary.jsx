@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import { fetchExits } from "../redux/slices/exitsSlice";
 
 function Summary() {
+  const [selectedQuarter, setSelectedQuarter] = useState(false);
+  const [dateByMonth, setDateByMonth] = useState([]);
+
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
   const exits = useSelector((state) => state.exits.data);
@@ -45,6 +48,47 @@ function Summary() {
 
   const total = totalEntries - totalExits;
 
+  const handleQuarterChange = () => {
+    setSelectedQuarter(true);
+
+    const lastThreeMonths = [
+      currentMonth,
+      (currentMonth - 1 + 12) % 12,
+      (currentMonth - 2 + 12) % 12,
+    ];
+
+    const filterByLastThreeMonths = (items) =>
+      items.filter((item) => {
+        const date = new Date(item.date + "T12:00:00");
+        return (
+          lastThreeMonths.includes(date.getMonth() + 1) &&
+          date.getFullYear() === currentYear
+        );
+      });
+
+    const lastThreeEntries = filterByLastThreeMonths(entries);
+    const lastThreeExits = filterByLastThreeMonths(exits);
+
+    const data = lastThreeMonths.map((month) => {
+      const entriesSum = lastThreeEntries
+        .filter((e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month)
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      const exitsSum = lastThreeExits
+        .filter((e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month)
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      return {
+        month,
+        entries: entriesSum,
+        exits: exitsSum,
+        total: entriesSum - exitsSum,
+      };
+    });
+
+    setDateByMonth(data);
+  };
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -74,24 +118,59 @@ function Summary() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      {new Date()
-                        .toLocaleDateString("en-US", {
-                          month: "long",
-                        })
-                        .toUpperCase()}
-                    </td>
-                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ {totalEntries.toFixed(2)}
-                    </td>
-                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      R$ -{totalExits.toFixed(2)}
-                    </td>
-                    <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      <strong>R$ {total.toFixed(2)}</strong>
-                    </td>
-                  </tr>
+                  {selectedQuarter ? (
+                    dateByMonth.length > 0 ? (
+                      dateByMonth.map((item) => (
+                        <tr key={item.month}>
+                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            {new Date(0, item.month - 1)
+                              .toLocaleDateString("en-US", {
+                                month: "long",
+                              })
+                              .toUpperCase()}
+                          </td>
+                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            R$ {item.entries.toFixed(2)}
+                          </td>
+                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            R$ -{item.exits.toFixed(2)}
+                          </td>
+                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                            <strong>R$ {item.total.toFixed(2)}</strong>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="5"
+                          className="text-center p-2 text-black italic"
+                        >
+                          No entry or exit found for selected date.
+                        </td>
+                      </tr>
+                    )
+                  ) : (
+                    // MES ATUAL
+                    <tr>
+                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        {new Date()
+                          .toLocaleDateString("en-US", {
+                            month: "long",
+                          })
+                          .toUpperCase()}
+                      </td>
+                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        R$ {totalEntries.toFixed(2)}
+                      </td>
+                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        R$ -{totalExits.toFixed(2)}
+                      </td>
+                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        <strong>R$ {total.toFixed(2)}</strong>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -102,7 +181,10 @@ function Summary() {
         <div className="flex flex-col items-center justify-center w-auto min-w-[280px] border-box shadow-2xl shadow-tertiary h-auto max-h-[140px]">
           <h2 className="font-bold text-xl">Period filter:</h2>
           <div className="flex flex-row w-auto h-[50px] border-2 border-tertiary gap-2 p-2 m-1">
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+            <button
+              onClick={handleQuarterChange}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
               Quarter
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">

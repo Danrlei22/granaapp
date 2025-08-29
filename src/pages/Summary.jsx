@@ -3,6 +3,7 @@ import { FaFilePdf } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import { fetchExits } from "../redux/slices/exitsSlice";
+import Tooltip from "../components/ui/Tooltip";
 
 function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
@@ -128,24 +129,18 @@ function Summary() {
     const lastSixEntries = entries ? filterByLastSixMonths(entries) : [];
     const lastSixExits = exits ? filterByLastSixMonths(exits) : [];
 
-    const data = lastSixMonths.map(({month, year}) => {
+    const data = lastSixMonths.map(({ month, year }) => {
       const entriesSum = lastSixEntries
         .filter((e) => {
           const date = new Date(e.date + "T12:00:00");
-          return (
-            date.getMonth() + 1 === month &&
-            date.getFullYear() === year
-          );
+          return date.getMonth() + 1 === month && date.getFullYear() === year;
         })
         .reduce((acc, e) => acc + e.amount, 0);
 
       const exitsSum = lastSixExits
         .filter((e) => {
           const date = new Date(e.date + "T12:00:00");
-          return (
-            date.getMonth() + 1 === month &&
-            date.getFullYear() === year
-          );
+          return date.getMonth() + 1 === month && date.getFullYear() === year;
         })
         .reduce((acc, e) => acc + e.amount, 0);
 
@@ -250,15 +245,17 @@ function Summary() {
         </div>
 
         {/* filtro */}
-        <div className="flex flex-col items-center justify-center w-auto min-w-[280px] border-box shadow-2xl shadow-tertiary h-auto max-h-[140px]">
-          <h2 className="font-bold text-xl">Period filter:</h2>
-          <div className="flex flex-row w-auto h-[50px] border-2 border-tertiary gap-2 p-2 m-1">
-            <button
-              onClick={handleQuarterChange}
-              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-            >
-              Quarter
-            </button>
+        <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
+          <h2 className="font-bold pl-2">Period filter:</h2>
+          <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
+            <Tooltip text="Filter last 3 months" position="bottom">
+              <button
+                onClick={handleQuarterChange}
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
+                Quarter
+              </button>
+            </Tooltip>
             <button
               onClick={handleLastSixMonthsChange}
               className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"

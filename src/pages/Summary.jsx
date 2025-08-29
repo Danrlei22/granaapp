@@ -7,6 +7,7 @@ import { fetchExits } from "../redux/slices/exitsSlice";
 function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
   const [dateByMonth, setDateByMonth] = useState([]);
+  const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
 
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
@@ -89,6 +90,77 @@ function Summary() {
     setDateByMonth(data);
   };
 
+  const handleLastSixMonthsChange = () => {
+    setSelectedLastSixMonths(true);
+
+    const today = new Date();
+
+    const currentMonthStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      1
+    );
+
+    const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date(
+        currentMonthStart.getFullYear(),
+        currentMonthStart.getMonth() - i,
+        1
+      );
+
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      };
+    });
+
+    const filterByLastSixMonths = (items) => {
+      return items.filter((item) => {
+        const date = new Date(item.date + "T12:00:00");
+
+        return lastSixMonths.some(
+          (m) =>
+            m.month === date.getMonth() + 1 && m.year === date.getFullYear()
+        );
+      });
+    };
+
+    const lastSixEntries = entries ? filterByLastSixMonths(entries) : [];
+    const lastSixExits = exits ? filterByLastSixMonths(exits) : [];
+
+    const data = lastSixMonths.map(({month, year}) => {
+      const entriesSum = lastSixEntries
+        .filter((e) => {
+          const date = new Date(e.date + "T12:00:00");
+          return (
+            date.getMonth() + 1 === month &&
+            date.getFullYear() === year
+          );
+        })
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      const exitsSum = lastSixExits
+        .filter((e) => {
+          const date = new Date(e.date + "T12:00:00");
+          return (
+            date.getMonth() + 1 === month &&
+            date.getFullYear() === year
+          );
+        })
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      return {
+        month,
+        year,
+        entries: entriesSum,
+        exits: exitsSum,
+        total: entriesSum - exitsSum,
+      };
+    });
+
+    setDateByMonth(data);
+  };
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -118,10 +190,10 @@ function Summary() {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedQuarter ? (
+                  {selectedQuarter || selectedLastSixMonths ? (
                     dateByMonth.length > 0 ? (
                       dateByMonth.map((item) => (
-                        <tr key={item.month}>
+                        <tr key={`${item.year}-${item.month}`}>
                           <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                             {new Date(0, item.month - 1)
                               .toLocaleDateString("en-US", {
@@ -187,8 +259,11 @@ function Summary() {
             >
               Quarter
             </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
-              Semester
+            <button
+              onClick={handleLastSixMonthsChange}
+              className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+            >
+              Last 6 months
             </button>
             <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
               Year
@@ -196,11 +271,12 @@ function Summary() {
           </div>
 
           <div className="flex flex-col items-start justify-center w-full">
-            {selectedQuarter && (
+            {(selectedQuarter || selectedLastSixMonths) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
-                    setSelectedQuarter(false)
+                    setSelectedQuarter(false);
+                    setSelectedLastSixMonths(false);
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

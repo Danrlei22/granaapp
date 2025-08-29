@@ -264,9 +264,11 @@ function Summary() {
                 Last 6 months
               </button>
             </Tooltip>
-            <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
-              Year
-            </button>
+            <Tooltip text="Filter by year" position="bottom">
+              <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+                Year
+              </button>
+            </Tooltip>
           </div>
 
           <div className="flex flex-col items-start justify-center w-full">

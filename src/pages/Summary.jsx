@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
@@ -9,6 +9,8 @@ function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
   const [dateByMonth, setDateByMonth] = useState([]);
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
+  const [selectYear, setSelectYear] = useState("");
+  const [showYearSelect, setShowYearSelect] = useState(false);
 
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
@@ -156,6 +158,59 @@ function Summary() {
     setDateByMonth(data);
   };
 
+  const handleYearChange = (newYear) => {
+    setSelectYear(newYear);
+
+    const filteredEntries = entries.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === parseInt(newYear)
+    );
+    const filteredExits = exits.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === parseInt(newYear)
+    );
+
+    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+    const data = months.map((month) => {
+      const entriesSum = filteredEntries
+        .filter((e) => {
+          const date = new Date(e.date + "T12:00:00");
+          return (
+            date.getMonth() + 1 === month &&
+            date.getFullYear() === parseInt(newYear)
+          );
+        })
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      const exitsSum = filteredExits
+        .filter((e) => {
+          const date = new Date(e.date + "T12:00:00");
+          return (
+            date.getMonth() + 1 === month &&
+            date.getFullYear() === parseInt(newYear)
+          );
+        })
+        .reduce((acc, e) => acc + e.amount, 0);
+
+      return {
+        month,
+        year: parseInt(newYear),
+        entries: entriesSum,
+        exits: exitsSum,
+        total: entriesSum - exitsSum,
+      };
+    });
+
+    setDateByMonth(data);
+  };
+
+  const availableYears = useMemo(() => {
+    return [
+      ...new Set(
+        [...entries, ...exits].map((item) => new Date(item.date).getFullYear())
+      ),
+    ].sort((a, b) => b - a);
+  }, [entries, exits]);
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -185,7 +240,7 @@ function Summary() {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedQuarter || selectedLastSixMonths ? (
+                  {selectedQuarter || selectedLastSixMonths || selectYear ? (
                     dateByMonth.length > 0 ? (
                       dateByMonth.map((item) => (
                         <tr key={`${item.year}-${item.month}`}>
@@ -265,19 +320,40 @@ function Summary() {
               </button>
             </Tooltip>
             <Tooltip text="Filter by year" position="bottom">
-              <button className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800">
+              <button
+                onClick={() => setShowYearSelect(true)}
+                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+              >
                 Year
               </button>
             </Tooltip>
           </div>
 
           <div className="flex flex-col items-start justify-center w-full">
-            {(selectedQuarter || selectedLastSixMonths) && (
+            {showYearSelect && (
+              <select
+                name="year"
+                className="flex flex-col w-auto h-auto sm:text-sm bg-blue-300 p-0.5 m-1 border-2 border-tertiary rounded ml-44"
+                value={selectYear}
+                onChange={(e) => handleYearChange(e.target.value)}
+                required
+              >
+                <option value="">Select year</option>
+                {availableYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            )}
+            {(selectedQuarter || selectedLastSixMonths || showYearSelect) && (
               <div className="w-full text-center mt-4">
                 <span
                   onClick={() => {
                     setSelectedQuarter(false);
                     setSelectedLastSixMonths(false);
+                    setShowYearSelect(false);
+                    setSelectYear("");
                   }}
                   className="text-blue-600 underline cursor-pointer"
                 >

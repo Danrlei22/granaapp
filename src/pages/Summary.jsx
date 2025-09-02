@@ -240,7 +240,9 @@ function Summary() {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedQuarter || selectedLastSixMonths || selectYear ? (
+                  {selectedQuarter ||
+                  selectedLastSixMonths ||
+                  showYearSelect ? (
                     dateByMonth.length > 0 ? (
                       dateByMonth.map((item) => (
                         <tr key={`${item.year}-${item.month}`}>
@@ -305,7 +307,10 @@ function Summary() {
           <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
             <Tooltip text="Filter last 3 months" position="bottom">
               <button
-                onClick={handleQuarterChange}
+                onClick={() => {
+                  handleQuarterChange();
+                  setShowYearSelect(false);
+                }}
                 className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
               >
                 Quarter
@@ -313,7 +318,10 @@ function Summary() {
             </Tooltip>
             <Tooltip text="Filter last 6 months" position="bottom">
               <button
-                onClick={handleLastSixMonthsChange}
+                onClick={() => {
+                  handleLastSixMonthsChange();
+                  setShowYearSelect(false);
+                }}
                 className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
               >
                 Last 6 months

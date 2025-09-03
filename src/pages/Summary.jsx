@@ -254,13 +254,24 @@ function Summary() {
                               .toUpperCase()}
                           </td>
                           <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R$ {item.entries.toFixed(2)}
+                            R${" "}
+                            {item.entries.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </td>
                           <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R$ -{item.exits.toFixed(2)}
+                            R$ -
+                            {item.exits.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </td>
                           <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            <strong>R$ {item.total.toFixed(2)}</strong>
+                            <strong>
+                              R${" "}
+                              {item.total.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </strong>
                           </td>
                         </tr>
                       ))
@@ -285,13 +296,24 @@ function Summary() {
                           .toUpperCase()}
                       </td>
                       <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        R$ {totalEntries.toFixed(2)}
+                        R${" "}
+                        {totalEntries.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                       <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        R$ -{totalExits.toFixed(2)}
+                        R$ -
+                        {totalExits.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                       <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        <strong>R$ {total.toFixed(2)}</strong>
+                        <strong>
+                          R${" "}
+                          {total.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </strong>
                       </td>
                     </tr>
                   )}

@@ -211,6 +211,15 @@ function Summary() {
     ].sort((a, b) => b - a);
   }, [entries, exits]);
 
+  const yearEntries = entries.filter(
+    (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+  );
+
+  const biggerEntry =
+    yearEntries.length > 0
+      ? Math.max(...yearEntries.map((item) => Number(item.amount)))
+      : 0;
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -393,7 +402,6 @@ function Summary() {
             )}
           </div>
         </div>
-        {/* tooltip nos botoes de data */}
 
         {/* Destaques do periodo */}
         <div className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base">
@@ -403,7 +411,12 @@ function Summary() {
 
           <div className="box-info mb-4">
             <p className="font-bold text-xl">Bigger balance:</p>
-            <p className="font-bold text-xl text-green-600">R$ +5.000,00</p>
+            <p className="font-bold text-xl text-green-600">
+              R${" "}
+              {biggerEntry.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
             <p>in: february</p>
           </div>
 
@@ -417,12 +430,12 @@ function Summary() {
             <p className="font-bold text-xl">Monthly average</p>
             <div className="flex sm:flex-row flex-col justify-between items-center">
               <p className="font-bold text-base">Entry: </p>
-              <p className="text-green-600 font-bold text-xl">R$ + 5.500,00</p>
+              <p className="text-green-600 font-bold text-xl">R$ 5.500,00</p>
             </div>
 
             <div className="flex sm:flex-row flex-col justify-between items-center">
               <p className="font-bold text-base">Exit: </p>
-              <p className="text-red-600 font-bold text-xl">R$ - 3.500,00</p>
+              <p className="text-red-600 font-bold text-xl">R$ -3.500,00</p>
             </div>
           </div>
           <div>

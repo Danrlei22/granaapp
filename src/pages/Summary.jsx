@@ -230,16 +230,27 @@ function Summary() {
     );
   };
 
-  const { value, month } = biggestEntry();
+  const { value: biggestEntryValue, month: biggestEntryMonth } = biggestEntry();
 
-  const yearExits = exits.filter(
-    (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
-  );
+  const biggestExit = () => {
+    const yearExits = exits.filter(
+      (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+    );
 
-  const lowestExit =
-    yearExits.length > 0
-      ? Math.max(...yearExits.map((item) => Number(item.amount)))
-      : 0;
+    if (yearExits.length === 0) return { value: 0, month: null };
+
+    return yearExits.reduce(
+      (max, item) => {
+        const date = new Date(item.date + "T12:00:00");
+        const month = date.toLocaleDateString("en-US", { month: "long" });
+        const amount = Number(item.amount);
+        return amount > max.value ? { value: amount, month } : max;
+      },
+      { value: 0, month: null }
+    );
+  };
+
+  const { value: biggestExitValue, month: biggestExitMonth } = biggestExit();
 
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
@@ -434,22 +445,22 @@ function Summary() {
             <p className="font-bold text-xl">Biggest entry:</p>
             <p className="font-bold text-xl text-green-600">
               R${" "}
-              {value.toLocaleString("pt-BR", {
+              {biggestEntryValue.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p>in: {month}</p>
+            <p>in: {biggestEntryMonth}</p>
           </div>
 
           <div className="box-info mb-4">
             <p className="font-bold text-xl">Biggest exit:</p>
             <p className="font-bold text-xl text-red-600">
               R$ -
-              {lowestExit.toLocaleString("pt-BR", {
+              {biggestExitValue.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p>in: march</p>
+            <p>in: {biggestExitMonth}</p>
           </div>
 
           <div className="box-info mb-4">

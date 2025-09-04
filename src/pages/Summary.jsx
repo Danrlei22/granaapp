@@ -250,6 +250,25 @@ function Summary() {
   };
   const { value: biggestExitValue, month: biggestExitMonth } = biggestExit();
 
+  const averageEntries = () => {
+    const yearEntries = entries.filter(
+      (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+    );
+
+    if (yearEntries.length === 0) return { value: 0 };
+
+    const total = yearEntries.reduce((acc, item) => {
+      const amount = Number(item.amount);
+      return (acc = acc + amount);
+    }, 0);
+
+    const average = total / yearEntries.length;
+
+    return average;
+  };
+
+  const averageEntry = averageEntries();
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -461,11 +480,17 @@ function Summary() {
             <p className="font-bold text-[12px]">in: {biggestExitMonth}</p>
           </div>
 
-          <div className="box-info mb-4">
+          <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
             <p className="font-bold text-xl">Monthly average</p>
             <div className="flex sm:flex-row flex-col justify-between items-center">
               <p className="font-bold text-base">Entry: </p>
-              <p className="text-green-600 font-bold text-xl">R$ 5.500,00</p>
+              <p className="text-green-600 font-bold text-xl">
+                R${" "}
+                {averageEntry.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
 
             <div className="flex sm:flex-row flex-col justify-between items-center">

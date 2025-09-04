@@ -269,6 +269,25 @@ function Summary() {
 
   const averageEntry = averageEntries();
 
+  const averageExits = () => {
+    const yearExits = exits.filter(
+      (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+    );
+
+    if (yearExits.length === 0) return { value: 0 };
+
+    const total = yearExits.reduce((acc, item) => {
+      const amount = Number(item.amount);
+      return (acc = acc + amount);
+    }, 0);
+
+    const average = total / yearExits.length;
+
+    return average;
+  };
+
+  const averageExit = averageExits();
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -495,7 +514,13 @@ function Summary() {
 
             <div className="flex sm:flex-row flex-col justify-between items-center">
               <p className="font-bold text-base">Exit: </p>
-              <p className="text-red-600 font-bold text-xl">R$ -3.500,00</p>
+              <p className="text-red-600 font-bold text-xl">
+                R$ -
+                {averageExit.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
           </div>
           <div>

@@ -213,11 +213,21 @@ function Summary() {
 
   const yearEntries = entries.filter(
     (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+    
   );
 
   const biggerEntry =
     yearEntries.length > 0
       ? Math.max(...yearEntries.map((item) => Number(item.amount)))
+      : 0;
+
+  const yearExits = exits.filter(
+    (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+  );
+
+  const lowestExit =
+    yearExits.length > 0
+      ? Math.max(...yearExits.map((item) => Number(item.amount)))
       : 0;
 
   return (
@@ -422,7 +432,12 @@ function Summary() {
 
           <div className="box-info mb-4">
             <p className="font-bold text-xl">Lowest balance:</p>
-            <p className="font-bold text-xl text-red-600">R$ -2.000,00</p>
+            <p className="font-bold text-xl text-red-600">
+              R$ -
+              {lowestExit.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
             <p>in: march</p>
           </div>
 

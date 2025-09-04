@@ -229,7 +229,6 @@ function Summary() {
       { value: 0, month: null }
     );
   };
-
   const { value: biggestEntryValue, month: biggestEntryMonth } = biggestEntry();
 
   const biggestExit = () => {
@@ -249,7 +248,6 @@ function Summary() {
       { value: 0, month: null }
     );
   };
-
   const { value: biggestExitValue, month: biggestExitMonth } = biggestExit();
 
   return (
@@ -441,26 +439,26 @@ function Summary() {
             Highlights of the year
           </h2>
 
-          <div className="box-info mb-4">
-            <p className="font-bold text-xl">Biggest entry:</p>
-            <p className="font-bold text-xl text-green-600">
+          <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
+            <p className="font-bold text-xl">Biggest entry</p>
+            <p className="font-bold text-2xl text-green-600">
               R${" "}
               {biggestEntryValue.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p>in: {biggestEntryMonth}</p>
+            <p className="font-bold text-[12px]">in:{biggestEntryMonth}</p>
           </div>
 
-          <div className="box-info mb-4">
-            <p className="font-bold text-xl">Biggest exit:</p>
-            <p className="font-bold text-xl text-red-600">
+          <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
+            <p className="font-bold text-xl">Biggest exit</p>
+            <p className="font-bold text-2xl text-red-600">
               R$ -
               {biggestExitValue.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p>in: {biggestExitMonth}</p>
+            <p className="font-bold text-[12px]">in: {biggestExitMonth}</p>
           </div>
 
           <div className="box-info mb-4">

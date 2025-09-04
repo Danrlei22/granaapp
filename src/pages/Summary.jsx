@@ -211,15 +211,26 @@ function Summary() {
     ].sort((a, b) => b - a);
   }, [entries, exits]);
 
-  const yearEntries = entries.filter(
-    (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
-    
-  );
+  const biggestEntry = () => {
+    const yearEntries = entries.filter(
+      (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
+    );
 
-  const biggerEntry =
-    yearEntries.length > 0
-      ? Math.max(...yearEntries.map((item) => Number(item.amount)))
-      : 0;
+    if (yearEntries.length === 0) return { value: 0, month: null };
+
+    return yearEntries.reduce(
+      (max, item) => {
+        const date = new Date(item.date + "T12:00:00");
+        const month = date.toLocaleDateString("en-US", { month: "long" });
+        const amount = Number(item.amount);
+
+        return amount > max.value ? { value: amount, month } : max;
+      },
+      { value: 0, month: null }
+    );
+  };
+
+  const { value, month } = biggestEntry();
 
   const yearExits = exits.filter(
     (item) => new Date(item.date + "T12:00:00").getFullYear() === currentYear
@@ -420,18 +431,18 @@ function Summary() {
           </h2>
 
           <div className="box-info mb-4">
-            <p className="font-bold text-xl">Bigger balance:</p>
+            <p className="font-bold text-xl">Biggest entry:</p>
             <p className="font-bold text-xl text-green-600">
               R${" "}
-              {biggerEntry.toLocaleString("pt-BR", {
+              {value.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p>in: february</p>
+            <p>in: {month}</p>
           </div>
 
           <div className="box-info mb-4">
-            <p className="font-bold text-xl">Lowest balance:</p>
+            <p className="font-bold text-xl">Biggest exit:</p>
             <p className="font-bold text-xl text-red-600">
               R$ -
               {lowestExit.toLocaleString("pt-BR", {

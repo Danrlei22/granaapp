@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
@@ -6,6 +6,7 @@ import { fetchExits } from "../redux/slices/exitsSlice";
 import Tooltip from "../components/ui/Tooltip";
 import jsPDF from "jspdf";
 import logoName from "../assets/logoName.PNG";
+import html2canvas from "html2canvas";
 
 function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
@@ -13,6 +14,8 @@ function Summary() {
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
   const [selectYear, setSelectYear] = useState("");
   const [showYearSelect, setShowYearSelect] = useState(false);
+
+  const highlighRef = useRef(null);
 
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
@@ -292,96 +295,107 @@ function Summary() {
 
   const exportToPDF = async () => {
     const doc = new jsPDF();
-
     const pageWidth = doc.internal.pageSize.getWidth();
 
     const response = await fetch(logoName);
     const blob = await response.blob();
-    const reader = new FileReader();
-    reader.onloadend = function () {
-      const base64data = reader.result;
 
-      doc.addImage(base64data, "PNG", 14, 5, 40, 12);
+    const base64data = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(18);
-      doc.text("Summary Report", pageWidth / 2, 14, { align: "center" });
+    doc.addImage(base64data, "PNG", 14, 5, 40, 12);
 
-      const tableColumn = ["Month", "Year", "Entry", "Exit", "Total"];
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Summary Report", pageWidth / 2, 14, { align: "center" });
 
-      const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const tableColumn = ["Month", "Year", "Entry", "Exit", "Total"];
+    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const yearEntries = entries.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
+    );
+    const yearExits = exits.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
+    );
+    const dateByMonth = months.map((month) => {
+      const entriesSum = yearEntries
+        .filter((e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month)
+        .reduce((acc, e) => acc + e.amount, 0);
 
-      const yearEntries = entries.filter(
-        (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
-      );
-      const yearExits = exits.filter(
-        (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
-      );
+      const exitsSum = yearExits
+        .filter((e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month)
+        .reduce((acc, e) => acc + e.amount, 0);
 
-      const dateByMonth = months.map((month) => {
-        const entriesSum = yearEntries
-          .filter(
-            (e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month
-          )
-          .reduce((acc, e) => acc + e.amount, 0);
+      return {
+        month,
+        year: currentYear,
+        entries: entriesSum,
+        exits: exitsSum,
+        total: entriesSum - exitsSum,
+      };
+    });
 
-        const exitsSum = yearExits
-          .filter(
-            (e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month
-          )
-          .reduce((acc, e) => acc + e.amount, 0);
-
-        return {
-          month,
-          year: currentYear,
-          entries: entriesSum,
-          exits: exitsSum,
-          total: entriesSum - exitsSum,
-        };
-      });
-
-      const tableRows = dateByMonth.map((item) => {
-        const monthName = new Date(0, item.month - 1).toLocaleDateString(
-          "en-US",
-          { month: "long" }
-        );
-
-        return [
-          monthName,
-          item.year,
-          `R$ ${Number(item.entries).toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-          })}`,
-          `R$ ${Number(item.exits).toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-          })}`,
-          `R$ ${Number(item.total).toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-          })}`,
-        ];
-      });
-
-      const totalAmount = dateByMonth.reduce(
-        (acc, item) => acc + (item.entries - item.exits),
-        0
+    const tableRows = dateByMonth.map((item) => {
+      const monthName = new Date(0, item.month - 1).toLocaleDateString(
+        "en-US",
+        { month: "long" }
       );
 
-      doc.autoTable({
-        head: [tableColumn],
-        body: tableRows,
-        startY: 22,
-      });
+      return [
+        monthName,
+        item.year,
+        `R$ ${Number(item.entries).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+        })}`,
+        `R$ ${Number(item.exits).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+        })}`,
+        `R$ ${Number(item.total).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+        })}`,
+      ];
+    });
 
-      const yPosition = (doc.lastAutoTable.finalY || 22) + 10;
-      const text = `Total: R$  ${totalAmount.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}`;
-      doc.text(text, pageWidth / 2, yPosition, { align: "center" });
+    const totalAmount = dateByMonth.reduce(
+      (acc, item) => acc + (item.entries - item.exits),
+      0
+    );
 
-      doc.save(`report-summary-${new Date().toISOString().slice(0, 10)}.pdf`);
-    };
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 22,
+    });
 
-    reader.readAsDataURL(blob);
+    const yPosition = (doc.lastAutoTable.finalY || 22) + 10;
+    const text = `Total: R$  ${totalAmount.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+    })}`;
+    doc.text(text, pageWidth / 2, yPosition, { align: "center" });
+
+    const canvas = await html2canvas(highlighRef.current);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let y = doc.lastAutoTable.finalY + 20;
+
+    const fixedWidth = 80;
+    const fixedHeight = 130;
+
+    if (y + fixedHeight > pageHeight) {
+      doc.addPage();
+      y = 20;
+    }
+
+    const x = (pageWidth - fixedWidth) / 2;
+
+    doc.addImage(imgData, "PNG", x, y, fixedWidth, fixedHeight);
+
+    doc.save(`report-summary-${new Date().toISOString().slice(0, 10)}.pdf`);
   };
 
   return (
@@ -568,7 +582,10 @@ function Summary() {
         </div>
 
         {/* Destaques do periodo */}
-        <div className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base">
+        <div
+          ref={highlighRef}
+          className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base"
+        >
           <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
             Highlights of the year
           </h2>

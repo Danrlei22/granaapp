@@ -7,6 +7,7 @@ import Tooltip from "../components/ui/Tooltip";
 import jsPDF from "jspdf";
 import logoName from "../assets/logoName.PNG";
 import html2canvas from "html2canvas";
+import Loading from "../components/Loading";
 
 function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
@@ -14,6 +15,7 @@ function Summary() {
   const [selectedLastSixMonths, setSelectedLastSixMonths] = useState(false);
   const [selectYear, setSelectYear] = useState("");
   const [showYearSelect, setShowYearSelect] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const highlighRef = useRef(null);
 
@@ -25,8 +27,14 @@ function Summary() {
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    dispatch(fetchEntries());
-    dispatch(fetchExits());
+    const fetchData = async () => {
+      setLoading(true);
+      await dispatch(fetchEntries());
+      await dispatch(fetchExits());
+      setLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const currentMonthEntries = entries.filter((item) => {
@@ -215,6 +223,10 @@ function Summary() {
       ),
     ].sort((a, b) => b - a);
   }, [entries, exits]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const biggestEntry = () => {
     const yearEntries = entries.filter(

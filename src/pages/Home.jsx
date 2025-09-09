@@ -1,15 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import graficoDinheiro from "../assets/graficoDinheiro.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setPhrase } from "../redux/slices/motivationalSlice";
+import Loading from "../components/Loading";
 
 function Home() {
+  const [loading, setLoading] = useState(true);
+
   const dispatch = useDispatch();
   const phrase = useSelector((state) => state.motivational.phraseCurrent);
 
   useEffect(() => {
-    dispatch(setPhrase());
+    const fetchData = () => {
+      setLoading(true);
+      dispatch(setPhrase());
+      setLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-row flex-wrap justify-center items-center w-full min-w-[340px] text-xs sm:text-base h-auto mb-8 gap-2">

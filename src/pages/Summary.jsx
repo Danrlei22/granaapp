@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import { fetchExits } from "../redux/slices/exitsSlice";
 import Tooltip from "../components/ui/Tooltip";
+import jsPDF from "jspdf";
+import logoName from "../assets/logoName.PNG";
 
 function Summary() {
   const [selectedQuarter, setSelectedQuarter] = useState(false);
@@ -288,6 +290,100 @@ function Summary() {
 
   const averageExit = averageExits();
 
+  const exportToPDF = async () => {
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const response = await fetch(logoName);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const base64data = reader.result;
+
+      doc.addImage(base64data, "PNG", 14, 5, 40, 12);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.text("Summary Report", pageWidth / 2, 14, { align: "center" });
+
+      const tableColumn = ["Month", "Year", "Entry", "Exit", "Total"];
+
+      const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+      const yearEntries = entries.filter(
+        (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
+      );
+      const yearExits = exits.filter(
+        (e) => new Date(e.date + "T12:00:00").getFullYear() === currentYear
+      );
+
+      const dateByMonth = months.map((month) => {
+        const entriesSum = yearEntries
+          .filter(
+            (e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month
+          )
+          .reduce((acc, e) => acc + e.amount, 0);
+
+        const exitsSum = yearExits
+          .filter(
+            (e) => new Date(e.date + "T12:00:00").getMonth() + 1 === month
+          )
+          .reduce((acc, e) => acc + e.amount, 0);
+
+        return {
+          month,
+          year: currentYear,
+          entries: entriesSum,
+          exits: exitsSum,
+          total: entriesSum - exitsSum,
+        };
+      });
+
+      const tableRows = dateByMonth.map((item) => {
+        const monthName = new Date(0, item.month - 1).toLocaleDateString(
+          "en-US",
+          { month: "long" }
+        );
+
+        return [
+          monthName,
+          item.year,
+          `R$ ${Number(item.entries).toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+          })}`,
+          `R$ ${Number(item.exits).toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+          })}`,
+          `R$ ${Number(item.total).toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+          })}`,
+        ];
+      });
+
+      const totalAmount = dateByMonth.reduce(
+        (acc, item) => acc + (item.entries - item.exits),
+        0
+      );
+
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 22,
+      });
+
+      const yPosition = (doc.lastAutoTable.finalY || 22) + 10;
+      const text = `Total: R$  ${totalAmount.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}`;
+      doc.text(text, pageWidth / 2, yPosition, { align: "center" });
+
+      doc.save(`report-summary-${new Date().toISOString().slice(0, 10)}.pdf`);
+    };
+
+    reader.readAsDataURL(blob);
+  };
+
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
       <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
@@ -523,12 +619,17 @@ function Summary() {
               </p>
             </div>
           </div>
-          <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
-              <FaFilePdf /> Export PDF
-            </button>
-          </div>
         </div>
+      </div>
+      <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
+        <button
+          onClick={() => {
+            exportToPDF();
+          }}
+          className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+        >
+          <FaFilePdf /> Export PDF Current Year
+        </button>
       </div>
     </div>
   );

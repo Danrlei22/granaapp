@@ -278,7 +278,7 @@ function Exit() {
 
       doc.addImage(base64data, "PNG", 14, 5, 40, 12);
 
-      doc.setFont("healvetica", "bold");
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.text("Exits Report", pageWidth / 2, 14, { align: "center" });
 

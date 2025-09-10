@@ -3,17 +3,23 @@ import graficoDinheiro from "../assets/graficoDinheiro.png";
 import { useEffect, useState } from "react";
 import { setPhrase } from "../redux/slices/motivationalSlice";
 import Loading from "../components/Loading";
+import { fetchEntries } from "../redux/slices/entriesSlice";
+import { fetchExits } from "../redux/slices/exitsSlice";
 
 function Home() {
   const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const phrase = useSelector((state) => state.motivational.phraseCurrent);
+  const entries = useSelector((state) => state.entries.data);
+  const exits = useSelector((state) => state.exits.data);
 
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       setLoading(true);
       dispatch(setPhrase());
+      await dispatch(fetchEntries());
+      await dispatch(fetchExits());
       setLoading(false);
     };
 
@@ -24,6 +30,37 @@ function Home() {
     return <Loading />;
   }
 
+  const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+
+  const currentMonthEntries = entries.filter((item) => {
+    const date = new Date(item.date + "T12:00:00");
+
+    return (
+      date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
+    );
+  });
+
+  const currentMonthExits = exits.filter((item) => {
+    const date = new Date(item.date + "T12:00:00");
+
+    return (
+      date.getMonth() + 1 === currentMonth && date.getFullYear() === currentYear
+    );
+  });
+
+  const totalEntries = currentMonthEntries.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const totalExits = currentMonthExits.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const totalMonth = totalEntries - totalExits;
+
   return (
     <div className="flex flex-row flex-wrap justify-center items-center w-full min-w-[340px] text-xs sm:text-base h-auto mb-8 gap-2">
       <div className="bg-primary text-black flex flex-col justify-between items-center mb-4 border-box w-[300px] h-auto shadow-2xl shadow-tertiary">
@@ -31,17 +68,32 @@ function Home() {
 
         <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
           <p className="font-bold text-xl">Entry</p>
-          <p className="text-green-600 font-bold text-xl">R$ 4.000,00</p>
+          <p className="text-green-600 font-bold text-xl">
+            R${" "}
+            {totalEntries.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}
+          </p>
         </div>
 
         <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
           <p className="font-bold text-xl">Exit</p>
-          <p className="text-red-600 font-bold text-xl">R$ -1.000,00</p>
+          <p className="text-red-600 font-bold text-xl">
+            R${" "}
+            {totalExits.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}
+          </p>
         </div>
 
         <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
           <p className="font-bold text-xl">Current balance</p>
-          <p className="text-blue-500 font-bold text-xl">R$ 5.000,00</p>
+          <p className="text-blue-500 font-bold text-xl">
+            R${" "}
+            {totalMonth.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}
+          </p>
         </div>
       </div>
 

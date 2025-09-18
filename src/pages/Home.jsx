@@ -61,10 +61,30 @@ function Home() {
 
   const totalMonth = totalEntries - totalExits;
 
+  const entriesTransfer = entries.map((item) => ({
+    ...item,
+    type: "entry",
+  }));
+
+  const exitsTransfer = exits.map((item) => ({
+    ...item,
+    type: "exit",
+  }));
+
+  const transfers = [...entriesTransfer, ...exitsTransfer];
+
+  const lastTransfers = transfers
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 7);
+
   return (
     <div className="flex flex-row flex-wrap justify-center items-center w-full min-w-[340px] text-xs sm:text-base h-auto mb-8 gap-2">
       <div className="bg-primary text-black flex flex-col justify-between items-center mb-4 border-box w-[300px] h-auto shadow-2xl shadow-tertiary">
-        <h2 className="h2-bold mb-6">Month current</h2>
+        <h2 className="h2-bold mb-6">
+          {new Date().toLocaleDateString("en-US", {
+            month: "long",
+          })}
+        </h2>
 
         <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
           <p className="font-bold text-xl">Entry</p>
@@ -110,7 +130,7 @@ function Home() {
         <h2 className="h2-bold box-info mb-6">Latest transfers</h2>
 
         <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px] text-center">
-          <table className="border-2 border-tertiary text-center min-w-[400px]">
+          <table className="border-2 border-tertiary text-center min-w-[400px] text-black">
             <thead className="bg-tertiary">
               <tr className="text-white">
                 <th className="thead-table">Amount</th>
@@ -119,37 +139,39 @@ function Home() {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-green-300">
-                <td className="td-table">+ 1000,00</td>
-                <td className="td-table">10/10/2023</td>
-                <td className="td-table">Transferência</td>
-              </tr>
-              <tr className="bg-red-300">
-                <td className="td-table">- 1000,00</td>
-                <td className="td-table">10/10/2023</td>
-                <td className="td-table">Aluguel</td>
-              </tr>
-              <tr className="bg-red-300">
-                <td className="td-table">- 500,00</td>
-                <td className="td-table">10/10/2023</td>
-                <td className="td-table">Luz</td>
-              </tr>
-              <tr className="bg-green-300">
-                <td className="td-table">+ 10000,00</td>
-                <td className="td-table">10/10/2023</td>
-                <td className="td-table">Transferência</td>
-              </tr>
-              <tr className="bg-red-300">
-                <td className="td-table">- 200,00</td>
-                <td className="td-table">10/10/2023</td>
-                <td className="td-table">Mercado</td>
-              </tr>
+              {lastTransfers.map((item) => (
+                <tr
+                  key={item.id}
+                  className={`${
+                    item.type === "entry" ? "bg-green-300" : "bg-red-300"
+                  }`}
+                >
+                  <td className="td-table">
+                    R${" "}
+                    {item.amount.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="td-table">
+                    {(() => {
+                      const [year, month, day] = item.date.split("-");
+                      return `${day}/${month}/${year}`;
+                    })()}
+                  </td>
+                  <td className="td-table">{item.description}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-        <a href="/summary" className="text-blue-500 font-bold underline">
-          See all
-        </a>
+        <div className="flex flex-row gap-4">
+          <a href="/entry" className="text-blue-500 font-bold underline">
+            See entries
+          </a>
+          <a href="/exit" className="text-blue-500 font-bold underline">
+            See outputs
+          </a>
+        </div>
       </div>
 
       <div className="border-box shadow-2xl shadow-tertiary">
@@ -162,6 +184,11 @@ function Home() {
               alt="Gráfico Mensal"
             />
           </div>
+        </div>
+        <div className="flex justify-center">
+          <a href="/graphics" className="text-blue-500 font-bold underline">
+            See graphics
+          </a>
         </div>
       </div>
     </div>

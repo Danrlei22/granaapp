@@ -1,11 +1,11 @@
 import { FaFilePdf } from "react-icons/fa";
 import {
+  PieChart,
   Bar,
   BarChart,
   Brush,
   CartesianGrid,
   Label,
-  LabelList,
   Legend,
   Line,
   LineChart,
@@ -14,6 +14,9 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Pie,
+  Cell,
+  LabelList,
 } from "recharts";
 import getDateByMonth from "../utils/getDateByMonth";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +48,45 @@ function Graphics() {
   const year = new Date().getFullYear();
 
   const chartData = getDateByMonth(entries, exits, year);
+
+  const getCategoryEntriesByData = (entries, year) => {
+    const yearInt = parseInt(year);
+
+    const filteredEntries = entries.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === yearInt
+    );
+
+    const grouped = {};
+
+    filteredEntries.forEach((entry) => {
+      if (!grouped[entry.category]) {
+        grouped[entry.category] = 0;
+      }
+      grouped[entry.category] += entry.amount;
+    });
+
+    const chartData = Object.entries(grouped).map(([category, amount]) => ({
+      name: category,
+      value: amount,
+    }));
+
+    return chartData;
+  };
+
+  const pieChartData = getCategoryEntriesByData(entries, year);
+  const colors = [
+    "green",
+    "red",
+    "blue",
+    "cyan",
+    "purple",
+    "teal",
+    "pink",
+    "yellow",
+    "magenta",
+    "orange",
+    "brown",
+  ];
 
   return (
     <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20 lg:ml-[280px]">
@@ -81,7 +123,7 @@ function Graphics() {
           </div>
 
           <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[500px]">
+            <div className="min-w-[500px] bg-slate-100">
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart
                   data={chartData}
@@ -145,7 +187,7 @@ function Graphics() {
           </div>
 
           <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[500px]">
+            <div className="min-w-[500px] bg-slate-100">
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart
                   data={chartData}
@@ -196,26 +238,53 @@ function Graphics() {
           </div>
         </div>
 
-        <div className="border-box p-2 w-[300px] h-[200px] flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
-          <h2>Bar Chart</h2>
-          <p className="text-center">
-            Mostrar entradas e saídas lado a lado por mês.
-          </p>
-          <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
-              <FaFilePdf /> Export PDF
-            </button>
+        <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
+          <div className="w-[80%]">
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
+              Pie Chart - Entries by category
+            </h2>
           </div>
-        </div>
 
-        <div className="border-box p-2 w-[300px] h-[200px] flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
-          <h2>Pie / Donut Chart</h2>
-          <p>
-            Distribuição por categoria (ex.: alimentação, transporte, lazer,
-            etc.)
-          </p>
+          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
+            <div className="min-w-[400px] bg-slate-100">
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={pieChartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                  >
+                    {pieChartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colors[index % colors.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value, name) => [
+                      `R$ ${value.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}`,
+                      name,
+                    ]}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    wrapperStyle={{ padding: 0 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>

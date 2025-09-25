@@ -73,19 +73,49 @@ function Graphics() {
     return chartData;
   };
 
-  const pieChartData = getCategoryEntriesByData(entries, year);
-  const colors = [
-    "green",
-    "red",
-    "blue",
-    "cyan",
-    "purple",
-    "teal",
-    "pink",
-    "yellow",
-    "magenta",
-    "orange",
-    "brown",
+  const pieChartDataEntries = getCategoryEntriesByData(entries, year);
+  const colorsEntries = [
+    "#2E8B57", // verde (salário)
+    "#4682B4", // azul aço
+    "#20B2AA", // teal
+    "#1E90FF", // azul vivo
+    "#00CED1", // turquesa
+    "#6A5ACD", // roxo suave
+  ];
+
+  const getCatergoryExitsByData = (exits, year) => {
+    const yearInt = parseInt(year);
+
+    const filteredExits = exits.filter(
+      (e) => new Date(e.date + "T12:00:00").getFullYear() === yearInt
+    );
+
+    const grouped = {};
+
+    filteredExits.forEach((exits) => {
+      if (!grouped[exits.category]) {
+        grouped[exits.category] = 0;
+      }
+      grouped[exits.category] += exits.amount;
+    });
+
+    const chartData = Object.entries(grouped).map(([category, amount]) => ({
+      name: category,
+      value: amount,
+    }));
+
+    return chartData;
+  };
+
+  const pieChartDataExits = getCatergoryExitsByData(exits, year);
+
+  const colorsExits = [
+    "#FA9510", // laranja forte
+    "#FF6347", // tomate
+    "#D9C03F", // dourado (dinheiro saindo)
+    "#FF69B4", // rosa choque
+    "#DD783C", // vermelho carmesim
+    "#FF8C00", // laranja escuro
   ];
 
   return (
@@ -250,7 +280,7 @@ function Graphics() {
               <ResponsiveContainer width="100%" height={350}>
                 <PieChart>
                   <Pie
-                    data={pieChartData}
+                    data={pieChartDataEntries}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
@@ -258,10 +288,62 @@ function Graphics() {
                     outerRadius={100}
                     label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                   >
-                    {pieChartData.map((entry, index) => (
+                    {pieChartDataEntries.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={colors[index % colors.length]}
+                        fill={colorsEntries[index % colorsEntries.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value, name) => [
+                      `R$ ${value.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}`,
+                      name,
+                    ]}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    wrapperStyle={{ padding: 0 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div>
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+              <FaFilePdf /> Export PDF
+            </button>
+          </div>
+        </div>
+
+        <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
+          <div className="w-[80%]">
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
+              Pie Chart - Exits by category
+            </h2>
+          </div>
+
+          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
+            <div className="min-w-[400px] bg-slate-100">
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={pieChartDataExits}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                  >
+                    {pieChartDataExits.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colorsExits[index % colorsExits.length]}
                       />
                     ))}
                   </Pie>

@@ -156,6 +156,43 @@ function Graphics() {
 
   const AreaChartYearlyExits = getYearlyExitsData(exits);
 
+  const getYeatlyEntriesAndExits = (entries, exits) => {
+    const groupedEntries = {};
+    const groupedExits = {};
+
+    entries.forEach((entry) => {
+      const year = new Date(entry.date).getFullYear();
+      if (!groupedEntries[year]) {
+        groupedEntries[year] = 0;
+      }
+      groupedEntries[year] += entry.amount;
+    });
+
+    exits.forEach((exit) => {
+      const year = new Date(exit.date).getFullYear();
+      if (!groupedExits[year]) {
+        groupedExits[year] = 0;
+      }
+      groupedExits[year] += exit.amount;
+    });
+
+    const allYears = new Set(
+      [...Object.keys(groupedEntries), ...Object.keys(groupedExits)].map(
+        (year) => Number(year)
+      )
+    );
+
+    return Array.from(allYears)
+      .map((year) => ({
+        name: Number(year),
+        entries: groupedEntries[year] || 0,
+        exits: groupedExits[year] || 0,
+      }))
+      .sort((a, b) => a.name - b.name);
+  };
+
+  const yearlyData = getYeatlyEntriesAndExits(entries, exits);
+
   return (
     <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20 lg:ml-[280px]">
       <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full lg:mr-[280px]">
@@ -413,7 +450,7 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Area Chart
+              Area Chart - Yearly Entries
             </h2>
           </div>
           <p className="text-center">
@@ -428,9 +465,7 @@ function Graphics() {
                   margin={{ top: 10, right: 10, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name">
-                    <Label value="Month" offset={-40} position="insideBottom" />
-                  </XAxis>
+                  <XAxis dataKey="name" />
                   <YAxis
                     domain={[0, "dataMax"]}
                     tickCount={9}
@@ -472,7 +507,7 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Area Chart
+              Area Chart - Yearly exits
             </h2>
           </div>
           <p className="text-center">
@@ -487,9 +522,7 @@ function Graphics() {
                   margin={{ top: 10, right: 10, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name">
-                    <Label value="Month" offset={-40} position="insideBottom" />
-                  </XAxis>
+                  <XAxis dataKey="name" />
                   <YAxis
                     domain={[0, "dataMax"]}
                     tickCount={9}
@@ -515,6 +548,71 @@ function Graphics() {
                     dataKey="value"
                     stroke="red"
                     fill="red"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div>
+            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+              <FaFilePdf /> Export PDF
+            </button>
+          </div>
+        </div>
+
+        <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
+          <div className="w-[80%]">
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
+              Area Chart - Yearly entries and exits
+            </h2>
+          </div>
+          <p className="text-center">
+            Entradas e saídas acumuladas ao longo do tempo. p/ano
+          </p>
+
+          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
+            <div className="min-w-[400px] bg-slate-100">
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart
+                  data={yearlyData}
+                  margin={{ top: 10, right: 20, left: 20, bottom: 30 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis
+                    domain={[0, "dataMax"]}
+                    tickCount={9}
+                    tickFormatter={(value) =>
+                      `${value.toLocaleString("pt-BR")}`
+                    }
+                  />
+                  <Tooltip
+                    formatter={(value, name) => [
+                      `R$ ${value.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}`,
+                      name,
+                    ]}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    wrapperStyle={{ padding: 0 }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="entries"
+                    stroke="green"
+                    fill="green"
+                    fillOpacity={0.5}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="exits"
+                    stroke="red"
+                    fill="red"
+                    fillOpacity={0.5}
                   />
                 </AreaChart>
               </ResponsiveContainer>

@@ -129,10 +129,20 @@ function Graphics() {
       grouped[year] += entry.amount;
     });
 
-    return Object.entries(grouped).map(([year, amount]) => ({
-      name: year,
-      value: amount,
-    }));
+    const year = Object.keys(grouped).map(Number);
+    const minYear = Math.min(...year);
+    const maxYear = Math.max(...year);
+
+    const result = [];
+
+    for (let year = minYear; year <= maxYear; year++) {
+      result.push({
+        name: year,
+        value: grouped[year] || 0,
+      });
+    }
+
+    return result;
   };
 
   const AreaChartYearlyEntries = getYearlyEntriesData(entries);
@@ -148,10 +158,20 @@ function Graphics() {
       grouped[year] += exit.amount;
     });
 
-    return Object.entries(grouped).map(([year, amount]) => ({
-      name: year,
-      value: amount,
-    }));
+    const year = Object.keys(grouped).map(Number);
+    const minYear = Math.min(...year);
+    const maxYear = Math.max(...year);
+
+    const result = [];
+
+    for (let year = minYear; year <= maxYear; year++) {
+      result.push({
+        name: year,
+        value: grouped[year] || 0,
+      });
+    }
+
+    return result;
   };
 
   const AreaChartYearlyExits = getYearlyExitsData(exits);

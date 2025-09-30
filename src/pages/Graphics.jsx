@@ -705,11 +705,53 @@ function Graphics() {
           </div>
         </div>
 
-        <div className="border-box p-2 w-[300px] h-[200px] flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
-          <h2>Radar Chart</h2>
+        <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
+          <div className="w-[80%]">
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
+              Radar Chart - Exits by category
+            </h2>
+          </div>
           <p className="text-center">
             Comparar categorias de gasto em formato radial.
           </p>
+
+          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
+            <div className="min-w-[400px] bg-slate-100">
+              <ResponsiveContainer width="100%" height={400}>
+                <RadarChart
+                  data={pieChartDataExits}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                >
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="name" />
+                  <PolarRadiusAxis />
+                  <Radar
+                    dataKey="value"
+                    name="Entries"
+                    stroke="red"
+                    fill="red"
+                    fillOpacity={0.5}
+                  />
+                  <Tooltip
+                    formatter={(value, name) => [
+                      `R$ ${value.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}`,
+                      name,
+                    ]}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    wrapperStyle={{ padding: 0 }}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           <div>
             <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF

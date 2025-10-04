@@ -219,32 +219,13 @@ function Graphics() {
   const yearlyData = getYeatlyEntriesAndExits(entries, exits);
 
   return (
-    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20 lg:ml-[280px]">
-      <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full lg:mr-[280px]">
+    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20">
+      <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full">
         Graphics
       </h1>
 
-      {/*Filtros */}
-      <div className="lg:fixed lg:top-40 lg:right-2 z-40">
-        <div className="border-box sm:p-1 lg:p-4 md:m-0 m-2 w-auto h-auto flex flex-col items-center justify-center">
-          <h2 className="font-bold text-xl">Period filter</h2>
-
-          <div className="flex flex-col w-auto h-auto border-2 border-tertiary gap-2 p-2 m-1">
-            <button className="bg-green-600 text-white p-2 rounded w-auto h-[30px] flex items-center justify-center active:bg-green-800">
-              Quarter
-            </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto h-[30px] flex items-center justify-center  active:bg-green-800">
-              Semester
-            </button>
-            <button className="bg-green-600 text-white p-2 rounded w-auto h-[30px] flex items-center justify-center active:bg-green-800">
-              Year
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* div container graphics*/}
-      <div className="relative flex md:flex-row flex-col flex-wrap items-center justify-center w-full sm:p-2 p-0 gap-8 lg:pr-[320px] mb-8">
+      <div className="relative flex md:flex-row flex-col flex-wrap items-center justify-center w-full sm:p-2 p-0 gap-8 mb-8">
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
@@ -523,7 +504,7 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -580,7 +561,7 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -645,7 +626,7 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -699,7 +680,7 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -753,27 +734,14 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
-              <FaFilePdf /> Export PDF
-            </button>
-          </div>
-        </div>
-
-        <div className="border-box p-2 w-[300px] h-[200px] flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
-          <h2>Gauge / Radial Progress</h2>
-          <p className="text-center">
-            Mostrar progresso em relação a uma meta (ex.: economia de 10k no
-            ano).
-          </p>
-          <div>
-            <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
               <FaFilePdf /> Export PDF
             </button>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center mb-8 w-full lg:mr-[280px]">
+      <div className="flex flex-col items-center justify-center mb-8 w-full">
         <button className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
           <FaFilePdf /> Export todos PDF
         </button>

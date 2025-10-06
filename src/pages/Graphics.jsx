@@ -26,12 +26,14 @@ import {
 } from "recharts";
 import getDateByMonth from "../utils/getDateByMonth";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchExits } from "../redux/slices/exitsSlice";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import Loading from "../components/Loading";
+import exportChartToPDF from "../utils/exportChartToPDF";
 
 function Graphics() {
+  const chartRef = useRef();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const entries = useSelector((state) => state.entries.data);
@@ -226,18 +228,19 @@ function Graphics() {
 
       {/* div container graphics*/}
       <div className="relative flex md:flex-row flex-col flex-wrap items-center justify-center w-full sm:p-2 p-0 gap-8 mb-8">
+
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
-            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Line Chart - Inflows and Outflows per month
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center m-2">
+              Monthly Inflows and Outflows – Current Year
             </h2>
           </div>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[500px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={400}>
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={chartRef} className="min-w-[500px] ">
+              <ResponsiveContainer width="95%" height={400}>
                 <LineChart
-                  data={chartData}
+                  data={getDateByMonth(entries, exits, year)}
                   margin={{ top: 10, right: 20, left: 10, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -284,7 +287,12 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                exportChartToPDF(chartRef, "Line_Chart_Current_Year.pdf", "Monthly Inflows and Outflows – Current Year");
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>

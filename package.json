@@ -13,6 +13,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.10.0",
+    "canvg": "^4.0.3",
     "framer-motion": "^12.22.0",
     "json-server": "^1.0.0-beta.3",
     "jspdf": "^2.5.1",

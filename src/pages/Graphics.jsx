@@ -41,6 +41,7 @@ function Graphics() {
   const barChartRef = useRef();
   const pieEntriesCategoryRef = useRef();
   const pieExitsCategoryRef = useRef();
+  const areaEntriesRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -377,7 +378,7 @@ function Graphics() {
 
           <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
             <div ref={pieEntriesCategoryRef} className="min-w-[500px]">
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="95%" height={350}>
                 <PieChart>
                   <Pie
                     data={getCategoryEntriesByData(entries, year)}
@@ -435,13 +436,13 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Pie Chart - Exits by category
+              Pie Chart - Exits by category - Current Year
             </h2>
           </div>
 
           <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
             <div ref={pieExitsCategoryRef} className="min-w-[500px]">
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="95%" height={400}>
                 <PieChart>
                   <Pie
                     data={getCatergoryExitsByData(exits, year)}
@@ -499,18 +500,15 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Area Chart - Yearly Entries
+              Area Chart - Annual entries
             </h2>
           </div>
-          <p className="text-center">
-            Entradas e saídas acumuladas ao longo do tempo. p/ano
-          </p>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={400}>
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={areaEntriesRef} className="min-w-[500px]">
+              <ResponsiveContainer width="95%" height={400}>
                 <AreaChart
-                  data={AreaChartYearlyEntries}
+                  data={getYearlyEntriesData(entries)}
                   margin={{ top: 10, right: 10, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -547,7 +545,16 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                exportChartToPDF(
+                  areaEntriesRef,
+                  "Area_Chart_Entries.pdf",
+                  "Annual entries"
+                );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>

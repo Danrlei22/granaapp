@@ -39,6 +39,7 @@ function Graphics() {
   const exits = useSelector((state) => state.exits.data);
   const lineChartRef = useRef();
   const barChartRef = useRef();
+  const pieEntriesCategoryRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +81,6 @@ function Graphics() {
     return chartData;
   };
 
-  const pieChartDataEntries = getCategoryEntriesByData(entries, year);
   const colorsEntries = [
     "#2E8B57", // verde (salário)
     "#4682B4", // azul aço
@@ -371,16 +371,16 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Pie Chart - Entries by category
+              Pie Chart - Entries by category - Current Year
             </h2>
           </div>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[400px] bg-slate-100">
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={pieEntriesCategoryRef} className="min-w-[400px]">
               <ResponsiveContainer width="100%" height={350}>
                 <PieChart>
                   <Pie
-                    data={pieChartDataEntries}
+                    data={getCategoryEntriesByData(entries, year)}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
@@ -388,12 +388,14 @@ function Graphics() {
                     outerRadius={100}
                     label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                   >
-                    {pieChartDataEntries.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colorsEntries[index % colorsEntries.length]}
-                      />
-                    ))}
+                    {getCategoryEntriesByData(entries, year).map(
+                      (entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={colorsEntries[index % colorsEntries.length]}
+                        />
+                      )
+                    )}
                   </Pie>
                   <Tooltip
                     formatter={(value, name) => [
@@ -414,7 +416,17 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                getCategoryEntriesByData(entries, year).length > 0 &&
+                  exportChartToPDF(
+                    pieEntriesCategoryRef,
+                    "Pie_Chart_Entries_categories.pdf",
+                    "Entries by category - Current Year"
+                  );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -665,7 +677,7 @@ function Graphics() {
             <div className="min-w-[400px] bg-slate-100">
               <ResponsiveContainer width="100%" height={400}>
                 <RadarChart
-                  data={pieChartDataEntries}
+                  data={getCategoryEntriesByData(entries, year)}
                   cx="50%"
                   cy="50%"
                   outerRadius={100}

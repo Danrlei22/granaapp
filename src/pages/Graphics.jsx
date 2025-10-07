@@ -40,6 +40,7 @@ function Graphics() {
   const lineChartRef = useRef();
   const barChartRef = useRef();
   const pieEntriesCategoryRef = useRef();
+  const pieExitsCategoryRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,7 +115,6 @@ function Graphics() {
     return chartData;
   };
 
-  const pieChartDataExits = getCatergoryExitsByData(exits, year);
   const colorsExits = [
     "#FA9510", // laranja forte
     "#FF6347", // tomate
@@ -376,7 +376,7 @@ function Graphics() {
           </div>
 
           <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
-            <div ref={pieEntriesCategoryRef} className="min-w-[400px]">
+            <div ref={pieEntriesCategoryRef} className="min-w-[500px]">
               <ResponsiveContainer width="100%" height={350}>
                 <PieChart>
                   <Pie
@@ -439,12 +439,12 @@ function Graphics() {
             </h2>
           </div>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={350}>
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={pieExitsCategoryRef} className="min-w-[500px]">
+              <ResponsiveContainer width="100%" height={400}>
                 <PieChart>
                   <Pie
-                    data={pieChartDataExits}
+                    data={getCatergoryExitsByData(exits, year)}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
@@ -452,12 +452,14 @@ function Graphics() {
                     outerRadius={100}
                     label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                   >
-                    {pieChartDataExits.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colorsExits[index % colorsExits.length]}
-                      />
-                    ))}
+                    {getCatergoryExitsByData(exits, year).map(
+                      (entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={colorsExits[index % colorsExits.length]}
+                        />
+                      )
+                    )}
                   </Pie>
                   <Tooltip
                     formatter={(value, name) => [
@@ -478,7 +480,17 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                getCatergoryExitsByData(exits, year).length > 0 &&
+                  exportChartToPDF(
+                    pieExitsCategoryRef,
+                    "Pie_Chart_Exits_Categories.pdf",
+                    "Exits by category - Current Year"
+                  );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -675,7 +687,7 @@ function Graphics() {
 
           <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
             <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={350}>
                 <RadarChart
                   data={getCategoryEntriesByData(entries, year)}
                   cx="50%"
@@ -729,9 +741,9 @@ function Graphics() {
 
           <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
             <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={350}>
                 <RadarChart
-                  data={pieChartDataExits}
+                  data={getCatergoryExitsByData(exits, year)}
                   cx="50%"
                   cy="50%"
                   outerRadius={100}

@@ -42,6 +42,7 @@ function Graphics() {
   const pieEntriesCategoryRef = useRef();
   const pieExitsCategoryRef = useRef();
   const areaEntriesRef = useRef();
+  const areaExitsRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -152,8 +153,6 @@ function Graphics() {
     return result;
   };
 
-  const AreaChartYearlyEntries = getYearlyEntriesData(entries);
-
   const getYearlyExitsData = (exits) => {
     const grouped = {};
 
@@ -180,8 +179,6 @@ function Graphics() {
 
     return result;
   };
-
-  const AreaChartYearlyExits = getYearlyExitsData(exits);
 
   const getYeatlyEntriesAndExits = (entries, exits) => {
     const groupedEntries = {};
@@ -563,18 +560,15 @@ function Graphics() {
         <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
           <div className="w-[80%]">
             <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
-              Area Chart - Yearly exits
+              Area Chart - Annual exits
             </h2>
           </div>
-          <p className="text-center">
-            Entradas e saídas acumuladas ao longo do tempo. p/ano
-          </p>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={400}>
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={areaExitsRef} className="min-w-[500px]">
+              <ResponsiveContainer width="95%" height={400}>
                 <AreaChart
-                  data={AreaChartYearlyExits}
+                  data={getYearlyExitsData(exits)}
                   margin={{ top: 10, right: 10, left: 20, bottom: 30 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -611,7 +605,16 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                exportChartToPDF(
+                  areaExitsRef,
+                  "Area_Chart_Exits.pdf",
+                  "Annual exits"
+                );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>

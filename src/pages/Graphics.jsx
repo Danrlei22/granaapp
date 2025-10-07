@@ -44,6 +44,7 @@ function Graphics() {
   const areaEntriesRef = useRef();
   const areaExitsRef = useRef();
   const areaEntriesAndExitsRef = useRef();
+  const radarEntriesCategoryRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -215,7 +216,6 @@ function Graphics() {
       }))
       .sort((a, b) => a.name - b.name);
   };
-
 
   return (
     <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20">
@@ -676,9 +676,16 @@ function Graphics() {
           </div>
 
           <div>
-            <button onClick={() => {
-              exportChartToPDF(areaEntriesAndExitsRef, "Area_Chart_Entries_and_Exits.pdf", "Annual entries and exits")
-            }} className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                exportChartToPDF(
+                  areaEntriesAndExitsRef,
+                  "Area_Chart_Entries_and_Exits.pdf",
+                  "Annual entries and exits"
+                );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>
@@ -690,13 +697,10 @@ function Graphics() {
               Radar Chart - Entries by category
             </h2>
           </div>
-          <p className="text-center">
-            Comparar categorias de gasto em formato radial.
-          </p>
 
-          <div className="flex max-w-[260px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto">
-            <div className="min-w-[400px] bg-slate-100">
-              <ResponsiveContainer width="100%" height={350}>
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div ref={radarEntriesCategoryRef} className="min-w-[500px]">
+              <ResponsiveContainer width="95%" height={400}>
                 <RadarChart
                   data={getCategoryEntriesByData(entries, year)}
                   cx="50%"
@@ -732,7 +736,16 @@ function Graphics() {
           </div>
 
           <div>
-            <button className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1">
+            <button
+              onClick={() => {
+                exportChartToPDF(
+                  radarEntriesCategoryRef,
+                  "Radar_Chart_Entries_Categories.pdf",
+                  "Entries by category - Current Year"
+                );
+              }}
+              className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+            >
               <FaFilePdf /> Export PDF
             </button>
           </div>

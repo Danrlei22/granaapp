@@ -1,4 +1,4 @@
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaSpinner } from "react-icons/fa";
 import {
   PolarGrid,
   PolarAngleAxis,
@@ -33,6 +33,7 @@ import Loading from "../components/Loading";
 import exportChartToPDF from "../utils/exportChartToPDF";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { toast } from "react-toastify";
 
 function Graphics() {
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ function Graphics() {
   const areaEntriesAndExitsRef = useRef();
   const radarEntriesCategoryRef = useRef();
   const radarExitsCategoryRef = useRef();
+  const [isExporting, setIsExporting] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -262,6 +264,8 @@ function Graphics() {
   };
 
   const exportAllChartsToPDF = async () => {
+    setIsExporting(true);
+
     const pdf = new jsPDF("p", "mm", "a4");
 
     const allRef = [
@@ -291,37 +295,48 @@ function Graphics() {
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    for (let i = 0; i < allRef.length; i++) {
-      const chartRef = allRef[i];
-      const title = allTitle[i];
+    try {
+      for (let i = 0; i < allRef.length; i++) {
+        const chartRef = allRef[i];
+        const title = allTitle[i];
 
-      if (i > 0) {
-        pdf.addPage();
+        if (i > 0) {
+          pdf.addPage();
+        }
+
+        const chartData = await processChartForPDF(
+          chartRef,
+          pdfWidth,
+          pdfHeight
+        );
+
+        if (!chartData.imgData) return;
+
+        const { imgData, targetWidth, targetHeight, x, borderY, imageY } =
+          chartData;
+
+        //Titulo
+        pdf.setFontSize(18);
+        pdf.setFont("helvetica", "bold");
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(title, pdfWidth / 2, 15, { align: "center" });
+
+        //Borda
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.5);
+        const borderHeight = targetHeight + 10;
+        pdf.rect(x - 5, borderY, targetWidth + 10, borderHeight);
+
+        pdf.addImage(imgData, "PNG", x, imageY, targetWidth, targetHeight);
       }
 
-      const chartData = await processChartForPDF(chartRef, pdfWidth, pdfHeight);
-
-      if (!chartData.imgData) return;
-
-      const { imgData, targetWidth, targetHeight, x, borderY, imageY } =
-        chartData;
-
-      //Titulo
-      pdf.setFontSize(18);
-      pdf.setFont("helvetica", "bold");
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(title, pdfWidth / 2, 15, { align: "center" });
-
-      //Borda
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setLineWidth(0.5);
-      const borderHeight = targetHeight + 10;
-      pdf.rect(x - 5, borderY, targetWidth + 10, borderHeight);
-
-      pdf.addImage(imgData, "PNG", x, imageY, targetWidth, targetHeight);
+      pdf.save("All_Charts.pdf");
+    } catch (err) {
+      console.error("Error generating PDF: ", err);
+      toast.error("Export error. Please try again.")
+    } finally {
+      setIsExporting(false);
     }
-
-    pdf.save("All_Charts.pdf");
   };
 
   return (
@@ -932,9 +947,19 @@ function Graphics() {
             onClick={() => {
               exportAllChartsToPDF();
             }}
+            disabled={isExporting}
             className="bg-blue-500 p-2 sm:p-4 rounded w-auto h-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-3xl"
           >
-            <FaFilePdf /> Export all chart PDF
+            {isExporting ? (
+              <>
+                <FaSpinner className="animate-spin" /> Generating PDF
+              </>
+            ) : (
+              <>
+                {" "}
+                <FaFilePdf /> Export all chart PDF
+              </>
+            )}
           </button>
         </div>
       </div>

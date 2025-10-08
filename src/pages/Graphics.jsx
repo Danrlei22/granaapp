@@ -340,7 +340,7 @@ function Graphics() {
   };
 
   return (
-    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20">
+    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-2">
       <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 md:pb-10 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
         <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full">
           Graphics

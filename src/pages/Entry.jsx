@@ -448,136 +448,54 @@ function Entry() {
 
   return (
     <div className="flex flex-col items-center w-full w-min-[340px] text-xs sm:text-base h-full">
-      {/* Search Bar */}
-      <SearchBar onSearch={handleSearch} />
+      <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
+        {/* Search Bar */}
+        <SearchBar onSearch={handleSearch} />
 
-      {/* Entry tables */}
-      <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1">
-        <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
-          <h1 className="font-bold text-2xl box-info sm:mb-4 mb-2">Entry</h1>
-          <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px]">
-            <table className="border border-tertiary text-center min-w-[400px]">
-              <thead className="bg-tertiary text-white">
-                <tr>
-                  <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    ID
-                  </th>
-                  <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Amount
-                  </th>
-                  <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Category
-                  </th>
-                  <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Description
-                  </th>
-                  <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-green-300 text-black">
-                {isSearchActive ||
-                selectedDate ||
-                selectedMonth ||
-                selectedQuarter ||
-                selectedLastSixMonths ||
-                selectedYear ? (
-                  filteredEntries.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan="5"
-                        className="text-center p-2 text-black italic"
-                      >
-                        No entries found for selected date.
-                      </td>
-                    </tr>
-                  ) : (
-                    <>
-                      {filteredEntries.map((item) => (
-                        <tr
-                          key={item.id}
-                          className={`transition duration-300 ${
-                            highlightedId === item.id ? "animate-bg-blink" : ""
-                          } ${
-                            selectedIds.includes(item.id) ? "bg-red-200" : ""
-                          }`}
-                        >
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {isDeleteMode && (
-                              <input
-                                type="checkbox"
-                                checked={selectedIds.includes(item.id)}
-                                onChange={() => toggleSelection(item.id)}
-                              />
-                            )}
-                            {isEditMode && (
-                              <input
-                                type="radio"
-                                name="edit-select"
-                                checked={selectedEditId === item.id}
-                                value={item.id}
-                                onChange={() => {
-                                  setSelectedEditId(item.id);
-                                  setEditingData(item);
-                                  setIsEditModalOpen(true);
-                                }}
-                              />
-                            )}
-                            {item.id}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R${" "}
-                            {item.amount.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                            })}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.category}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {item.description}
-                          </td>
-                          <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {(() => {
-                              const [year, month, day] = item.date.split("-");
-                              return `${day}/${month}/${year}`;
-                            })()}
-                          </td>
-                        </tr>
-                      ))}
+        {/* Entry tables */}
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1">
+          <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+            <h1 className="font-bold text-2xl box-info sm:mb-4 mb-2">Entry</h1>
+            <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px]">
+              <table className="border border-tertiary text-center min-w-[400px]">
+                <thead className="bg-tertiary text-white">
+                  <tr>
+                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      ID
+                    </th>
+                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      Amount
+                    </th>
+                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      Category
+                    </th>
+                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      Description
+                    </th>
+                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                      Date
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-green-300 text-black">
+                  {isSearchActive ||
+                  selectedDate ||
+                  selectedMonth ||
+                  selectedQuarter ||
+                  selectedLastSixMonths ||
+                  selectedYear ? (
+                    filteredEntries.length === 0 ? (
                       <tr>
                         <td
                           colSpan="5"
-                          className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
+                          className="text-center p-2 text-black italic"
                         >
-                          <span>
-                            Total: R${" "}
-                            {calculateTotal(filteredEntries).toLocaleString(
-                              "pt-BR",
-                              {
-                                minimumFractionDigits: 2,
-                              }
-                            )}
-                          </span>
+                          No entries found for selected date.
                         </td>
                       </tr>
-                    </>
-                  )
-                ) : currentMonthEntries.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan="5"
-                      className="text-center p-2 text-black italic"
-                    >
-                      No entries found for selected date.
-                    </td>
-                  </tr>
-                ) : (
-                  currentMonthEntries.map(([month, items]) => {
-                    return (
-                      <React.Fragment key={month}>
-                        {items.map((item) => (
+                    ) : (
+                      <>
+                        {filteredEntries.map((item) => (
                           <tr
                             key={item.id}
                             className={`transition duration-300 ${
@@ -636,288 +554,379 @@ function Entry() {
                             colSpan="5"
                             className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
                           >
-                            <span>Month: {month}</span>
-                            <br />
                             <span>
                               Total: R${" "}
-                              {calculateTotal(
-                                groupedEntries[month]
-                              ).toLocaleString("pt-BR", {
-                                minimumFractionDigits: 2,
-                              })}
+                              {calculateTotal(filteredEntries).toLocaleString(
+                                "pt-BR",
+                                {
+                                  minimumFractionDigits: 2,
+                                }
+                              )}
                             </span>
                           </td>
                         </tr>
-                      </React.Fragment>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                      </>
+                    )
+                  ) : currentMonthEntries.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="text-center p-2 text-black italic"
+                      >
+                        No entries found for selected date.
+                      </td>
+                    </tr>
+                  ) : (
+                    currentMonthEntries.map(([month, items]) => {
+                      return (
+                        <React.Fragment key={month}>
+                          {items.map((item) => (
+                            <tr
+                              key={item.id}
+                              className={`transition duration-300 ${
+                                highlightedId === item.id
+                                  ? "animate-bg-blink"
+                                  : ""
+                              } ${
+                                selectedIds.includes(item.id)
+                                  ? "bg-red-200"
+                                  : ""
+                              }`}
+                            >
+                              <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                                {isDeleteMode && (
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedIds.includes(item.id)}
+                                    onChange={() => toggleSelection(item.id)}
+                                  />
+                                )}
+                                {isEditMode && (
+                                  <input
+                                    type="radio"
+                                    name="edit-select"
+                                    checked={selectedEditId === item.id}
+                                    value={item.id}
+                                    onChange={() => {
+                                      setSelectedEditId(item.id);
+                                      setEditingData(item);
+                                      setIsEditModalOpen(true);
+                                    }}
+                                  />
+                                )}
+                                {item.id}
+                              </td>
+                              <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                                R${" "}
+                                {item.amount.toLocaleString("pt-BR", {
+                                  minimumFractionDigits: 2,
+                                })}
+                              </td>
+                              <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                                {item.category}
+                              </td>
+                              <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                                {item.description}
+                              </td>
+                              <td className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                                {(() => {
+                                  const [year, month, day] =
+                                    item.date.split("-");
+                                  return `${day}/${month}/${year}`;
+                                })()}
+                              </td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td
+                              colSpan="5"
+                              className="font-bold bg-green-600 border border-black sm:px-2 px-0 sm:py-1 py-0"
+                            >
+                              <span>Month: {month}</span>
+                              <br />
+                              <span>
+                                Total: R${" "}
+                                {calculateTotal(
+                                  groupedEntries[month]
+                                ).toLocaleString("pt-BR", {
+                                  minimumFractionDigits: 2,
+                                })}
+                              </span>
+                            </td>
+                          </tr>
+                        </React.Fragment>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
-          <h2 className="font-bold pl-2">Period filter:</h2>
-          <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <Tooltip text="Filter by day" position="bottom">
-              <button
-                onClick={() =>
-                  setActiveFilterType((prev) => (prev === "day" ? null : "day"))
-                }
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Day
-              </button>
-            </Tooltip>
-
-            <Tooltip text="Filter by month" position="bottom">
-              <button
-                onClick={() =>
-                  setActiveFilterType((prev) =>
-                    prev === "month" ? null : "month"
-                  )
-                }
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Month
-              </button>
-            </Tooltip>
-
-            <Tooltip text="Filter last 3 months" position="bottom">
-              <button
-                onClick={handleQuarterChange}
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Quarter
-              </button>
-            </Tooltip>
-
-            <Tooltip text="Filter las 6 months" position="bottom">
-              <button
-                onClick={handleLastSixMonthsChange}
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Last 6 months
-              </button>
-            </Tooltip>
-
-            <Tooltip text="Filter by year" position="bottom">
-              <button
-                onClick={() =>
-                  setActiveFilterType((prev) =>
-                    prev === "year" ? null : "year"
-                  )
-                }
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Year
-              </button>
-            </Tooltip>
-          </div>
-          <div className="flex flex-col items-start justify-center w-full">
-            {activeFilterType === "day" && (
-              <DataFilter onDateChange={handleDateChange} />
-            )}
-
-            {activeFilterType === "month" && (
-              <MonthFilter onMonthChange={handleMonthChange} />
-            )}
-
-            {activeFilterType === "year" && (
-              <YearFilter onYearChange={handleYearChange} data={entries} />
-            )}
-
-            {(selectedDate ||
-              selectedMonth ||
-              selectedQuarter ||
-              selectedLastSixMonths ||
-              selectedYear) && (
-              <div className="w-full text-center mt-4">
-                <span
-                  onClick={() => {
-                    setSelectedDate("");
-                    setFilteredEntries([]);
-                    setSelectedMonth("");
-                    setActiveFilterType(null);
-                    setSelectedQuarter("");
-                    setSelectedLastSixMonths("");
-                    setSelectedYear("");
-                  }}
-                  className="text-blue-600 underline cursor-pointer"
+          <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
+            <h2 className="font-bold pl-2">Period filter:</h2>
+            <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
+              <Tooltip text="Filter by day" position="bottom">
+                <button
+                  onClick={() =>
+                    setActiveFilterType((prev) =>
+                      prev === "day" ? null : "day"
+                    )
+                  }
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
                 >
-                  Clean filter
-                </span>
-              </div>
-            )}
+                  Day
+                </button>
+              </Tooltip>
+
+              <Tooltip text="Filter by month" position="bottom">
+                <button
+                  onClick={() =>
+                    setActiveFilterType((prev) =>
+                      prev === "month" ? null : "month"
+                    )
+                  }
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Month
+                </button>
+              </Tooltip>
+
+              <Tooltip text="Filter last 3 months" position="bottom">
+                <button
+                  onClick={handleQuarterChange}
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Quarter
+                </button>
+              </Tooltip>
+
+              <Tooltip text="Filter las 6 months" position="bottom">
+                <button
+                  onClick={handleLastSixMonthsChange}
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Last 6 months
+                </button>
+              </Tooltip>
+
+              <Tooltip text="Filter by year" position="bottom">
+                <button
+                  onClick={() =>
+                    setActiveFilterType((prev) =>
+                      prev === "year" ? null : "year"
+                    )
+                  }
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Year
+                </button>
+              </Tooltip>
+            </div>
+            <div className="flex flex-col items-start justify-center w-full">
+              {activeFilterType === "day" && (
+                <DataFilter onDateChange={handleDateChange} />
+              )}
+
+              {activeFilterType === "month" && (
+                <MonthFilter onMonthChange={handleMonthChange} />
+              )}
+
+              {activeFilterType === "year" && (
+                <YearFilter onYearChange={handleYearChange} data={entries} />
+              )}
+
+              {(selectedDate ||
+                selectedMonth ||
+                selectedQuarter ||
+                selectedLastSixMonths ||
+                selectedYear) && (
+                <div className="w-full text-center mt-4">
+                  <span
+                    onClick={() => {
+                      setSelectedDate("");
+                      setFilteredEntries([]);
+                      setSelectedMonth("");
+                      setActiveFilterType(null);
+                      setSelectedQuarter("");
+                      setSelectedLastSixMonths("");
+                      setSelectedYear("");
+                    }}
+                    className="text-blue-600 underline cursor-pointer"
+                  >
+                    Clean filter
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Form */}
-      {(showForm || isEditModalOpen) && (
-        <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col w-full max-w-md p-4 gap-2"
+        {/* Form */}
+        {(showForm || isEditModalOpen) && (
+          <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col w-full max-w-md p-4 gap-2"
+            >
+              <button
+                type="button"
+                className="text-red-600 hover:text-red-800 flex justify-end text-xl"
+                onClick={resetForm}
+              >
+                <FaXmark />
+              </button>
+              <h2 className="font-bold text-2xl box-info mb-4">
+                {editingData ? "Edit Entry" : "New Entry"}
+              </h2>
+              <label className="font-bold">Amount:</label>
+              <input
+                type="text"
+                name="amount"
+                placeholder="0,00"
+                min={0}
+                value={amount}
+                onChange={handleAmountChange}
+                className="border border-tertiary p-2 rounded w-full text-black"
+                required
+              />
+              <label className="font-bold">Category:</label>
+              <select
+                name="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="border border-tertiary p-2 rounded w-full text-black"
+                required
+              >
+                <option value="">Select category</option>
+                {categories.map((cat, index) => (
+                  <option key={index} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <label className="font-bold">Description:</label>
+              <input
+                type="text"
+                name="description"
+                placeholder="Description"
+                max={50}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="border border-tertiary p-2 rounded w-full text-black"
+              />
+
+              <label className="font-bold">Date:</label>
+              <input
+                type="date"
+                name="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="border border-tertiary p-2 rounded w-full text-black"
+                required
+              />
+
+              <button
+                type="submit"
+                className="font-bold bg-blue-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-blue-800 mt-4"
+              >
+                Submit
+              </button>
+
+              <button
+                type="button"
+                className="font-bold bg-yellow-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-yellow-800 mt-2"
+                onClick={() => {
+                  setAmount("0,00");
+                  setCategory("");
+                  setDescription("");
+                  setDate("");
+                }}
+              >
+                Reset
+              </button>
+
+              <button
+                type="button"
+                className="font-bold bg-red-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-red-800 mt-2"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Buttons */}
+        <div className="flex flex-row flex-wrap w-full p-2 gap-2 justify-center items-end py-12">
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1"
           >
+            <FaPlusSquare /> New entry
+          </button>
+          <button
+            onClick={() => {
+              if (!isEditMode) {
+                setIsEditMode(true);
+                setIsDeleteMode(false);
+              }
+            }}
+            className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaEdit /> Edit
+          </button>
+          {isEditMode && (
             <button
-              type="button"
-              className="text-red-600 hover:text-red-800 flex justify-end text-xl"
-              onClick={resetForm}
-            >
-              <FaXmark />
-            </button>
-            <h2 className="font-bold text-2xl box-info mb-4">
-              {editingData ? "Edit Entry" : "New Entry"}
-            </h2>
-            <label className="font-bold">Amount:</label>
-            <input
-              type="text"
-              name="amount"
-              placeholder="0,00"
-              min={0}
-              value={amount}
-              onChange={handleAmountChange}
-              className="border border-tertiary p-2 rounded w-full text-black"
-              required
-            />
-            <label className="font-bold">Category:</label>
-            <select
-              name="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="border border-tertiary p-2 rounded w-full text-black"
-              required
-            >
-              <option value="">Select category</option>
-              {categories.map((cat, index) => (
-                <option key={index} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <label className="font-bold">Description:</label>
-            <input
-              type="text"
-              name="description"
-              placeholder="Description"
-              max={50}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border border-tertiary p-2 rounded w-full text-black"
-            />
-
-            <label className="font-bold">Date:</label>
-            <input
-              type="date"
-              name="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="border border-tertiary p-2 rounded w-full text-black"
-              required
-            />
-
-            <button
-              type="submit"
-              className="font-bold bg-blue-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-blue-800 mt-4"
-            >
-              Submit
-            </button>
-
-            <button
-              type="button"
-              className="font-bold bg-yellow-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-yellow-800 mt-2"
               onClick={() => {
-                setAmount("0,00");
-                setCategory("");
-                setDescription("");
-                setDate("");
+                setIsEditMode(false);
+                setSelectedEditId(null);
+                setEditingData(null);
+                setIsEditModalOpen(false);
               }}
+              className="bg-yellow-400 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
             >
-              Reset
+              <FaXmark /> Cancel edit
             </button>
-
+          )}
+          <button
+            onClick={() => {
+              if (!isDeleteMode) {
+                setIsDeleteMode(true);
+                setIsEditMode(false);
+              } else if (selectedIds.length > 0) {
+                handleDeleteSelected();
+              } else {
+                alert("Select at least one item to delete.");
+              }
+            }}
+            className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaTrash />{" "}
+            {isDeleteMode
+              ? selectedIds.length > 0
+                ? "Confirm Deletion"
+                : "Selecionar itens"
+              : "Delete"}
+          </button>
+          {isDeleteMode && (
             <button
-              type="button"
-              className="font-bold bg-red-600 text-white p-2 rounded w-full flex items-center justify-center active:bg-red-800 mt-2"
-              onClick={resetForm}
+              onClick={() => {
+                setIsDeleteMode(false);
+                setSelectedIds([]);
+              }}
+              className="bg-red-400 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
             >
-              Cancel
+              <FaXmark /> Cancel delete
             </button>
-          </form>
+          )}
+          <button
+            onClick={exportToPDF}
+            className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
+          >
+            <FaFilePdf /> Export PDF
+          </button>
         </div>
-      )}
-
-      {/* Buttons */}
-      <div className="flex flex-row flex-wrap w-full p-2 gap-2 justify-center items-end py-12">
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-green-600 p-2 rounded w-auto flex items-center active:bg-green-800 border-collapse border-2 border-tertiary gap-1"
-        >
-          <FaPlusSquare /> New entry
-        </button>
-        <button
-          onClick={() => {
-            if (!isEditMode) {
-              setIsEditMode(true);
-              setIsDeleteMode(false);
-            }
-          }}
-          className="bg-yellow-600 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
-        >
-          <FaEdit /> Edit
-        </button>
-        {isEditMode && (
-          <button
-            onClick={() => {
-              setIsEditMode(false);
-              setSelectedEditId(null);
-              setEditingData(null);
-              setIsEditModalOpen(false);
-            }}
-            className="bg-yellow-400 p-2 rounded w-auto flex items-center active:bg-yellow-800 border-collapse border-2 border-tertiary gap-1"
-          >
-            <FaXmark /> Cancel edit
-          </button>
-        )}
-        <button
-          onClick={() => {
-            if (!isDeleteMode) {
-              setIsDeleteMode(true);
-              setIsEditMode(false);
-            } else if (selectedIds.length > 0) {
-              handleDeleteSelected();
-            } else {
-              alert("Select at least one item to delete.");
-            }
-          }}
-          className="bg-red-600 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
-        >
-          <FaTrash />{" "}
-          {isDeleteMode
-            ? selectedIds.length > 0
-              ? "Confirm Deletion"
-              : "Selecionar itens"
-            : "Delete"}
-        </button>
-        {isDeleteMode && (
-          <button
-            onClick={() => {
-              setIsDeleteMode(false);
-              setSelectedIds([]);
-            }}
-            className="bg-red-400 p-2 rounded w-auto flex items-center active:bg-red-800 border-collapse border-2 border-tertiary gap-1"
-          >
-            <FaXmark /> Cancel delete
-          </button>
-        )}
-        <button
-          onClick={exportToPDF}
-          className="bg-blue-500 p-2 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
-        >
-          <FaFilePdf /> Export PDF
-        </button>
       </div>
     </div>
   );

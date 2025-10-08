@@ -31,6 +31,8 @@ import { fetchExits } from "../redux/slices/exitsSlice";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import Loading from "../components/Loading";
 import exportChartToPDF from "../utils/exportChartToPDF";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function Graphics() {
   const [loading, setLoading] = useState(true);
@@ -218,6 +220,110 @@ function Graphics() {
       .sort((a, b) => a.name - b.name);
   };
 
+  const processChartForPDF = async (chartRef, pdfWidth, pdfHeight) => {
+    if (!chartRef.current) return;
+
+    const containerScroll = chartRef.current.querySelector(".overflow-x-auto");
+    const contentWidth = containerScroll
+      ? containerScroll.scrollWidth
+      : chartRef.current.scrollWidth;
+
+    // renderiza o conteúdo do gráfico inteiro como imagem
+    const canvas = await html2canvas(chartRef.current, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: contentWidth + 20,
+      windowHeight: chartRef.current.scrollHeight,
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    const aspectRatio = canvas.height / canvas.width;
+    let targetWidth = pdfWidth * 0.7;
+    let targetHeight = targetWidth * aspectRatio;
+
+    if (targetHeight > pdfHeight) {
+      const scaleFactor = pdfHeight / targetHeight;
+      targetWidth *= scaleFactor * 0.9;
+      targetHeight = pdfHeight * 0.9;
+    }
+
+    //centraliza
+    const x = (pdfWidth - targetWidth) / 2;
+    const marginY = 20;
+    const titleY = marginY;
+    const borderY = titleY + 5;
+    const imageY = borderY + 5;
+
+    return { imgData, targetWidth, targetHeight, x, borderY, imageY };
+  };
+
+  const exportAllChartsToPDF = async () => {
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const allRef = [
+      lineChartRef,
+      barChartRef,
+      pieEntriesCategoryRef,
+      pieExitsCategoryRef,
+      areaEntriesRef,
+      areaExitsRef,
+      areaEntriesAndExitsRef,
+      radarEntriesCategoryRef,
+      radarExitsCategoryRef,
+    ];
+    const allTitle = [
+      "Line chart - Monthly Inflows and Outflows – Current Year",
+      "Bar chart - Monthly Inflows and Outflows – Current Year",
+      "Pie chart - Entries by category - Current Year",
+      "Pie chart - Exits by category - Current Year",
+      "Area chart - Annual entries",
+      "Area Chart - Annual exits",
+      "Area Chart - Annual entries and exits",
+      "Radar Chart - Entries by category - Current Year",
+      "Radar Chart - Exits by category - Current Year",
+    ];
+
+    // converte pixels para mm (aprox. 1px = 0.264583mm)
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    for (let i = 0; i < allRef.length; i++) {
+      const chartRef = allRef[i];
+      const title = allTitle[i];
+
+      if (i > 0) {
+        pdf.addPage();
+      }
+
+      const chartData = await processChartForPDF(chartRef, pdfWidth, pdfHeight);
+
+      if (!chartData.imgData) return;
+
+      const { imgData, targetWidth, targetHeight, x, borderY, imageY } =
+        chartData;
+
+      //Titulo
+      pdf.setFontSize(18);
+      pdf.setFont("helvetica", "bold");
+      pdf.setTextColor(0, 0, 0);
+      pdf.text(title, pdfWidth / 2, 15, { align: "center" });
+
+      //Borda
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.5);
+      const borderHeight = targetHeight + 10;
+      pdf.rect(x - 5, borderY, targetWidth + 10, borderHeight);
+
+      pdf.addImage(imgData, "PNG", x, imageY, targetWidth, targetHeight);
+    }
+
+    pdf.save("All_Charts.pdf");
+  };
+
   return (
     <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-20">
       <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 md:pb-10 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
@@ -293,7 +399,7 @@ function Graphics() {
                   exportChartToPDF(
                     lineChartRef,
                     "Line_Chart_Current_Year.pdf",
-                    "Monthly Inflows and Outflows – Current Year"
+                    "Line chart - Monthly Inflows and Outflows – Current Year"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl "
@@ -365,7 +471,7 @@ function Graphics() {
                   exportChartToPDF(
                     barChartRef,
                     "Bar_chart_Current_Year.pdf",
-                    "Monthly Inflows and Outflows – Current Year"
+                    "Bar chart - Monthly Inflows and Outflows – Current Year"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -429,7 +535,7 @@ function Graphics() {
                     exportChartToPDF(
                       pieEntriesCategoryRef,
                       "Pie_Chart_Entries_categories.pdf",
-                      "Entries by category - Current Year"
+                      "Pie chart - Entries by category - Current Year"
                     );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -493,7 +599,7 @@ function Graphics() {
                     exportChartToPDF(
                       pieExitsCategoryRef,
                       "Pie_Chart_Exits_Categories.pdf",
-                      "Exits by category - Current Year"
+                      "Pie chart - Exits by category - Current Year"
                     );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -556,7 +662,7 @@ function Graphics() {
                   exportChartToPDF(
                     areaEntriesRef,
                     "Area_Chart_Entries.pdf",
-                    "Annual entries"
+                    "Area chart - Annual entries"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -619,7 +725,7 @@ function Graphics() {
                   exportChartToPDF(
                     areaExitsRef,
                     "Area_Chart_Exits.pdf",
-                    "Annual exits"
+                    "Area Chart - Annual exits"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -690,7 +796,7 @@ function Graphics() {
                   exportChartToPDF(
                     areaEntriesAndExitsRef,
                     "Area_Chart_Entries_and_Exits.pdf",
-                    "Annual entries and exits"
+                    "Area Chart - Annual entries and exits"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -750,7 +856,7 @@ function Graphics() {
                   exportChartToPDF(
                     radarEntriesCategoryRef,
                     "Radar_Chart_Entries_Categories.pdf",
-                    "Entries by category - Current Year"
+                    "Radar Chart - Entries by category - Current Year"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -781,7 +887,7 @@ function Graphics() {
                     <PolarRadiusAxis />
                     <Radar
                       dataKey="value"
-                      name="Entries"
+                      name="Exits"
                       stroke="red"
                       fill="red"
                       fillOpacity={0.5}
@@ -810,7 +916,7 @@ function Graphics() {
                   exportChartToPDF(
                     radarExitsCategoryRef,
                     "Radar_Chart_Exits_Categories.pdf",
-                    "Exits by category - Current Year"
+                    "Radar Chart - Exits by category - Current Year"
                   );
                 }}
                 className="bg-blue-500 p-0.5 my-4 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-xl"
@@ -823,8 +929,10 @@ function Graphics() {
 
         <div className="flex flex-col items-center justify-center w-full">
           <button
-            onClick={() => {}}
-            className="bg-blue-500 p-2 sm:p-4 rounded w-auto h-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-4xl"
+            onClick={() => {
+              exportAllChartsToPDF();
+            }}
+            className="bg-blue-500 p-2 sm:p-4 rounded w-auto h-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-3xl"
           >
             <FaFilePdf /> Export all chart PDF
           </button>

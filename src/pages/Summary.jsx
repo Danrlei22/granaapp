@@ -412,253 +412,255 @@ function Summary() {
 
   return (
     <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto">
-      <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
+      <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
+        <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
 
-      <div className="flex flex-col sm:flex-row justify-center items-center w-auto gap-2 flex-wrap">
-        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1 ">
-          <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
-            <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
-              Balance for the month
-            </h2>
-            <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px]">
-              <table className="border-2 border-tertiary text-center min-w-[400px]">
-                <thead className="bg-tertiary text-white">
-                  <tr>
-                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      Month
-                    </th>
-                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      Entry
-                    </th>
-                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      Exit
-                    </th>
-                    <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedQuarter ||
-                  selectedLastSixMonths ||
-                  showYearSelect ? (
-                    dateByMonth.length > 0 ? (
-                      dateByMonth.map((item) => (
-                        <tr key={`${item.year}-${item.month}`}>
-                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            {new Date(0, item.month - 1)
-                              .toLocaleDateString("en-US", {
-                                month: "long",
-                              })
-                              .toUpperCase()}
-                          </td>
-                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R${" "}
-                            {item.entries.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                            })}
-                          </td>
-                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            R$ -
-                            {item.exits.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                            })}
-                          </td>
-                          <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                            <strong>
+        <div className="flex flex-col sm:flex-row justify-center items-center w-auto gap-2 p-2 flex-wrap border-2 sm:border-4 border-primary shadow-primary">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:p-2 p-1 ">
+            <div className="flex flex-col items-center justify-center w-auto sm:m-2 m-1 sm:p-4 p-1 rounded shadow-2xl shadow-tertiary border-4 border-tertiary">
+              <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
+                Balance for the month
+              </h2>
+              <div className="overflow-x-auto w-auto max-w-[320px] sm:max-w-[640px]">
+                <table className="border-2 border-tertiary text-center min-w-[400px]">
+                  <thead className="bg-tertiary text-white">
+                    <tr>
+                      <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        Month
+                      </th>
+                      <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        Entry
+                      </th>
+                      <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        Exit
+                      </th>
+                      <th className="border border-black sm:px-2 px-0 sm:py-1 py-0">
+                        Total
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedQuarter ||
+                    selectedLastSixMonths ||
+                    showYearSelect ? (
+                      dateByMonth.length > 0 ? (
+                        dateByMonth.map((item) => (
+                          <tr key={`${item.year}-${item.month}`}>
+                            <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              {new Date(0, item.month - 1)
+                                .toLocaleDateString("en-US", {
+                                  month: "long",
+                                })
+                                .toUpperCase()}
+                            </td>
+                            <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                               R${" "}
-                              {item.total.toLocaleString("pt-BR", {
+                              {item.entries.toLocaleString("pt-BR", {
                                 minimumFractionDigits: 2,
                               })}
-                            </strong>
+                            </td>
+                            <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              R$ -
+                              {item.exits.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                            <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                              <strong>
+                                R${" "}
+                                {item.total.toLocaleString("pt-BR", {
+                                  minimumFractionDigits: 2,
+                                })}
+                              </strong>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="text-center p-2 text-black italic"
+                          >
+                            No entry or exit found for selected date.
                           </td>
                         </tr>
-                      ))
+                      )
                     ) : (
+                      // MES ATUAL
                       <tr>
-                        <td
-                          colSpan="5"
-                          className="text-center p-2 text-black italic"
-                        >
-                          No entry or exit found for selected date.
+                        <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          {new Date()
+                            .toLocaleDateString("en-US", {
+                              month: "long",
+                            })
+                            .toUpperCase()}
                         </td>
-                      </tr>
-                    )
-                  ) : (
-                    // MES ATUAL
-                    <tr>
-                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        {new Date()
-                          .toLocaleDateString("en-US", {
-                            month: "long",
-                          })
-                          .toUpperCase()}
-                      </td>
-                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        R${" "}
-                        {totalEntries.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        R$ -
-                        {totalExits.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
-                        <strong>
+                        <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
                           R${" "}
-                          {total.toLocaleString("pt-BR", {
+                          {totalEntries.toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                           })}
-                        </strong>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* filtro */}
-        <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
-          <h2 className="font-bold pl-2">Period filter:</h2>
-          <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
-            <Tooltip text="Filter last 3 months" position="bottom">
-              <button
-                onClick={() => {
-                  handleQuarterChange();
-                  setShowYearSelect(false);
-                }}
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Quarter
-              </button>
-            </Tooltip>
-            <Tooltip text="Filter last 6 months" position="bottom">
-              <button
-                onClick={() => {
-                  handleLastSixMonthsChange();
-                  setShowYearSelect(false);
-                }}
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Last 6 months
-              </button>
-            </Tooltip>
-            <Tooltip text="Filter by year" position="bottom">
-              <button
-                onClick={() => setShowYearSelect(true)}
-                className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
-              >
-                Year
-              </button>
-            </Tooltip>
-          </div>
-
-          <div className="flex flex-col items-start justify-center w-full">
-            {showYearSelect && (
-              <select
-                name="year"
-                className="flex flex-col w-auto h-auto sm:text-sm bg-blue-300 p-0.5 m-1 border-2 border-tertiary rounded ml-44"
-                value={selectYear}
-                onChange={(e) => handleYearChange(e.target.value)}
-                required
-              >
-                <option value="">Select year</option>
-                {availableYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            )}
-            {(selectedQuarter || selectedLastSixMonths || showYearSelect) && (
-              <div className="w-full text-center mt-4">
-                <span
-                  onClick={() => {
-                    setSelectedQuarter(false);
-                    setSelectedLastSixMonths(false);
-                    setShowYearSelect(false);
-                    setSelectYear("");
-                  }}
-                  className="text-blue-600 underline cursor-pointer"
-                >
-                  Clean filter
-                </span>
+                        </td>
+                        <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          R$ -
+                          {totalExits.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td className="bg-blue-200 text-black border border-black sm:px-2 px-0 sm:py-1 py-0">
+                          <strong>
+                            R${" "}
+                            {total.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </strong>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            )}
-          </div>
-        </div>
-
-        {/* Destaques do periodo */}
-        <div
-          ref={highlighRef}
-          className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base"
-        >
-          <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
-            Highlights of the year
-          </h2>
-
-          <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
-            <p className="font-bold text-xl">Biggest entry</p>
-            <p className="font-bold text-2xl text-green-600">
-              R${" "}
-              {biggestEntryValue.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
-            </p>
-            <p className="font-bold text-[12px]">in:{biggestEntryMonth}</p>
+            </div>
           </div>
 
-          <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
-            <p className="font-bold text-xl">Biggest exit</p>
-            <p className="font-bold text-2xl text-red-600">
-              R$ -
-              {biggestExitValue.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
-            </p>
-            <p className="font-bold text-[12px]">in: {biggestExitMonth}</p>
+          {/* filtro */}
+          <div className="flex flex-col items-start justify-center w-auto border-box shadow-2xl shadow-tertiary">
+            <h2 className="font-bold pl-2">Period filter:</h2>
+            <div className="flex flex-row w-auto h-[60px] border-2 border-tertiary gap-2 p-2 m-1">
+              <Tooltip text="Filter last 3 months" position="bottom">
+                <button
+                  onClick={() => {
+                    handleQuarterChange();
+                    setShowYearSelect(false);
+                  }}
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Quarter
+                </button>
+              </Tooltip>
+              <Tooltip text="Filter last 6 months" position="bottom">
+                <button
+                  onClick={() => {
+                    handleLastSixMonthsChange();
+                    setShowYearSelect(false);
+                  }}
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Last 6 months
+                </button>
+              </Tooltip>
+              <Tooltip text="Filter by year" position="bottom">
+                <button
+                  onClick={() => setShowYearSelect(true)}
+                  className="bg-green-600 text-white p-2 rounded w-auto flex items-center active:bg-green-800"
+                >
+                  Year
+                </button>
+              </Tooltip>
+            </div>
+
+            <div className="flex flex-col items-start justify-center w-full">
+              {showYearSelect && (
+                <select
+                  name="year"
+                  className="flex flex-col w-auto h-auto sm:text-sm bg-blue-300 p-0.5 m-1 border-2 border-tertiary rounded ml-44"
+                  value={selectYear}
+                  onChange={(e) => handleYearChange(e.target.value)}
+                  required
+                >
+                  <option value="">Select year</option>
+                  {availableYears.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {(selectedQuarter || selectedLastSixMonths || showYearSelect) && (
+                <div className="w-full text-center mt-4">
+                  <span
+                    onClick={() => {
+                      setSelectedQuarter(false);
+                      setSelectedLastSixMonths(false);
+                      setShowYearSelect(false);
+                      setSelectYear("");
+                    }}
+                    className="text-blue-600 underline cursor-pointer"
+                  >
+                    Clean filter
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
-            <p className="font-bold text-xl">Monthly average</p>
-            <div className="flex sm:flex-row flex-col justify-between items-center">
-              <p className="font-bold text-base">Entry: </p>
-              <p className="text-green-600 font-bold text-xl">
+          {/* Destaques do periodo */}
+          <div
+            ref={highlighRef}
+            className="bg-primary text-black flex flex-col justify-between items-center sm:p-4 p-1 mb-4 border-box w-auto min-w-[290px] h-auto min-h-[380px] shadow-2xl shadow-tertiary text-xs sm:text-base"
+          >
+            <h2 className="font-bold text-2xl box-info sm:mb-4 mb-2">
+              Highlights of the year
+            </h2>
+
+            <div className="box-info mb-4 border-2 border-tertiary p-2 bg-slate-300">
+              <p className="font-bold text-xl">Biggest entry</p>
+              <p className="font-bold text-2xl text-green-600">
                 R${" "}
-                {averageEntry.toLocaleString("pt-BR", {
+                {biggestEntryValue.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
                 })}
               </p>
+              <p className="font-bold text-[12px]">in:{biggestEntryMonth}</p>
             </div>
 
-            <div className="flex sm:flex-row flex-col justify-between items-center">
-              <p className="font-bold text-base">Exit: </p>
-              <p className="text-red-600 font-bold text-xl">
+            <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
+              <p className="font-bold text-xl">Biggest exit</p>
+              <p className="font-bold text-2xl text-red-600">
                 R$ -
-                {averageExit.toLocaleString("pt-BR", {
+                {biggestExitValue.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
                 })}
               </p>
+              <p className="font-bold text-[12px]">in: {biggestExitMonth}</p>
+            </div>
+
+            <div className="box-info mb-4 border-2 border-tertiary p-3 bg-slate-300">
+              <p className="font-bold text-xl">Monthly average</p>
+              <div className="flex sm:flex-row flex-col justify-between items-center">
+                <p className="font-bold text-base">Entry: </p>
+                <p className="text-green-600 font-bold text-xl">
+                  R${" "}
+                  {averageEntry.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+              </div>
+
+              <div className="flex sm:flex-row flex-col justify-between items-center">
+                <p className="font-bold text-base">Exit: </p>
+                <p className="text-red-600 font-bold text-xl">
+                  R$ -
+                  {averageExit.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
-        <button
-          onClick={() => {
-            exportToPDF();
-          }}
-          className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1"
-        >
-          <FaFilePdf /> Export PDF Current Year
-        </button>
+        <div className="flex flex-row w-full p-2 gap-2 justify-center items-end py-12">
+          <button
+            onClick={() => {
+              exportToPDF();
+            }}
+            className="bg-blue-500 p-0.5 rounded w-auto flex items-center active:bg-blue-800 border-collapse border-2 border-tertiary gap-1 text-2xl"
+          >
+            <FaFilePdf /> Export PDF Current Year
+          </button>
+        </div>
       </div>
     </div>
   );

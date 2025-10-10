@@ -45,7 +45,7 @@ function Entry() {
 
   const fetchEntries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/entries");
+      const res = await axios.get("https://granaapp.onrender.com/entries");
 
       setEntries(res.data);
       setLoading(false);
@@ -128,7 +128,7 @@ function Entry() {
               onClick: async () => {
                 try {
                   await axios.put(
-                    `http://localhost:5000/entries/${editingData.id}`,
+                    `https://granaapp.onrender.com/entries/${editingData.id}`,
                     {
                       ...editingData,
                       amount: parseFloat(amount.replace(",", ".")),
@@ -162,7 +162,7 @@ function Entry() {
           ],
         });
       } else {
-        const res = await axios.post("http://localhost:5000/entries", {
+        const res = await axios.post("https://granaapp.onrender.com/entries", {
           amount: parseFloat(amount.replace(",", ".")),
           category,
           description,
@@ -229,7 +229,7 @@ function Entry() {
             try {
               await Promise.all(
                 selectedIds.map((id) =>
-                  axios.delete(`http://localhost:5000/entries/${id}`)
+                  axios.delete(`https://granaapp.onrender.com/entries/${id}`)
                 )
               );
 

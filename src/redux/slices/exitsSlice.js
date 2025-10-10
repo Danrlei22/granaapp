@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchExits = createAsyncThunk("exits/fetchExits", async () => {
-  const res = await fetch("http://localhost:5000/exits");
+  const res = await fetch("https://granaapp.onrender.com/exits");
 
   return res.json();
 });

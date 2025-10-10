@@ -50,7 +50,7 @@ function Exit() {
 
   const fetchExits = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/exits");
+      const res = await axios.get("https://granaapp.onrender.com/exits");
 
       setExits(res.data);
       setLoading(false);
@@ -153,7 +153,7 @@ function Exit() {
               onClick: async () => {
                 try {
                   await axios.put(
-                    `http://localhost:5000/exits/${editingData.id}`,
+                    `https://granaapp.onrender.com/exits/${editingData.id}`,
                     {
                       ...editingData,
                       amount: parseFloat(amount.replace(",", ".")),
@@ -186,7 +186,7 @@ function Exit() {
           ],
         });
       } else {
-        const res = await axios.post("http://localhost:5000/exits", {
+        const res = await axios.post("https://granaapp.onrender.com/exits", {
           amount: parseFloat(amount.replace(",", ".")),
           category,
           description,
@@ -224,7 +224,7 @@ function Exit() {
             try {
               await Promise.all(
                 selectedIds.map((id) =>
-                  axios.delete(`http://localhost:5000/exits/${id}`)
+                  axios.delete(`https://granaapp.onrender.com/exits/${id}`)
                 )
               );
 

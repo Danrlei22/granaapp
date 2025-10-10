@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchEntries = createAsyncThunk(
   "entries/fetchEntries",
   async () => {
-    const res = await fetch("http://localhost:5000/entries");
+    const res = await fetch("https://granaapp.onrender.com/entries");
 
     return res.json();
   }

@@ -411,7 +411,7 @@ function Summary() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-auto mb-2">
+    <div className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base h-full mb-2">
       <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
         <h1 className="text-center font-bold text-4xl my-4">Summary</h1>
 

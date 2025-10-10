@@ -340,7 +340,7 @@ function Graphics() {
   };
 
   return (
-    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-2">
+    <main className="flex flex-col items-center w-full min-w-[340px] text-xs sm:text-base mb-2 h-full">
       <div className="flex flex-col items-center justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 md:pb-10 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
         <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full">
           Graphics
@@ -581,7 +581,7 @@ function Graphics() {
                       label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                     >
                       {getCatergoryExitsByData(exits, year).map(
-                        (entry, index) => (
+                        (exit, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={colorsExits[index % colorsExits.length]}

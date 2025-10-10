@@ -10,19 +10,25 @@ function Layout() {
   const location = useLocation();
 
   // Define routes where the side menu should not be displayed
-  const noSideMenuRoutes = ["/about" ,"/contact", "/terms", "/privacy", "/help",];
-  const hideSideMenu =  noSideMenuRoutes.includes(location.pathname);
+  const noSideMenuRoutes = [
+    "/about",
+    "/contact",
+    "/terms",
+    "/privacy",
+    "/help",
+  ];
+  const hideSideMenu = noSideMenuRoutes.includes(location.pathname);
 
   return (
     <div
       className={
         darkMode
-          ? "bg-black text-white min-h-screen min-w-[350px]"
-          : "bg-white text-black min-h-screen min-w-[350px]"
+          ? "bg-black text-white h-full min-h-screen min-w-[350px]"
+          : "bg-white text-black h-full min-h-screen min-w-[350px]"
       }
     >
       <Header />
-      <Main showSideMenu={!hideSideMenu}/>
+      <Main showSideMenu={!hideSideMenu} />
       <Footer />
     </div>
   );

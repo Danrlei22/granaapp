@@ -1,10 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import graficoDinheiro from "../assets/graficoDinheiro.png";
 import { useEffect, useState } from "react";
 import { setPhrase } from "../redux/slices/motivationalSlice";
 import Loading from "../components/Loading";
 import { fetchEntries } from "../redux/slices/entriesSlice";
 import { fetchExits } from "../redux/slices/exitsSlice";
+import {
+  Legend,
+  Pie,
+  ResponsiveContainer,
+  Tooltip,
+  PieChart,
+  Cell,
+} from "recharts";
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -77,9 +84,40 @@ function Home() {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 7);
 
+  const getCategoryExitsCurrentMonth = () => {
+    const grouped = {};
+
+    currentMonthExits.forEach((exits) => {
+      if (!grouped[exits.category]) {
+        grouped[exits.category] = 0;
+      }
+      grouped[exits.category] += exits.amount;
+    });
+
+    const pieChartExitsCategory = Object.entries(grouped).map(
+      ([category, amount]) => ({
+        name: category,
+        value: amount,
+      })
+    );
+
+    return pieChartExitsCategory;
+  };
+
+  const colorsExits = [
+    "#FA9510", // laranja forte
+    "#FF6347", // tomate
+    "#D9C03F", // dourado (dinheiro saindo)
+    "#FF69B4", // rosa choque
+    "#DD783C", // vermelho carmesim
+    "#FF8C00", // laranja escuro
+  ];
   return (
     <div className="flex flex-row flex-wrap justify-center items-center w-full min-w-[340px] text-xs sm:text-base h-auto mb-8 gap-2">
       <div className="flex flex-row flex-wrap justify-center h-auto w-full sm:w-[95%] min-w-[340px] p-0.5 sm:p-2 sm:my-1 md:my-2 sm:pb-6 border-2 sm:border-4 border-primary shadow-xl shadow-primary">
+        <h1 className="text-4xl font-bold mb-4 text-center my-4 w-full">
+          GranaApp
+        </h1>
         <div className="bg-primary text-black flex flex-col justify-between items-center mb-4 border-box w-[300px] h-auto shadow-2xl shadow-tertiary">
           <h2 className="h2-bold mb-6">
             {new Date().toLocaleDateString("en-US", {
@@ -175,15 +213,48 @@ function Home() {
           </div>
         </div>
 
-        <div className="border-box shadow-2xl shadow-tertiary">
-          <div>
-            <h2 className="h2-bold box-info mb-6">Chart of the month</h2>
-            <div className="border-solid border-2 border-tertiary ">
-              <img
-                src={graficoDinheiro}
-                className="grafic"
-                alt="Gráfico Mensal"
-              />
+        <div className="border-4 border-tertiary md:p-2 rounded w-auto h-auto flex flex-col items-center justify-center shadow-2xl shadow-tertiary">
+          <div className="w-[80%]">
+            <h2 className="font-bold sm:text-2xl text-xl box-info text-center">
+              Pie Chart - Exits by category - Current month
+            </h2>
+          </div>
+
+          <div className="flex max-w-[350px] md:max-w-[450px] h-auto sm:m-2 border-2 border-black overflow-x-auto bg-slate-100">
+            <div className="min-w-[500px]">
+              <ResponsiveContainer width="95%" height={400}>
+                <PieChart>
+                  <Pie
+                    data={getCategoryExitsCurrentMonth()}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                  >
+                    {getCategoryExitsCurrentMonth(exits).map((exit, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colorsExits[index % colorsExits.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value, name) => [
+                      `R$ ${value.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}`,
+                      name,
+                    ]}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    wrapperStyle={{ padding: 0 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
           <div className="flex justify-center">
